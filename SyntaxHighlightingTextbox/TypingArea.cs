@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+///using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace SyntaxHighlightingTextbox
 {
-    public partial class SyntaxHighlightTextboxControl : RichTextBox
+    public partial class TypingArea : RichTextBox
     {
-        #region Members
-
+        #region Fields
         //Members exposed via properties
         private SeparatorCollection separators = new SeparatorCollection();
         private HighlightDescriptorCollection descriptors = new HighlightDescriptorCollection();
         private bool caseSensitive = false;
-        private bool filterAutoComplete = true;
-        private bool enabledHighlighting = true;
-        private bool enabledAutoCompleteForm = true;
+        private bool filterAutoComplete = false;
+        private bool enabledAutoCompleteForm = false;
         private int maxUndoRedoSteps = 1000;
         private char[] separatorArray;
 
@@ -115,30 +113,11 @@ namespace SyntaxHighlightingTextbox
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [enable highlihting].
-        /// </summary>
-        /// <value><c>true</c> if [enable highlihting]; otherwise, <c>false</c>.</value>
-        public bool EnableHighlighting
-        {
-            get
-            {
-                return enabledHighlighting;
-            }
-            set
-            {
-                enabledHighlighting = value;
-                //if (value) Highlight();
-                //else UnHighlight();
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether [enable auto complete form].
         /// </summary>
         /// <value>
         /// 	<c>true</c> if [enable auto complete form]; otherwise, <c>false</c>.
         /// </value>
-        [DefaultValue(true)]
         public bool enableAutoCompleteForm
         {
             get
@@ -166,11 +145,9 @@ namespace SyntaxHighlightingTextbox
             //    this.LimitUndo();
             //    mLastInfo = new UndoRedoInfo(Text, GetScrollPos(), SelectionStart);
             //}
-
-            if (enabledHighlighting)
-            {
-                //Highlight();
-            }
+            
+            Highlight();
+          
 
             if (autoCompleteShown)
             {
@@ -210,7 +187,7 @@ namespace SyntaxHighlightingTextbox
             colors = AddColorTable(rtfHeader);
 
             //Create font table
-            rtfHeader.Append(@"\fonttbl ");
+            rtfHeader.Append(@"{\fonttbl ");
 
             //Add default font of the textbox.
             AddFontToTable(rtfHeader, Font, fonts);
@@ -224,12 +201,10 @@ namespace SyntaxHighlightingTextbox
             SetDefaultSetting(rtfBody, colors, fonts);
 
             separatorArray = separators.ToArray();
-            
+
             //Replace some specified symbols that has meaning in RTF file.
             string inputText = Text;
             string[] lines = inputText.Replace("\\", "\\\\").Replace("{", "\\{").Replace("}", "\\}").Split('\n');
-
-            StringBuilder rtfText = new StringBuilder();
 
             //Scan every line of input text.
             for (int lineCounter = 0; lineCounter < lines.Length; lineCounter++)
@@ -307,7 +282,7 @@ namespace SyntaxHighlightingTextbox
                             {
                                 case DescriptorType.Word:
                                     textToFormat = line.Substring(i, currentToken.Length);
-                                    i += currentToken.Length;                                    
+                                    i += currentToken.Length;
                                     break;
                                 //case DescriptorType.ToEOW:
                                 //    textToFormat = line.Substring(i, currentToken.Length);
@@ -321,7 +296,7 @@ namespace SyntaxHighlightingTextbox
                                     {
                                         StringBuilder sbOfTextToFormat = new StringBuilder();
                                         //int closeStart = i + item.token.Length;
-                                        while((!line.Contains(item.closeToken)) && (lineCounter < lines.Length))
+                                        while ((!line.Contains(item.closeToken)) && (lineCounter < lines.Length))
                                         {
                                             sbOfTextToFormat.Append(line.Remove(0, i));
                                             lineCounter++;
@@ -356,7 +331,7 @@ namespace SyntaxHighlightingTextbox
                                     break;
                             }
 
-                            AddUnicode(rtfBody, textToFormat);
+                            AddTextToRTFBody(rtfBody, textToFormat);
                             //Close the block contains the text formated.
                             rtfBody.Append("}");
                             break;
@@ -364,7 +339,7 @@ namespace SyntaxHighlightingTextbox
 
                         if (isPlainTextToken)
                         {
-                            AddUnicode(rtfBody, line.Substring(i, currentToken.Length));
+                            AddTextToRTFBody(rtfBody, line.Substring(i, currentToken.Length));
                             i += currentToken.Length;
                         }
                     }
@@ -376,7 +351,8 @@ namespace SyntaxHighlightingTextbox
 
             //Join the rtf header with the rtf body.
             //Then show it to the text box.
-            this.Rtf = rtfHeader.ToString() + rtfBody;
+            string rtfString = rtfHeader.ToString() + rtfBody.ToString();
+            this.Rtf = rtfString;
 
             //Restore cursor and scrollbars location.
             SelectionStart = cursorPosition;
@@ -415,7 +391,7 @@ namespace SyntaxHighlightingTextbox
         {
             int counter = fonts.Count;
 
-            rtfHeader.Append(@"\n ");
+            rtfHeader.Append("\n    ");
             rtfHeader.Append(@"{\f").Append(counter).Append(@"\fnil");
             rtfHeader.Append(@"\fcharset0 ").Append(font.Name).Append(";}");
             fonts.Add(font.Name, counter);
@@ -437,7 +413,7 @@ namespace SyntaxHighlightingTextbox
         /// <param name="size"></param>
         private void SetFontSize(StringBuilder rtfBody, float size)
         {
-            rtfBody.Append(@"\fs").Append(size * 2);
+            rtfBody.Append(@"\fs").Append((int)(size * 2));
         }
 
         /// <summary>
@@ -456,7 +432,7 @@ namespace SyntaxHighlightingTextbox
         /// </summary>
         /// <param name="rtfBody">The RTF body to add.</param>
         /// <param name="textToAdd">The text to add.</param>
-        private void AddUnicode(StringBuilder rtfBody, string textToAdd)
+        private void AddTextToRTFBody(StringBuilder rtfBody, string textToAdd)
         {
             StringBuilder sb = new StringBuilder();
             foreach (char c in textToAdd)
@@ -478,7 +454,7 @@ namespace SyntaxHighlightingTextbox
         //    currentTokenStartIndex = text.LastIndexOfAny(separatorArray, )
         //}
 
-        private void SetDescriptorSetting(StringBuilder rtfBody, HighlightDescriptor descriptor, 
+        private void SetDescriptorSetting(StringBuilder rtfBody, HighlightDescriptor descriptor,
             Dictionary<Color, int> colors, Dictionary<string, int> fonts)
         {
             if (descriptor.color != null)
@@ -528,7 +504,7 @@ namespace SyntaxHighlightingTextbox
                 AddFontToTable(rtfHeader, fontToSet, fonts);
             }
 
-            rtfBody.Append(@"\f").Append(fontIndex).Append("{");
+            rtfBody.Append(@"\f").Append(fontIndex);
             //rtfBody.Append(fontStyles.GetFontStyle(fontToSet));
         }
 
@@ -540,7 +516,7 @@ namespace SyntaxHighlightingTextbox
         private Dictionary<Color, int> AddColorTable(StringBuilder rtfBody)
         {
             //Color table
-            rtfBody.Append(@"\colortbl ;");
+            rtfBody.Append(@"{\colortbl ;");
             Dictionary<Color, int> colors = new Dictionary<Color, int>();
             int colorCounter = 1;
             AddColorToTable(rtfBody, ForeColor, ref colorCounter, colors);
@@ -580,37 +556,12 @@ namespace SyntaxHighlightingTextbox
         }
 
 
-        private void AddTextToRTFBody(StringBuilder rtfBody, string textToAdd)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (char c in textToAdd)
-            {
-                if (c < 128) sb.Append(c);
-                else
-                {
-                    //Add unicode character to rtfBody.
-                    sb.Append(@"\u" + ((int)c).ToString() + "?");
-                } 
-            }
-
-            rtfBody.Append(sb.ToString());
-        }
+        
         #endregion
 
-        #region unknown
-
-        public SyntaxHighlightTextboxControl()
-        {
-            InitializeComponent();
-        }
-
-        public SyntaxHighlightTextboxControl(IContainer container)
-        {
-            container.Add(this);
-
-            InitializeComponent();
-        }
-
-        #endregion
+        //public TypingText()
+        //{
+        //    InitializeComponent();
+        //}
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace SyntaxHighlightingTextbox
 {
-    partial class SyntaxHighlightTextboxControl
+    partial class MyTextBox
     {
         /// <summary>
         /// Required designer variable.
