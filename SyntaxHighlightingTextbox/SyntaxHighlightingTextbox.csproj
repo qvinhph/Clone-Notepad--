@@ -47,12 +47,6 @@
     <Compile Include="HighlightDescriptorCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeparatorCollection.cs" />
-    <Compile Include="SyntaxRichTextbox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SyntaxRichTextbox.Designer.cs">
-      <DependentUpon>SyntaxRichTextbox.cs</DependentUpon>
-    </Compile>
     <Compile Include="TypingArea.cs">
       <SubType>Component</SubType>
     </Compile>

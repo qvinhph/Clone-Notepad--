@@ -118,15 +118,15 @@ namespace SyntaxHighlightingTextbox
         /// <value>
         /// 	<c>true</c> if [enable auto complete form]; otherwise, <c>false</c>.
         /// </value>
-        public bool enableAutoCompleteForm
+        public bool EnabledAutoCompleteForm
         {
             get
             {
-                return enableAutoCompleteForm;
+                return enabledAutoCompleteForm;
             }
             set
             {
-                enableAutoCompleteForm = value;
+                enabledAutoCompleteForm = value;
             }
         }
 
@@ -259,7 +259,7 @@ namespace SyntaxHighlightingTextbox
                                     double number = 0;
                                     if (double.TryParse(currentToken, out number))
                                         match = true;
-                                    continue;
+                                    break;
                                 default:
                                     break;
                             }
@@ -465,6 +465,17 @@ namespace SyntaxHighlightingTextbox
                 SetFont(rtfBody, descriptor.font, fonts);
                 SetFontSize(rtfBody, descriptor.font.Size);
             }
+
+            EndTags(rtfBody);
+        }
+
+        /// <summary>
+        /// End a rtf tags to begin insert text.
+        /// </summary>
+        /// <param name="rtfBody"></param>
+        private void EndTags(StringBuilder rtfBody)
+        {
+            rtfBody.Append(' ');
         }
 
         private void AddNewLine(StringBuilder rtfBody)
@@ -556,12 +567,12 @@ namespace SyntaxHighlightingTextbox
         }
 
 
-        
+
         #endregion
 
-        //public TypingText()
-        //{
-        //    InitializeComponent();
-        //}
+        public TypingArea()
+        {
+            InitializeComponent();
+        }
     }
 }

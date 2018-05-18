@@ -25,25 +25,33 @@ namespace Tester
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            typingText.Location = new Point(0, 0);
-            typingText.Separators.Add(' ');
-            typingText.Separators.Add('\r');
-            typingText.Separators.Add('\n');
-            typingText.Separators.Add(',');
-            typingText.Separators.Add('.');
-            typingText.Separators.Add('-');
-            typingText.Separators.Add('+');
+            typingArea.Focus();
+            this.typingArea.Location = new Point(0, 0);
+            typingArea.Separators.Add(' ');
+            typingArea.Separators.Add('\r');
+            typingArea.Separators.Add('\n');
+            typingArea.Separators.Add(',');
+            typingArea.Separators.Add('.');
+            typingArea.Separators.Add('-');
+            typingArea.Separators.Add('+');
             //shtb.Seperators.Add('*');
             //shtb.Seperators.Add('/');
-            Controls.Add(typingText);
-            typingText.WordWrap = false;
-            typingText.ScrollBars = RichTextBoxScrollBars.Both;// & RichTextBoxScrollBars.ForcedVertical;
+            Controls.Add(typingArea);
+            typingArea.WordWrap = false;
+            typingArea.ScrollBars = RichTextBoxScrollBars.Both;// & RichTextBoxScrollBars.ForcedVertical;
 
-            typingText.Descriptors.Add(new HighlightDescriptor("Hello", Color.Red, this.Font, DescriptorType.Word, DescriptorRecognition.WholeWord, false));
-
+            typingArea.Descriptors.Add(new HighlightDescriptor("Hello", Color.Red, this.Font, DescriptorType.Word, DescriptorRecognition.WholeWord, false));
+            typingArea.Descriptors.Add(new HighlightDescriptor("", Color.Green, null, DescriptorType.Word, DescriptorRecognition.IsNumber, false));
+            typingArea.Descriptors.Add(new HighlightDescriptor("/*", "*/", DescriptorType.ToCloseToken, DescriptorRecognition.StartsWith, Color.Green, 
+                                                                null, false));
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void typingArea_TextChanged(object sender, EventArgs e)
         {
 
         }

@@ -47,17 +47,12 @@ namespace SyntaxHighlightingTextbox
         public HighlightDescriptor(string token, string closeToken, DescriptorType descriptorType,
             DescriptorRecognition descriptorRecognition, Color color, Font font, bool isUsedForAutoComplete)
         {
-            //if (descriptorRecognition == DescriptorRecognition.RegEx)
-            //{
-            //    throw new ArgumentException("You may not choose RegEx DescriptorType with an end token.");
-            //}
             this.color = color;
             this.font = font;
             this.token = token;
             this.closeToken = closeToken;
             this.descriptorType = descriptorType;
             this.descriptorRecognition = descriptorRecognition;
-            this.closeToken = null;
             this.isUsedForAutoComplete = isUsedForAutoComplete;
         }
 
