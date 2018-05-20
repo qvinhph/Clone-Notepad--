@@ -25,24 +25,24 @@ namespace Tester
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            typingArea.Focus();
-            this.typingArea.Location = new Point(0, 0);
-            typingArea.Separators.Add(' ');
-            typingArea.Separators.Add('\r');
-            typingArea.Separators.Add('\n');
-            typingArea.Separators.Add(',');
-            typingArea.Separators.Add('.');
-            typingArea.Separators.Add('-');
-            typingArea.Separators.Add('+');
+            typingArea1.Focus();
+            this.typingArea1.Location = new Point(0, 0);
+            typingArea1.Separators.Add(' ');
+            typingArea1.Separators.Add('\r');
+            typingArea1.Separators.Add('\n');
+            typingArea1.Separators.Add(',');
+            typingArea1.Separators.Add('.');
+            typingArea1.Separators.Add('-');
+            typingArea1.Separators.Add('+');
             //shtb.Seperators.Add('*');
             //shtb.Seperators.Add('/');
-            Controls.Add(typingArea);
-            typingArea.WordWrap = false;
-            typingArea.ScrollBars = RichTextBoxScrollBars.Both;// & RichTextBoxScrollBars.ForcedVertical;
+            Controls.Add(typingArea1);
+            typingArea1.WordWrap = false;
+            typingArea1.ScrollBars = RichTextBoxScrollBars.Both;// & RichTextBoxScrollBars.ForcedVertical;
 
-            typingArea.Descriptors.Add(new HighlightDescriptor("Hello", Color.Red, this.Font, DescriptorType.Word, DescriptorRecognition.WholeWord, false));
-            typingArea.Descriptors.Add(new HighlightDescriptor("", Color.Green, null, DescriptorType.Word, DescriptorRecognition.IsNumber, false));
-            typingArea.Descriptors.Add(new HighlightDescriptor("/*", "*/", DescriptorType.ToCloseToken, DescriptorRecognition.StartsWith, Color.Green, 
+            typingArea1.Descriptors.Add(new HighlightDescriptor("Hello", Color.Red, this.Font, DescriptorType.Word, DescriptorRecognition.WholeWord, false));
+            typingArea1.Descriptors.Add(new HighlightDescriptor("", Color.Green, null, DescriptorType.Word, DescriptorRecognition.IsNumber, false));
+            typingArea1.Descriptors.Add(new HighlightDescriptor("/*", "*/", DescriptorType.ToCloseToken, DescriptorRecognition.StartsWith, Color.Green, 
                                                                 null, false));
         }
 

@@ -31,7 +31,7 @@ namespace Tester
         private void InitializeComponent()
         {
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.typingArea = new SyntaxHighlightingTextbox.TypingArea();
+            this.typingArea1 = new SyntaxHighlightingTextbox.TypingArea();
             this.SuspendLayout();
             // 
             // richTextBox1
@@ -42,25 +42,22 @@ namespace Tester
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // typingArea
+            // typingArea1
             // 
-            this.typingArea.CaseSensitive = false;
-            this.typingArea.EnabledAutoCompleteForm = false;
-            this.typingArea.FilterAutoComplete = false;
-            this.typingArea.Location = new System.Drawing.Point(12, 12);
-            this.typingArea.MaxUndoRedoSteps = 1000;
-            this.typingArea.Name = "typingArea";
-            this.typingArea.Size = new System.Drawing.Size(400, 372);
-            this.typingArea.TabIndex = 1;
-            this.typingArea.Text = "";
-            this.typingArea.TextChanged += new System.EventHandler(this.typingArea_TextChanged);
+            this.typingArea1.CaseSensitive = false;
+            this.typingArea1.EnabledHighlight = true;
+            this.typingArea1.Location = new System.Drawing.Point(12, 12);
+            this.typingArea1.Name = "typingArea1";
+            this.typingArea1.Size = new System.Drawing.Size(406, 378);
+            this.typingArea1.TabIndex = 1;
+            this.typingArea1.Text = "";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.typingArea);
+            this.Controls.Add(this.typingArea1);
             this.Controls.Add(this.richTextBox1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -72,7 +69,7 @@ namespace Tester
         #endregion
 
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private TypingArea typingArea;
+        private TypingArea typingArea1;
     }
 }
 

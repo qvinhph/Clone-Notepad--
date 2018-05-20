@@ -17,15 +17,15 @@ namespace SyntaxHighlightingTextbox
         private SeparatorCollection separators = new SeparatorCollection();
         private HighlightDescriptorCollection descriptors = new HighlightDescriptorCollection();
         private bool caseSensitive = false;
-        private bool filterAutoComplete = false;
-        private bool enabledAutoCompleteForm = false;
-        private int maxUndoRedoSteps = 1000;
+        //private bool filterAutoComplete = false;
+        //private bool enabledAutoCompleteForm = false;
+        private bool enabledHighlight = true;
         private char[] separatorArray;
 
         //Internal use members
-        private bool autoCompleteShown = false;
+        //private bool autoCompleteShown = false;
         private bool parsing = false;
-        private bool ignoreLostFocus = false;
+        //private bool ignoreLostFocus = false;
 
         //Members used for Highlight() function.
         private StringBuilder rtfHeader = new StringBuilder();
@@ -34,10 +34,30 @@ namespace SyntaxHighlightingTextbox
         //private AutoCompleteForm mAutoCompleteForm = new AutoCompleteForm();
 
         //Undo/Redo members
-        //private ArrayList mUndoList = new ArrayList();
-        //private Stack mRedoStack = new Stack();
-        //private bool mIsUndo = false;
-        //private UndoRedoInfo mLastInfo = new UndoRedoInfo("", new Win32.POINT(), 0);
+        private Stack<UndoRedoInfo> undoStack = new Stack<UndoRedoInfo>();
+        private Stack<UndoRedoInfo> redoStack = new Stack<UndoRedoInfo>();
+        private bool isUndoRedo = false;
+        private UndoRedoInfo lastInfo = new UndoRedoInfo("", 0, new Win32.POINT());
+
+        public struct UndoRedoInfo
+        {
+            /// <summary>
+            /// Create a new instance of UndoRedoInfo.
+            /// </summary>
+            /// <param name="text">The current text in textbox.</param>
+            /// <param name="caretPos">the current</param>
+            /// <param name="scrollPos"></param>
+            public UndoRedoInfo(string text, int caretPos, Win32.POINT scrollPos)
+            {
+                this.caretPosition = caretPos;
+                this.scrollPosition = scrollPos;
+                this.text = text;
+            }
+
+            public readonly int caretPosition;
+            public readonly Win32.POINT scrollPosition;
+            public readonly string text;
+        }
 
         #endregion
 
@@ -55,37 +75,6 @@ namespace SyntaxHighlightingTextbox
             set
             {
                 caseSensitive = value;
-            }
-        }
-
-
-        /// <summary>
-        /// Sets whether or not to remove items from the Autocomplete window as the user types...
-        /// </summary>
-        public bool FilterAutoComplete
-        {
-            get
-            {
-                return filterAutoComplete;
-            }
-            set
-            {
-                filterAutoComplete = value;
-            }
-        }
-
-        /// <summary>
-        /// Set the maximum amount of Undo/Redo steps.
-        /// </summary>
-        public int MaxUndoRedoSteps
-        {
-            get
-            {
-                return maxUndoRedoSteps;
-            }
-            set
-            {
-                maxUndoRedoSteps = value;
             }
         }
 
@@ -112,21 +101,16 @@ namespace SyntaxHighlightingTextbox
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [enable auto complete form].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [enable auto complete form]; otherwise, <c>false</c>.
-        /// </value>
-        public bool EnabledAutoCompleteForm
+        public bool EnabledHighlight
         {
             get
             {
-                return enabledAutoCompleteForm;
+                return enabledHighlight;
             }
+
             set
             {
-                enabledAutoCompleteForm = value;
+                enabledHighlight = value;
             }
         }
 
@@ -145,222 +129,60 @@ namespace SyntaxHighlightingTextbox
             //    this.LimitUndo();
             //    mLastInfo = new UndoRedoInfo(Text, GetScrollPos(), SelectionStart);
             //}
-            
-            Highlight();
-          
-
-            if (autoCompleteShown)
+            if (!isUndoRedo)
             {
-                //if (mFilterAutoComplete)
-                //{
-                //    SetAutoCompleteItems();
-                //    SetAutoCompleteSize();
-                //    SetAutoCompleteLocation(false);
-                //}
-                //SetBestSelectedAutoCompleteItem();
+                redoStack.Clear();
+                undoStack.Push(lastInfo);
+                lastInfo = new UndoRedoInfo(Text, SelectionStart, GetScrollPos());
             }
+
+            if (EnabledHighlight)
+            {
+                Highlight();
+            }
+
+            //if (autoCompleteShown)
+            //{
+            //    if (mFilterAutoComplete)
+            //    {
+            //        SetAutoCompleteItems();
+            //        SetAutoCompleteSize();
+            //        SetAutoCompleteLocation(false);
+            //    }
+            //    SetBestSelectedAutoCompleteItem();
+            //}
 
             base.OnTextChanged(e);
         }
 
-        public void Highlight()
+        protected override void WndProc(ref Message m)
         {
-            parsing = true;
-            rtfHeader.Length = 0;
-            fontStyles.Clear();
-
-            //Save cursor and scrollbars position
-            Win32.LockWindowUpdate(Handle);
-            Win32.POINT scrollPosition = GetScrollPos();
-            int cursorPosition = SelectionStart;
-
-            StringBuilder rtfBody = new StringBuilder();
-
-            //Dictionary that saves the index of font/color in font/color table.
-            Dictionary<string, int> fonts = new Dictionary<string, int>();
-            Dictionary<Color, int> colors = new Dictionary<Color, int>();
-
-            //Add RTF header
-            rtfHeader.Append(@"{\rtf1\ansi\deff0");
-
-            //Create color table, loaded from color's descriptors.
-            colors = AddColorTable(rtfHeader);
-
-            //Create font table
-            rtfHeader.Append(@"{\fonttbl ");
-
-            //Add default font of the textbox.
-            AddFontToTable(rtfHeader, Font, fonts);
-
-            //Add the defaults font tags to 
-            fontStyles.GetFontStyle(Font);
-
-            //Parsing text in the rtf body
-            rtfBody.Append(@"\viewkind4\uc1\pard\ltrpar").Append("\n");
-            //Set default color and font for the text
-            SetDefaultSetting(rtfBody, colors, fonts);
-
-            separatorArray = separators.ToArray();
-
-            //Replace some specified symbols that has meaning in RTF file.
-            string inputText = Text;
-            string[] lines = inputText.Replace("\\", "\\\\").Replace("{", "\\{").Replace("}", "\\}").Split('\n');
-
-            //Scan every line of input text.
-            for (int lineCounter = 0; lineCounter < lines.Length; lineCounter++)
+            switch (m.Msg)
             {
-                if (lineCounter != 0)
-                {
-                    AddNewLine(rtfBody);
-                }
-
-                string line = lines[lineCounter];
-
-                //Put every word of line to an array.
-                string[] tokens = caseSensitive ? line.Split(separatorArray) : line.ToUpper().Split(separatorArray);
-
-                int tokenCounter = 0;
-                for (int i = 0; i < line.Length;)
-                {
-                    char currentChar = line[i];
-                    if (separators.Contains(currentChar))
+                // Don't redraw the control windows if the text is parsing to avoid flicker.
+                case Win32.WM_PAINT: 
+                    if (parsing)
+                        return;
+                    break;
+                case Win32.WM_KEYDOWN:
+                    //Shortcut for undo
+                    if (((Keys)m.WParam == Keys.Z) && (Win32.GetKeyState(Win32.VK_CONTROL) != 0))
                     {
-                        rtfBody.Append(currentChar);
-                        i++;
+                        Undo();
+                        break;
                     }
-                    else
+                    //Shortcut for redo
+                    else if (((Keys)m.WParam == Keys.Y) && (Win32.GetKeyState(Win32.VK_CONTROL) != 0))
                     {
-                        if (tokenCounter >= tokens.Length) break;
-                        string currentToken = tokens[tokenCounter];
-                        tokenCounter++;
-                        bool isPlainTextToken = true;
-
-                        foreach (var item in descriptors)
-                        {
-                            string stringToCompare = caseSensitive ? item.token : item.token.ToUpper();
-                            bool match = false;
-
-                            //Check if the current token matches any of descriptors according to the DescriptorRecognition property.
-                            switch (item.descriptorRecognition)
-                            {
-                                case DescriptorRecognition.WholeWord:
-                                    if (stringToCompare == currentToken)
-                                        match = true;
-                                    break;
-                                case DescriptorRecognition.StartsWith:
-                                    if (currentToken.StartsWith(stringToCompare))
-                                        match = true;
-                                    break;
-                                case DescriptorRecognition.Contains:
-                                    if (currentToken.Contains(stringToCompare))
-                                        match = true;
-                                    break;
-                                case DescriptorRecognition.IsNumber:
-                                    double number = 0;
-                                    if (double.TryParse(currentToken, out number))
-                                        match = true;
-                                    break;
-                                default:
-                                    break;
-                            }
-                            if (!match)
-                            {
-                                //If doesn't match, continue to check another item in descriptors.
-                                continue;
-                            }
-
-                            //Found the item of descriptors that matches.
-                            isPlainTextToken = false;
-                            //Open a "block" that contains the text we are going to add
-                            //and its style tags
-                            rtfBody.Append("{");
-                            //Apply the font and color for the text.
-                            SetDescriptorSetting(rtfBody, item, colors, fonts);
-
-                            string textToFormat = "";
-                            switch (item.descriptorType)
-                            {
-                                case DescriptorType.Word:
-                                    textToFormat = line.Substring(i, currentToken.Length);
-                                    i += currentToken.Length;
-                                    break;
-                                //case DescriptorType.ToEOW:
-                                //    textToFormat = line.Substring(i, currentToken.Length);
-                                //    i += currentToken.Length;
-                                //    break;
-                                case DescriptorType.ToEOL:
-                                    textToFormat = line.Substring(i, line.Length);
-                                    i = line.Length;
-                                    break;
-                                case DescriptorType.ToCloseToken:
-                                    {
-                                        StringBuilder sbOfTextToFormat = new StringBuilder();
-                                        //int closeStart = i + item.token.Length;
-                                        while ((!line.Contains(item.closeToken)) && (lineCounter < lines.Length))
-                                        {
-                                            sbOfTextToFormat.Append(line.Remove(0, i));
-                                            lineCounter++;
-                                            if (lineCounter < lines.Length) //Not the last line.
-                                            {
-                                                AddNewLine(sbOfTextToFormat);
-                                                line = lines[lineCounter];
-                                                i = 0;
-                                            }
-                                            else
-                                                i = line.Length;
-                                        }
-
-                                        bool hasCloseToken = line.Contains(item.closeToken);
-                                        if (hasCloseToken)
-                                        {
-                                            int closeTokenIndex = line.IndexOf(item.closeToken);
-                                            sbOfTextToFormat.Append(line.Substring(i, closeTokenIndex + item.closeToken.Length - i));
-
-                                            //Because we might skip some token since add it to text to format.
-                                            //--> We need to generate the list of tokens in line again. 
-                                            line = line.Remove(0, closeTokenIndex + item.closeToken.Length);
-                                            tokenCounter = 0;
-                                            tokens = caseSensitive ? line.Split(separatorArray) : line.ToUpper().Split(separatorArray);
-                                            i = 0;
-                                        }
-
-                                        textToFormat = sbOfTextToFormat.ToString();
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            AddTextToRTFBody(rtfBody, textToFormat);
-                            //Close the block contains the text formated.
-                            rtfBody.Append("}");
-                            break;
-                        } //End of foreach(var item in descriptors).
-
-                        if (isPlainTextToken)
-                        {
-                            AddTextToRTFBody(rtfBody, line.Substring(i, currentToken.Length));
-                            i += currentToken.Length;
-                        }
+                        Redo();
+                        break;
                     }
-                } //End for(int i = 0; i < line.Length;).
-            } //End of for(int lineCounter = 0; lineCounter < lines.Length; lineCounter++)
+                    break;
+                default:
+                    break;
+            }
 
-            //Close rtf header.
-            rtfHeader.Append("\n}\n");
-
-            //Join the rtf header with the rtf body.
-            //Then show it to the text box.
-            string rtfString = rtfHeader.ToString() + rtfBody.ToString();
-            this.Rtf = rtfString;
-
-            //Restore cursor and scrollbars location.
-            SelectionStart = cursorPosition;
-            SelectionLength = 0;
-            SetScrollPos(scrollPosition);
-            Win32.LockWindowUpdate((IntPtr)0);
-            Invalidate();
-            parsing = false;
+            base.WndProc(ref m);
         }
 
         #endregion
@@ -567,6 +389,262 @@ namespace SyntaxHighlightingTextbox
         }
 
 
+
+        #endregion
+
+        #region Undo/Redo code
+
+        public new bool CanUndo
+        {
+            get
+            {
+                return undoStack.Count > 0;
+            }
+        }
+
+        public new bool CanRedo
+        {
+            get
+            {
+                return redoStack.Count > 0;
+            }
+        }
+
+
+        public new void Undo()
+        {
+            if (!CanUndo)
+                return;
+
+            isUndoRedo = true;
+            redoStack.Push(new UndoRedoInfo(Text, SelectionStart, GetScrollPos()));
+            UndoRedoInfo info = undoStack.Pop();
+
+            this.Text = info.text;
+            this.SelectionStart = (int)info.caretPosition;
+            SetScrollPos(info.scrollPosition);
+            lastInfo = info;
+            isUndoRedo = false;
+        }
+
+        public new void Redo()
+        {
+            if (!CanRedo)
+                return;
+
+            isUndoRedo = true;
+            undoStack.Push(new UndoRedoInfo(Text, SelectionStart, GetScrollPos()));
+            UndoRedoInfo info = redoStack.Pop();
+
+            Text = info.text;
+            SelectionStart = info.caretPosition;
+            SetScrollPos(info.scrollPosition);
+            lastInfo = info;
+            isUndoRedo = false;
+        }
+        #endregion
+
+        #region Highlight Syntax code
+
+        public void Highlight()
+        {
+            parsing = true;
+            rtfHeader.Length = 0;
+            fontStyles.Clear();
+
+            //Save caret and scrollbars position
+            Win32.LockWindowUpdate(Handle);
+            Win32.POINT scrollPosition = GetScrollPos();
+            int caretPosition = SelectionStart;
+
+            StringBuilder rtfBody = new StringBuilder();
+
+            //Dictionary that saves the index of font/color in font/color table.
+            Dictionary<string, int> fonts = new Dictionary<string, int>();
+            Dictionary<Color, int> colors = new Dictionary<Color, int>();
+
+            //Add RTF header
+            rtfHeader.Append(@"{\rtf1\ansi\deff0");
+
+            //Create color table, loaded from color's descriptors.
+            colors = AddColorTable(rtfHeader);
+
+            //Create font table
+            rtfHeader.Append(@"{\fonttbl ");
+
+            //Add default font of the textbox.
+            AddFontToTable(rtfHeader, Font, fonts);
+
+            //Add the defaults font tags to 
+            fontStyles.GetFontStyle(Font);
+
+            //Parsing text in the rtf body
+            rtfBody.Append(@"\viewkind4\uc1\pard\ltrpar").Append("\n");
+            //Set default color and font for the text
+            SetDefaultSetting(rtfBody, colors, fonts);
+
+            separatorArray = separators.ToArray();
+
+            //Replace some specified symbols that has meaning in RTF file.
+            string inputText = Text;
+            string[] lines = inputText.Replace("\\", "\\\\").Replace("{", "\\{").Replace("}", "\\}").Split('\n');
+
+            //Scan every line of input text.
+            for (int lineCounter = 0; lineCounter < lines.Length; lineCounter++)
+            {
+                if (lineCounter != 0)
+                {
+                    AddNewLine(rtfBody);
+                }
+
+                string line = lines[lineCounter];
+
+                //Put every word of line to an array.
+                string[] tokens = CaseSensitive ? line.Split(separatorArray) : line.ToUpper().Split(separatorArray);
+
+                int tokenCounter = 0;
+                for (int i = 0; i < line.Length;)
+                {
+                    char currentChar = line[i];
+                    if (separators.Contains(currentChar))
+                    {
+                        rtfBody.Append(currentChar);
+                        i++;
+                    }
+                    else
+                    {
+                        if (tokenCounter >= tokens.Length) break;
+                        string currentToken = tokens[tokenCounter];
+                        tokenCounter++;
+                        bool isPlainTextToken = true;
+
+                        foreach (var item in descriptors)
+                        {
+                            string stringToCompare = CaseSensitive ? item.token : item.token.ToUpper();
+                            bool match = false;
+
+                            //Check if the current token matches any of descriptors according to the DescriptorRecognition property.
+                            switch (item.descriptorRecognition)
+                            {
+                                case DescriptorRecognition.WholeWord:
+                                    if (stringToCompare == currentToken)
+                                        match = true;
+                                    break;
+                                case DescriptorRecognition.StartsWith:
+                                    if (currentToken.StartsWith(stringToCompare))
+                                        match = true;
+                                    break;
+                                case DescriptorRecognition.Contains:
+                                    if (currentToken.Contains(stringToCompare))
+                                        match = true;
+                                    break;
+                                case DescriptorRecognition.IsNumber:
+                                    double number = 0;
+                                    if (double.TryParse(currentToken, out number))
+                                        match = true;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            if (!match)
+                            {
+                                //If doesn't match, continue to check another item in descriptors.
+                                continue;
+                            }
+
+                            //Found the item of descriptors that matches.
+                            isPlainTextToken = false;
+                            //Open a "block" that contains the text we are going to add
+                            //and its style tags
+                            rtfBody.Append("{");
+                            //Apply the font and color for the text.
+                            SetDescriptorSetting(rtfBody, item, colors, fonts);
+
+                            string textToFormat = "";
+                            switch (item.descriptorType)
+                            {
+                                case DescriptorType.Word:
+                                    textToFormat = line.Substring(i, currentToken.Length);
+                                    i += currentToken.Length;
+                                    break;
+                                //case DescriptorType.ToEOW:
+                                //    textToFormat = line.Substring(i, currentToken.Length);
+                                //    i += currentToken.Length;
+                                //    break;
+                                case DescriptorType.ToEOL:
+                                    textToFormat = line.Substring(i, line.Length);
+                                    i = line.Length;
+                                    break;
+                                case DescriptorType.ToCloseToken:
+                                    {
+                                        StringBuilder sbOfTextToFormat = new StringBuilder();
+                                        //int closeStart = i + item.token.Length;
+                                        while ((!line.Contains(item.closeToken)) && (lineCounter < lines.Length))
+                                        {
+                                            sbOfTextToFormat.Append(line.Remove(0, i));
+                                            lineCounter++;
+                                            if (lineCounter < lines.Length) //Not the last line.
+                                            {
+                                                AddNewLine(sbOfTextToFormat);
+                                                line = lines[lineCounter];
+                                                i = 0;
+                                            }
+                                            else
+                                                i = line.Length;
+                                        }
+
+                                        bool hasCloseToken = line.Contains(item.closeToken);
+                                        if (hasCloseToken)
+                                        {
+                                            int closeTokenIndex = line.IndexOf(item.closeToken);
+                                            sbOfTextToFormat.Append(line.Substring(i, closeTokenIndex + item.closeToken.Length - i));
+
+                                            //Because we might skip some token since add it to text to format.
+                                            //--> We need to generate the list of tokens in line again. 
+                                            line = line.Remove(0, closeTokenIndex + item.closeToken.Length);
+                                            tokenCounter = 0;
+                                            tokens = CaseSensitive ? line.Split(separatorArray) : line.ToUpper().Split(separatorArray);
+                                            i = 0;
+                                        }
+
+                                        textToFormat = sbOfTextToFormat.ToString();
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            AddTextToRTFBody(rtfBody, textToFormat);
+                            //Close the block contains the text formated.
+                            rtfBody.Append("}");
+                            break;
+                        } //End of foreach(var item in descriptors).
+
+                        if (isPlainTextToken)
+                        {
+                            AddTextToRTFBody(rtfBody, line.Substring(i, currentToken.Length));
+                            i += currentToken.Length;
+                        }
+                    }
+                } //End for(int i = 0; i < line.Length;).
+            } //End of for(int lineCounter = 0; lineCounter < lines.Length; lineCounter++)
+
+            //Close rtf header.
+            rtfHeader.Append("\n}\n");
+
+            //Join the rtf header with the rtf body.
+            //Then show it to the text box.
+            string rtfString = rtfHeader.ToString() + rtfBody.ToString();
+            this.Rtf = rtfString;
+
+            //Restore caret and scrollbars location.
+            SelectionStart = caretPosition;
+            SelectionLength = 0;
+            SetScrollPos(scrollPosition);
+            Win32.LockWindowUpdate((IntPtr)0);
+            Invalidate();
+            parsing = false;
+        }
 
         #endregion
 
