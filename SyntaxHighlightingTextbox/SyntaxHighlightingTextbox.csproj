@@ -47,11 +47,11 @@
     <Compile Include="HighlightDescriptorCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeparatorCollection.cs" />
-    <Compile Include="SyntaxHighlightTextboxControl.cs">
+    <Compile Include="TypingArea.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SyntaxHighlightTextboxControl.Designer.cs">
-      <DependentUpon>SyntaxHighlightTextboxControl.cs</DependentUpon>
+    <Compile Include="TypingArea.Designer.cs">
+      <DependentUpon>TypingArea.cs</DependentUpon>
     </Compile>
     <Compile Include="Win32.cs" />
   </ItemGroup>
