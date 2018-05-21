@@ -1,8 +1,9 @@
 ﻿using System.Windows.Forms;
 
+
 namespace SyntaxHighlightingTextbox
 {
-    partial class TypingArea
+    partial class RightMargin
     {
         /// <summary>
         /// Required designer variable.

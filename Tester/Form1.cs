@@ -45,20 +45,5 @@ namespace Tester
             typingArea1.Descriptors.Add(new HighlightDescriptor("/*", "*/", HighlightType.ToCloseToken, DescriptorRecognition.StartsWith, Color.Green, 
                                                                 null, false));
         }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void typingArea_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void typingArea1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
