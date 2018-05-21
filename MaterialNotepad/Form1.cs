@@ -58,6 +58,7 @@ namespace MaterialNotepad
             typingArea1.Descriptors.Add(new HighlightDescriptor("/*", "*/", HighlightType.ToCloseToken, DescriptorRecognition.StartsWith, Color.Green,
                                                                 null, false));
             typingArea1.Descriptors.Add(new HighlightDescriptor("Nghiangu", Color.Red, this.Font, HighlightType.ToEOW, DescriptorRecognition.WholeWord, false));
+            typingArea1.Descriptors.Add(new HighlightDescriptor("Quangdepzai", Color.Red, this.Font, HighlightType.ToEOW, DescriptorRecognition.WholeWord, false));
 
         }
         private void Menu_Mouseover(object sender, EventArgs e)

@@ -83,7 +83,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Source\Repos\Notepad++ new\SyntaxHighlightingTextbox\SyntaxHighlightingTextbox.csproj">
+    <ProjectReference Include="..\SyntaxHighlightingTextbox\SyntaxHighlightingTextbox.csproj">
       <Project>{bcd522fd-2e1e-43ff-9764-b6a631716927}</Project>
       <Name>SyntaxHighlightingTextbox</Name>
     </ProjectReference>
