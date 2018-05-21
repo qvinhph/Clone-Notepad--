@@ -40,9 +40,9 @@ namespace Tester
             typingArea1.WordWrap = false;
             typingArea1.ScrollBars = RichTextBoxScrollBars.Both;// & RichTextBoxScrollBars.ForcedVertical;
 
-            typingArea1.Descriptors.Add(new HighlightDescriptor("Hello", Color.Red, this.Font, DescriptorType.Word, DescriptorRecognition.WholeWord, false));
-            typingArea1.Descriptors.Add(new HighlightDescriptor("", Color.Green, null, DescriptorType.Word, DescriptorRecognition.IsNumber, false));
-            typingArea1.Descriptors.Add(new HighlightDescriptor("/*", "*/", DescriptorType.ToCloseToken, DescriptorRecognition.StartsWith, Color.Green, 
+            typingArea1.Descriptors.Add(new HighlightDescriptor("Hello", Color.Red, this.Font, HighlightType.ToEOW, DescriptorRecognition.WholeWord, false));
+            typingArea1.Descriptors.Add(new HighlightDescriptor("", Color.Green, null, HighlightType.ToEOW, DescriptorRecognition.IsNumber, false));
+            typingArea1.Descriptors.Add(new HighlightDescriptor("/*", "*/", HighlightType.ToCloseToken, DescriptorRecognition.StartsWith, Color.Green, 
                                                                 null, false));
         }
 
@@ -52,6 +52,11 @@ namespace Tester
         }
 
         private void typingArea_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void typingArea1_TextChanged(object sender, EventArgs e)
         {
 
         }

@@ -15,17 +15,17 @@ namespace SyntaxHighlightingTextbox
         #region Fields
         //Members exposed via properties
         private SeparatorCollection separators = new SeparatorCollection();
+        /// <summary>
+        /// List of highlight descriptors describing how to highlight.
+        /// </summary>
         private HighlightDescriptorCollection descriptors = new HighlightDescriptorCollection();
         private bool caseSensitive = false;
-        //private bool filterAutoComplete = false;
-        //private bool enabledAutoCompleteForm = false;
-        private bool enabledHighlight = true;
-        private char[] separatorArray;
+        private bool enableHighlight = true;
+        
 
         //Internal use members
-        //private bool autoCompleteShown = false;
         private bool parsing = false;
-        //private bool ignoreLostFocus = false;
+        private char[] separatorArray;
 
         //Members used for Highlight() function.
         private StringBuilder rtfHeader = new StringBuilder();
@@ -101,16 +101,16 @@ namespace SyntaxHighlightingTextbox
             }
         }
 
-        public bool EnabledHighlight
+        public bool EnableHighlight
         {
             get
             {
-                return enabledHighlight;
+                return enableHighlight;
             }
 
             set
             {
-                enabledHighlight = value;
+                enableHighlight = value;
             }
         }
 
@@ -136,7 +136,7 @@ namespace SyntaxHighlightingTextbox
                 lastInfo = new UndoRedoInfo(Text, SelectionStart, GetScrollPos());
             }
 
-            if (EnabledHighlight)
+            if (EnableHighlight)
             {
                 Highlight();
             }
@@ -561,21 +561,17 @@ namespace SyntaxHighlightingTextbox
                             SetDescriptorSetting(rtfBody, item, colors, fonts);
 
                             string textToFormat = "";
-                            switch (item.descriptorType)
+                            switch (item.highlightType)
                             {
-                                case DescriptorType.Word:
+                                case HighlightType.ToEOW:
                                     textToFormat = line.Substring(i, currentToken.Length);
                                     i += currentToken.Length;
                                     break;
-                                //case DescriptorType.ToEOW:
-                                //    textToFormat = line.Substring(i, currentToken.Length);
-                                //    i += currentToken.Length;
-                                //    break;
-                                case DescriptorType.ToEOL:
+                                case HighlightType.ToEOL:
                                     textToFormat = line.Substring(i, line.Length);
                                     i = line.Length;
                                     break;
-                                case DescriptorType.ToCloseToken:
+                                case HighlightType.ToCloseToken:
                                     {
                                         StringBuilder sbOfTextToFormat = new StringBuilder();
                                         //int closeStart = i + item.token.Length;
@@ -644,6 +640,69 @@ namespace SyntaxHighlightingTextbox
             Win32.LockWindowUpdate((IntPtr)0);
             Invalidate();
             parsing = false;
+        }
+
+        public void AddHighlightDescriptor(DescriptorRecognition descriptorRecognition, string openToken, HighlightType highlightType,
+            string closeToken, Color color, Font font)
+        {
+            Descriptors.Add(new HighlightDescriptor(openToken, closeToken, highlightType, descriptorRecognition, color, font, false));
+        }
+
+        public void AddHighlightDescriptor(DescriptorRecognition descriptorRecognition, string token, HighlightType highlightType,
+            Color color, Font font)
+        {
+            Descriptors.Add(new HighlightDescriptor(token, color, font, highlightType, descriptorRecognition));
+        }
+
+        /// <summary>
+        /// Add a number of keyword that need to be highlight.
+        /// </summary>
+        /// <param name="listOfKeyword">The list of keywords.</param>
+        /// <param name="color">The color setting to the keywords.</param>
+        /// <param name="font">The font setting to the keywords.</param>
+        public void AddHighlightKeywords(List<string> listOfKeyword, Color color, Font font)
+        {
+            foreach (string word in listOfKeyword)
+            {
+                AddHighlightDescriptor(DescriptorRecognition.WholeWord, word, HighlightType.ToEOW, Color.DeepSkyBlue, null);
+            }
+        }
+
+        /// <summary>
+        /// Add a list of open and close tokens that set boundary for highlighting.
+        /// </summary>
+        /// <param name="listOfPairToken">The list of tokens of which even index is open token, odd index is close token.</param>
+        /// <param name="color">The color of text inside the boundary.</param>
+        /// <param name="font">The font of text inside the boundary.</param>
+        public void AddHighlightBoundaries(List<string> listOfPairToken, Color color, Font font)
+        {
+            if (listOfPairToken.Count % 2 != 0)
+            {
+                throw new ArgumentException("A pair of tokens is required.");
+            }
+
+            for (int i = 0; i < listOfPairToken.Count; i = i + 2)
+            {
+                AddHighlightDescriptor(DescriptorRecognition.StartsWith, listOfPairToken[i],
+                    HighlightType.ToCloseToken, listOfPairToken[i + 1], color, font);
+            }
+        }
+
+        /// <summary>
+        /// Add a list of character having the same way to highlight.
+        /// </summary>
+        /// <param name="listThings">A list of characters.</param>
+        /// <param name="recognition"></param>
+        /// <param name="highlightType"></param>
+        /// <param name="color"></param>
+        /// <param name="font"></param>
+        public void AddListOfHighlightDescriptors(List<string> listThings, DescriptorRecognition recognition,
+                                        HighlightType highlightType, Color color, Font font)
+        {
+            foreach (string item in listThings)
+            {
+                AddHighlightDescriptor(recognition, item, highlightType, color, font);
+            }
         }
 
         #endregion

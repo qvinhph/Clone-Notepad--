@@ -15,20 +15,20 @@ namespace SyntaxHighlightingTextbox
         /// <param name="token">The token.</param>
         /// <param name="color">The color.</param>
         /// <param name="font">The font.</param>
-        /// <param name="descriptorType">Type of the descriptor.</param>
+        /// <param name="highlightType">Type of the descriptor.</param>
         /// <param name="dr">The dr.</param>
         /// <param name="useForAutoComplete">if set to <c>true</c> [use for auto complete].</param>
-        public HighlightDescriptor(string token, Color color, Font font, DescriptorType descriptorType, 
-            DescriptorRecognition descriptorRecognition, bool isUsedForAutoComplete)
+        public HighlightDescriptor(string token, Color color, Font font, HighlightType highlightType, 
+            DescriptorRecognition descriptorRecognition, bool isUsedForAutoComplete = true)
         {
-            if (descriptorType == DescriptorType.ToCloseToken)
+            if (highlightType == HighlightType.ToCloseToken)
             {
-                throw new ArgumentException("You may not choose ToCloseToken DescriptorType without specifing an end token.");
+                throw new ArgumentException("You may not choose ToCloseToken HighlightType without specifing an end token.");
             }
             this.color = color;
             this.font = font;
             this.token = token;
-            this.descriptorType = descriptorType;
+            this.highlightType = highlightType;
             this.descriptorRecognition = descriptorRecognition;
             this.closeToken = null;
             this.isUsedForAutoComplete = isUsedForAutoComplete;
@@ -39,19 +39,19 @@ namespace SyntaxHighlightingTextbox
         /// </summary>
         /// <param name="token">The token.</param>
         /// <param name="closeToken">The close token.</param>
-        /// <param name="descriptorType">Type of the descriptor.</param>
+        /// <param name="highlightType">Type of the descriptor.</param>
         /// <param name="dr">The dr.</param>
         /// <param name="color">The color.</param>
         /// <param name="font">The font.</param>
         /// <param name="useForAutoComplete">if set to <c>true</c> [use for auto complete].</param>
-        public HighlightDescriptor(string token, string closeToken, DescriptorType descriptorType,
-            DescriptorRecognition descriptorRecognition, Color color, Font font, bool isUsedForAutoComplete)
+        public HighlightDescriptor(string token, string closeToken, HighlightType highlightType,
+            DescriptorRecognition descriptorRecognition, Color color, Font font, bool isUsedForAutoComplete = true)
         {
             this.color = color;
             this.font = font;
             this.token = token;
             this.closeToken = closeToken;
-            this.descriptorType = descriptorType;
+            this.highlightType = highlightType;
             this.descriptorRecognition = descriptorRecognition;
             this.isUsedForAutoComplete = isUsedForAutoComplete;
         }
@@ -60,17 +60,13 @@ namespace SyntaxHighlightingTextbox
         public readonly Font font;
         public readonly string token;
         public readonly string closeToken;
-        public readonly DescriptorType descriptorType;
+        public readonly HighlightType highlightType;
         public readonly DescriptorRecognition descriptorRecognition;
         public readonly bool isUsedForAutoComplete;
     }
 
-    public enum DescriptorType
+    public enum HighlightType
     {
-        /// <summary>
-        /// Causes the highlighting of a single word.
-        /// </summary>
-        Word,
         /// <summary>
         /// Causes the entire line from this point on the be highlighted, regardless of other tokens.
         /// </summary>

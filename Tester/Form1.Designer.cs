@@ -45,12 +45,13 @@ namespace Tester
             // typingArea1
             // 
             this.typingArea1.CaseSensitive = false;
-            this.typingArea1.EnabledHighlight = true;
+            this.typingArea1.EnableHighlight = true;
             this.typingArea1.Location = new System.Drawing.Point(12, 12);
             this.typingArea1.Name = "typingArea1";
             this.typingArea1.Size = new System.Drawing.Size(406, 378);
             this.typingArea1.TabIndex = 1;
             this.typingArea1.Text = "";
+            this.typingArea1.TextChanged += new System.EventHandler(this.typingArea1_TextChanged);
             // 
             // Form1
             // 
