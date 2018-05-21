@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GUI
+namespace MaterialNotepad
 {
     partial class Form1
     {
@@ -33,6 +33,7 @@ namespace GUI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialDivider1 = new MaterialSkin.Controls.MaterialDivider();
             this.materialDivider2 = new MaterialSkin.Controls.MaterialDivider();
             this.mMain = new MaterialSkin.Controls.MaterialContextMenuStrip();
@@ -69,7 +70,6 @@ namespace GUI
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.bMenu = new System.Windows.Forms.Button();
             this.bNew = new System.Windows.Forms.Button();
             this.bOpen = new System.Windows.Forms.Button();
@@ -83,6 +83,7 @@ namespace GUI
             this.ttSaveas = new System.Windows.Forms.ToolTip(this.components);
             this.ttSaveall = new System.Windows.Forms.ToolTip(this.components);
             this.bNewtab = new System.Windows.Forms.Button();
+            this.typingArea1 = new SyntaxHighlightingTextbox.TypingArea();
             this.mMain.SuspendLayout();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -341,7 +342,7 @@ namespace GUI
             this.materialTabSelector1.Location = new System.Drawing.Point(1, 110);
             this.materialTabSelector1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabSelector1.Name = "materialTabSelector1";
-            this.materialTabSelector1.Size = new System.Drawing.Size(779, 23);
+            this.materialTabSelector1.Size = new System.Drawing.Size(1103, 23);
             this.materialTabSelector1.TabIndex = 5;
             this.materialTabSelector1.Text = "materialTabSelector1";
             // 
@@ -350,31 +351,23 @@ namespace GUI
             this.materialTabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.materialTabControl1.Controls.Add(this.tabPage1);
             this.materialTabControl1.Depth = 0;
-            this.materialTabControl1.Location = new System.Drawing.Point(343, 276);
+            this.materialTabControl1.Location = new System.Drawing.Point(37, 139);
             this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(743, 270);
+            this.materialTabControl1.Size = new System.Drawing.Size(1058, 418);
             this.materialTabControl1.TabIndex = 6;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.richTextBox2);
+            this.tabPage1.Controls.Add(this.typingArea1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(735, 244);
+            this.tabPage1.Size = new System.Drawing.Size(1050, 392);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // richTextBox2
-            // 
-            this.richTextBox2.Location = new System.Drawing.Point(6, 6);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(725, 232);
-            this.richTextBox2.TabIndex = 0;
-            this.richTextBox2.Text = "";
             // 
             // bMenu
             // 
@@ -386,6 +379,7 @@ namespace GUI
             this.bMenu.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.bMenu.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.bMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bMenu.Image = ((System.Drawing.Image)(resources.GetObject("bMenu.Image")));
             this.bMenu.Location = new System.Drawing.Point(1, 68);
             this.bMenu.Name = "bMenu";
             this.bMenu.Size = new System.Drawing.Size(39, 36);
@@ -402,6 +396,7 @@ namespace GUI
             this.bNew.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.bNew.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.bNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bNew.Image = ((System.Drawing.Image)(resources.GetObject("bNew.Image")));
             this.bNew.Location = new System.Drawing.Point(41, 68);
             this.bNew.Name = "bNew";
             this.bNew.Size = new System.Drawing.Size(39, 36);
@@ -418,6 +413,7 @@ namespace GUI
             this.bOpen.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.bOpen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.bOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bOpen.Image = ((System.Drawing.Image)(resources.GetObject("bOpen.Image")));
             this.bOpen.Location = new System.Drawing.Point(86, 68);
             this.bOpen.Name = "bOpen";
             this.bOpen.Size = new System.Drawing.Size(39, 36);
@@ -434,6 +430,7 @@ namespace GUI
             this.bSave.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.bSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.bSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bSave.Image = ((System.Drawing.Image)(resources.GetObject("bSave.Image")));
             this.bSave.Location = new System.Drawing.Point(131, 68);
             this.bSave.Name = "bSave";
             this.bSave.Size = new System.Drawing.Size(39, 36);
@@ -450,6 +447,7 @@ namespace GUI
             this.bSaveas.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.bSaveas.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.bSaveas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bSaveas.Image = ((System.Drawing.Image)(resources.GetObject("bSaveas.Image")));
             this.bSaveas.Location = new System.Drawing.Point(176, 68);
             this.bSaveas.Name = "bSaveas";
             this.bSaveas.Size = new System.Drawing.Size(39, 36);
@@ -466,6 +464,7 @@ namespace GUI
             this.bSaveall.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.bSaveall.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.bSaveall.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.bSaveall.Image = ((System.Drawing.Image)(resources.GetObject("bSaveall.Image")));
             this.bSaveall.Location = new System.Drawing.Point(221, 68);
             this.bSaveall.Name = "bSaveall";
             this.bSaveall.Size = new System.Drawing.Size(39, 36);
@@ -501,6 +500,7 @@ namespace GUI
             // bNewtab
             // 
             this.bNewtab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(71)))), ((int)(((byte)(79)))));
+            this.bNewtab.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("bNewtab.BackgroundImage")));
             this.bNewtab.Cursor = System.Windows.Forms.Cursors.Hand;
             this.bNewtab.FlatAppearance.BorderColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.bNewtab.FlatAppearance.BorderSize = 0;
@@ -513,6 +513,16 @@ namespace GUI
             this.bNewtab.Size = new System.Drawing.Size(24, 23);
             this.bNewtab.TabIndex = 8;
             this.bNewtab.UseVisualStyleBackColor = false;
+            // 
+            // typingArea1
+            // 
+            this.typingArea1.CaseSensitive = false;
+            this.typingArea1.EnableHighlight = true;
+            this.typingArea1.Location = new System.Drawing.Point(0, 0);
+            this.typingArea1.Name = "typingArea1";
+            this.typingArea1.Size = new System.Drawing.Size(1054, 392);
+            this.typingArea1.TabIndex = 0;
+            this.typingArea1.Text = "";
             // 
             // Form1
             // 
@@ -547,7 +557,7 @@ namespace GUI
             Point ptLowerLeft = new Point(0, btnsender.Height);
             ptLowerLeft = btnsender.PointToScreen(ptLowerLeft);
             mMain.Show(ptLowerLeft);
-
+            
         }
 
 
@@ -581,7 +591,6 @@ namespace GUI
         private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
         private MaterialSkin.Controls.MaterialTabControl materialTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.Button bMenu;
         private Button bNew;
         private Button bOpen;
@@ -622,6 +631,7 @@ namespace GUI
         private ToolStripMenuItem cToolStripMenuItem;
         private ToolStripMenuItem cToolStripMenuItem1;
         private ToolStripMenuItem pythonToolStripMenuItem;
+        private SyntaxHighlightingTextbox.TypingArea typingArea1;
     }
 }
 

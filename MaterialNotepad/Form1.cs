@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaterialSkin.Controls;
+using SyntaxHighlightingTextbox;
 
 namespace MaterialNotepad
 {
@@ -37,32 +38,26 @@ namespace MaterialNotepad
             bSaveall.MouseLeave += OnMouseLeave;
         }
 
-        private void materialContextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-
-        }
-
-        private void materialFlatButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
+            typingArea1.Focus();
+            typingArea1.Separators.Add(' ');
+            typingArea1.Separators.Add('\r');
+            typingArea1.Separators.Add('\n');
+            typingArea1.Separators.Add(',');
+            typingArea1.Separators.Add('.');
+            typingArea1.Separators.Add('-');
+            typingArea1.Separators.Add('+');
+            //shtb.Seperators.Add('*');
+            //shtb.Seperators.Add('/');
+            typingArea1.WordWrap = false;
+            typingArea1.ScrollBars = RichTextBoxScrollBars.Both;// & RichTextBoxScrollBars.ForcedVertical;
 
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void button1_Click1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolTip1_Popup(object sender, PopupEventArgs e)
-        {
+            typingArea1.Descriptors.Add(new HighlightDescriptor("Hello", Color.Red, this.Font, HighlightType.ToEOW, DescriptorRecognition.WholeWord, false));
+            typingArea1.Descriptors.Add(new HighlightDescriptor("", Color.Green, null, HighlightType.ToEOW, DescriptorRecognition.IsNumber, false));
+            typingArea1.Descriptors.Add(new HighlightDescriptor("/*", "*/", HighlightType.ToCloseToken, DescriptorRecognition.StartsWith, Color.Green,
+                                                                null, false));
+            typingArea1.Descriptors.Add(new HighlightDescriptor("Nghiangu", Color.Red, this.Font, HighlightType.ToEOW, DescriptorRecognition.WholeWord, false));
 
         }
         private void Menu_Mouseover(object sender, EventArgs e)

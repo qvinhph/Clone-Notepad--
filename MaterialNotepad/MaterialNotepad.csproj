@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1F0F31BD-0966-4FCD-BDB5-2ECE5ADD6DE8}</ProjectGuid>
+    <ProjectGuid>{56A963ED-8AEE-4913-AA2A-42F3481E2C56}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>GUI</RootNamespace>
-    <AssemblyName>GUI</AssemblyName>
+    <RootNamespace>MaterialNotepad</RootNamespace>
+    <AssemblyName>MaterialNotepad</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -81,6 +81,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Source\Repos\Notepad++ new\SyntaxHighlightingTextbox\SyntaxHighlightingTextbox.csproj">
+      <Project>{bcd522fd-2e1e-43ff-9764-b6a631716927}</Project>
+      <Name>SyntaxHighlightingTextbox</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
