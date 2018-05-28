@@ -116,19 +116,35 @@ namespace SyntaxHighlightingTextbox
 
         #endregion
 
+        #region Methods
+
+        public new void Clear()
+        {
+            Descriptors.Clear();
+        }
+
+        public void ZoomIn()
+        {
+            if (this.ZoomFactor == 5f) return;
+            this.ZoomFactor = this.ZoomFactor + 0.1f;
+        }
+
+        public void ZoomOut()
+        {
+            if (this.ZoomFactor == 0.1f) return;
+            this.ZoomFactor = this.ZoomFactor - 0.1f;
+
+        }
+
+        #endregion
+
         #region Override Methods
 
         protected override void OnTextChanged(EventArgs e)
         {
+            var zoomFactor = this.ZoomFactor;
             if (parsing) return;
 
-            //if (!mIsUndo)
-            //{
-            //    mRedoStack.Clear();
-            //    mUndoList.Insert(0, mLastInfo);
-            //    this.LimitUndo();
-            //    mLastInfo = new UndoRedoInfo(Text, GetScrollPos(), SelectionStart);
-            //}
             if (!isUndoRedo)
             {
                 redoStack.Clear();
@@ -140,19 +156,31 @@ namespace SyntaxHighlightingTextbox
             {
                 Highlight();
             }
+            else
+            {
+                parsing = true;
 
-            //if (autoCompleteShown)
-            //{
-            //    if (mFilterAutoComplete)
-            //    {
-            //        SetAutoCompleteItems();
-            //        SetAutoCompleteSize();
-            //        SetAutoCompleteLocation(false);
-            //    }
-            //    SetBestSelectedAutoCompleteItem();
-            //}
+                //Store cursor and scrollbars location
+                Win32.LockWindowUpdate(Handle);
+                Win32.POINT scrollPos = GetScrollPos();
+                int cursorLoc = SelectionStart;
+
+                //Clear formatting
+                string txt = Text;
+                this.Rtf = "";
+                Text = txt;
+
+                //Restore cursor and scrollbars location
+                SelectionStart = cursorLoc;
+                SetScrollPos(scrollPos);
+                Win32.LockWindowUpdate((IntPtr)0);
+                Invalidate();
+
+                parsing = false;
+            }
 
             base.OnTextChanged(e);
+            this.ZoomFactor = zoomFactor;
         }
 
         protected override void WndProc(ref Message m)
@@ -338,7 +366,7 @@ namespace SyntaxHighlightingTextbox
             }
 
             rtfBody.Append(@"\f").Append(fontIndex);
-            //rtfBody.Append(fontStyles.GetFontStyle(fontToSet));
+            rtfBody.Append(fontStyles.GetFontStyle(fontToSet));
         }
 
         /// <summary>
@@ -664,7 +692,7 @@ namespace SyntaxHighlightingTextbox
         {
             foreach (string word in listOfKeyword)
             {
-                AddHighlightDescriptor(DescriptorRecognition.WholeWord, word, HighlightType.ToEOW, Color.DeepSkyBlue, null);
+                AddHighlightDescriptor(DescriptorRecognition.WholeWord, word, HighlightType.ToEOW, color, font);
             }
         }
 
@@ -696,12 +724,24 @@ namespace SyntaxHighlightingTextbox
         /// <param name="highlightType"></param>
         /// <param name="color"></param>
         /// <param name="font"></param>
-        public void AddListOfHighlightDescriptors(List<string> listThings, DescriptorRecognition recognition,
+        public void AddListOfHighlightDescriptors(List<string> listDescriptor, DescriptorRecognition recognition,
                                         HighlightType highlightType, Color color, Font font)
         {
-            foreach (string item in listThings)
+            foreach (string item in listDescriptor)
             {
                 AddHighlightDescriptor(recognition, item, highlightType, color, font);
+            }
+        }
+
+        /// <summary>
+        /// Add a list of separators.
+        /// </summary>
+        /// <param name="list"></param>
+        public void AddListOfSeparators(List<char> listSeparator)
+        {
+            foreach (char item in listSeparator)
+            {
+                Separators.Add(item);
             }
         }
 
@@ -710,6 +750,14 @@ namespace SyntaxHighlightingTextbox
         public TypingArea()
         {
             InitializeComponent();
+
+            //Separators
+            var separators = new List<char>()
+                        {
+                            '?', ',', '.', ';', '(', ')', '[', ']', '{', '}', '+', '-', '/',
+                            '%', '*', '^', '=', '~', '!', '|', ' ', '\r', '\n', '\t'
+                        };
+            AddListOfSeparators(separators);
         }
     }
 }
