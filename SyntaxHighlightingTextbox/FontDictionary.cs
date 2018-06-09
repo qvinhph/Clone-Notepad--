@@ -29,7 +29,7 @@ namespace SyntaxHighlightingTextbox
         /// </summary>
         /// <param name="font">The font to add.</param>
         /// <returns></returns>
-        private string SaveFontStyle(Font font)
+        public string SaveFontStyle(Font font)
         {
             StringBuilder fontStyle = new StringBuilder();
 

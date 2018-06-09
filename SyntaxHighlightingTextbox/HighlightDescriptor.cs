@@ -94,7 +94,7 @@ namespace SyntaxHighlightingTextbox
         /// <summary>
         /// If the word contains the token.
         /// </summary>
-        Contains,
+        //Contains,
         /// <summary>
         /// If the word is the number.
         /// </summary>

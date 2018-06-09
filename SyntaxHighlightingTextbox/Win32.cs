@@ -12,14 +12,14 @@ namespace SyntaxHighlightingTextbox
     /// </summary>
     public class Win32
     {
-        private Win32()
-        {}
+        private Win32() { }
 
         public const int WM_USER = 0x400;
         public const int WM_PAINT = 0xF;
         public const int WM_KEYDOWN = 0x100;
         public const int WM_KEYUP = 0x101;
         public const int WM_CHAR = 0x102;
+        public const int WM_SETREDRAW = 0x0b;
 
         public const int EM_GETSCROLLPOS = (WM_USER + 221);
         public const int EM_SETSCROLLPOS = (WM_USER + 222);
@@ -34,8 +34,14 @@ namespace SyntaxHighlightingTextbox
 
         public struct POINT
         {
-            public int x;
-            public int y;
+            public long x;
+            public long y;
+
+            public POINT(int a, int b)
+            {
+                x = a;
+                y = b;
+            }
         }
 
         /// <summary>
@@ -48,6 +54,18 @@ namespace SyntaxHighlightingTextbox
         /// <returns></returns>
         [DllImport("user32")]
         public static extern int SendMessage(IntPtr hwnd, int Msg, int wParam, ref POINT point);
+        
+
+        /// <summary>
+        /// The SendMessage function calls the window procedure for the specified window.
+        /// </summary>
+        /// <param name="hwnd">A handle to the window whose window procedure will receive the message.</param>
+        /// <param name="Msg">The message to be sent.</param>
+        /// <param name="wParam">Additional message-specific information.</param>
+        /// <param name="point">This parameter is depended on the messages.</param>
+        /// <returns></returns>
+        [DllImport("user32")]
+        public static extern int SendMessage(IntPtr hwnd, int Msg, int wParam, int lParam);
 
         [DllImport("user32")]
         public static extern short GetKeyState(int nVirtKey);
@@ -57,7 +75,5 @@ namespace SyntaxHighlightingTextbox
         /// </summary>
         /// <param name="hwnd">The handle to the window in which drawing will be disabled. If this parameter is NULL, drawing in the locked window is enabled.</param>
         /// <returns></returns>
-        [DllImport("user32")]
-        public static extern int LockWindowUpdate(IntPtr hwnd);
     }
 }

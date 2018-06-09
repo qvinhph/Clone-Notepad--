@@ -11,7 +11,7 @@ using SyntaxHighlightingTextbox;
 
 namespace GUI
 {
-    public partial class Form1 : Form
+    public partial class MainFrm : Form
     {
         private string language = "C#";
 
@@ -22,7 +22,7 @@ namespace GUI
         }
 
 
-        public Form1()
+        public MainFrm()
         {
             InitializeComponent();
         }
@@ -58,16 +58,17 @@ namespace GUI
         private void SetHighlightRule(string language)
         {
             var currentTypingArea = MyTabControl.CurrentTextArea;
+            var typingFont = currentTypingArea.Font;
             MyTabControl.CurrentTextArea.EnableHighlight = true;
             MyTabControl.CurrentTextArea.Clear();
             switch (language)
             {
                 case "C#":
                     {
-
                         //Number highlight
                         currentTypingArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
                                                     HighlightType.ToEOW, Color.IndianRed, null);
+
 
                         //Keyword highlight
                         var keywords = new List<string>()
@@ -80,8 +81,9 @@ namespace GUI
                             "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
                             "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe"
                         };
-                        var fontToSet = new Font(Font, FontStyle.Bold);
+                        var fontToSet = new Font(typingFont, FontStyle.Bold);
                         currentTypingArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
+
 
                         //Keyword highlight another color
                         var keywords2 = new List<string>()
@@ -89,7 +91,8 @@ namespace GUI
                             "define", "error", "import", "undef", "elif", "if", "include", "using", "else",
                             "ifdef", "line", "endif", "ifndef", "pragma"
                         };
-                        currentTypingArea.AddHighlightKeywords(keywords2, Color.SlateGray, Font);
+                        currentTypingArea.AddHighlightKeywords(keywords2, Color.SlateGray, typingFont);
+
 
                         //Comment highlight
                         var commentSymbols = new List<string>()
@@ -99,18 +102,20 @@ namespace GUI
                         currentTypingArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
                                                 HighlightType.ToEOL, Color.Green, null);
                         currentTypingArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
-                                                            HighlightType.ToCloseToken, "*/", Color.Green, Font);
+                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont);
+
 
                         //Highlight text between begin and end token
                         var listPair = new List<string>()
                         {
                             "\"", "\"", "\'", "\'",
                         };
-                        currentTypingArea.AddHighlightBoundaries(listPair, Color.Red, Font);
+                        currentTypingArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+
 
                         //Highlight string start with '#'
                         currentTypingArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
-                                                        Color.SlateGray, Font);
+                                                        Color.SlateGray, typingFont);
                         
                     }
                     break;
