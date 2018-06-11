@@ -9,22 +9,16 @@ using System.Drawing;
 
 namespace GUI
 {
-    static class MyTabControl
+    partial class MyTabControl
     {
+        //the "x" image 
+        private static Image closeImage;
 
-        #region Fields
-        private static Image closeImage; //the "x" image 
-        
-        private static TabControl tabControl; //A variable refer on current handling TabControl.
-        
-        #endregion
-
+        //A variable refer on current handling TabControl.
+        private static TabControl tabControl;
 
         #region Properties
 
-        /// <summary>
-        /// Get the current TypingArea control to manipulate with.
-        /// </summary>
         public static TypingArea CurrentTextArea
         {
             get
@@ -35,10 +29,6 @@ namespace GUI
             }
         }
 
-
-        /// <summary>
-        /// Get and set the current TabControl control to manipulate with.
-        /// </summary>
         public static TabControl TabControl
         {
             get
@@ -54,33 +44,27 @@ namespace GUI
 
         #endregion
 
-
         public static void SetupTabControl(TabControl _tabControl)
         {
-            TabControl = _tabControl;
-            TabControl.AllowDrop = true;
+            tabControl = _tabControl;
 
-
+            tabControl.AllowDrop = true;
+            
             //Allow to custom the way tab control are drawn through DrawItem event raising
             //whenever the tab redraw
-            //Defaults is TabDrawMode.Normal.
-            TabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-
+            tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
 
             //Set size of each tab page.
-            TabControl.Padding = new Point(15, 5);
+            tabControl.Padding = new Point(15, 3);
 
-
-            //get the "x" image from sources
+            //get the "x" image 
             closeImage = Properties.Resources.CloseImage;
 
-
             //draw the "x" button
-            TabControl.DrawItem += tabControl_DrawItem;
-
+            tabControl.DrawItem += tabControl_DrawItem;
 
             //click "x" button to close the tab page.
-            TabControl.MouseClick += tabControl_MouseDown;
+            tabControl.MouseClick += tabControl_MouseDown;
         }
 
         #region TabControl event handlers
@@ -90,32 +74,31 @@ namespace GUI
             //Get the area of the tab being drawn.
             Rectangle tabRect = tabControl.GetTabRect(e.Index);
 
-            //If the tab being drawn is the selected tab.
             if (e.Index == tabControl.SelectedIndex)
             {
-                //Set background color for selected tab
-                e.Graphics.FillRectangle(Brushes.LightGray, tabRect);
+                //If the tab being drawn is the selected tab.
+
+                //Get the rectangle of the selected tab
+                tabRect = tabControl.GetTabRect(tabControl.SelectedIndex);
+
+                //Set background color for this tab
+                e.Graphics.FillRectangle(Brushes.White, tabRect);
             }
 
-
-            //"x" image
-            int closeImageWidth = tabRect.Height;
-            int closeImageHeigt = tabRect.Height;
-            Rectangle imageRect = new Rectangle(tabRect.Right - closeImageWidth,
-                                                tabRect.Top, closeImageHeigt, closeImageHeigt);
-            //Minimize the closeImage for better look
-            imageRect.Inflate(-2, -2);
-
-
             //Reduce the area of rectangle to centerize the text inside.
-            tabRect.Inflate(-4, -4);
+            tabRect.Inflate(-2, -2);
 
-
-            //draw the string text
+            //Show name of the tab page.
             e.Graphics.DrawString(tabControl.TabPages[e.Index].Text,
                                   tabControl.Font, Brushes.Black, tabRect);
 
+            //"x" image
+            Rectangle imageRect = new Rectangle(tabRect.Right - closeImage.Width/3,
+                                                tabRect.Top, closeImage.Width/3, closeImage.Height/3);
 
+            //draw the string text 
+            e.Graphics.DrawString(tabControl.TabPages[e.Index].Text,
+                                  tabControl.Font, Brushes.Black, tabRect);
             //draw the "x" image
             e.Graphics.DrawImage(closeImage, imageRect);
         }
@@ -180,7 +163,7 @@ namespace GUI
         {
             TabPage newTabPage = new TabPage(tabName);
             InitTabPageInfo(newTabPage);
-            
+
             //Create the textbox inside
             TypingArea typingArea = new TypingArea();
             newTabPage.Controls.Add(typingArea);
