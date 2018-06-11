@@ -11,7 +11,7 @@ using SyntaxHighlightingTextbox;
 
 namespace GUI
 {
-    public partial class MainFrm : Form
+    public partial class _MainFrm : Form
     {
         private string language = "C#";
 
@@ -22,7 +22,7 @@ namespace GUI
         }
 
 
-        public MainFrm()
+        public _MainFrm()
         {
             InitializeComponent();
         }
@@ -58,6 +58,7 @@ namespace GUI
         private void SetHighlightRule(string language)
         {
             var currentTypingArea = MyTabControl.CurrentTextArea;
+            Font fontToSet; //Use for the specified keyword highlighting.
             var typingFont = currentTypingArea.Font;
             MyTabControl.CurrentTextArea.EnableHighlight = true;
             MyTabControl.CurrentTextArea.Clear();
@@ -81,7 +82,7 @@ namespace GUI
                             "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
                             "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe"
                         };
-                        var fontToSet = new Font(typingFont, FontStyle.Bold);
+                        fontToSet = new Font(typingFont, FontStyle.Bold);
                         currentTypingArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
 
 

@@ -159,7 +159,7 @@ namespace SyntaxHighlightingTextbox
             parsing = false;
             isUndoRedo = false;
             EnableAutoComplete = true;
-            this.Font = new Font(FontFamily.GenericMonospace, 14);
+            this.Font = new Font(FontFamily.GenericMonospace, 12);
 
             rtfHeader = new StringBuilder();
             undoStack = new Stack<UndoRedoInfo>();
@@ -175,13 +175,14 @@ namespace SyntaxHighlightingTextbox
             //Inherited properties
             this.AcceptsTab = true;
 
-            //Separators
+            //Load separators
             var separators = new List<char>()
                         {
                             '?', ',', '.', ';', '(', ')', '[', ']', '{', '}', '+', '-',
                             '%', '^', '=', '~', '!', '|', ' ', '\r', '\n', '\t'
                         };
             AddListOfSeparators(separators);
+
         }
 
         #endregion
@@ -215,6 +216,7 @@ namespace SyntaxHighlightingTextbox
             autoCompleteListBox.Visible = false;
             AutoShowListBox();
         }
+        
 
         #endregion
 
@@ -244,7 +246,7 @@ namespace SyntaxHighlightingTextbox
             {
                 AutoShowListBox();
             }
-
+            
             base.OnTextChanged(e);
         }
 
@@ -297,9 +299,18 @@ namespace SyntaxHighlightingTextbox
                         Undo();
                         return true;
                     }
+
                 case (Keys.Control | Keys.Y):
                     {
                         Redo();
+                        return true;
+                    }
+
+                //Set tab stop
+                case (Keys.Tab):
+                    {
+                        this.SelectionLength = 4;
+                        this.SelectedText = "    ";
                         return true;
                     }
                 default:
