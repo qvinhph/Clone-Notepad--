@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace GUI
 {
-    class MyTabControl
+    partial class MyTabControl
     {
         //the "x" image 
         private static Image closeImage;

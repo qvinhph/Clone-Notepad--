@@ -27,6 +27,8 @@ namespace GUI
             InitializeComponent();
         }
 
+        private FindingForm findingForm = null;
+
         private void Form1_Load(object sender, EventArgs e)
         {
             MyTabControl.SetupTabControl(tabControl);
@@ -174,6 +176,20 @@ namespace GUI
         private void btZoomOut_Click(object sender, EventArgs e)
         {
             MyTabControl.CurrentTextArea.ZoomOut();
+        }
+
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void findToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            if (findingForm == null)
+            {
+                findingForm = new FindingForm();
+            }
+            findingForm.ShowFindingForm();
         }
     }
 }
