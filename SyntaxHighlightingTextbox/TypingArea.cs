@@ -206,23 +206,23 @@ namespace SyntaxHighlightingTextbox
 
         public void ZoomIn()
         {
-            if (this.ZoomFactor > 10f) return;
-            this.ZoomFactor = this.ZoomFactor + 0.4f;
-
+            //if (this.ZoomFactor > 10f) return;
+            //this.ZoomFactor = this.ZoomFactor + 0.4f;
+            this.Font = new Font(FontFamily.GenericMonospace,this.Font.Size+1);
             //To re-locate the ListBox
-            autoCompleteListBox.Visible = false;
-            AutoShowListBox();
+            //autoCompleteListBox.Visible = false;
+            //AutoShowListBox();
         }
             
 
         public void ZoomOut()
         {
-            if (this.ZoomFactor < 1f) return;
-            this.ZoomFactor = this.ZoomFactor - 0.4f;
-
+            //if (this.ZoomFactor < 1f) return;
+            //this.ZoomFactor = this.ZoomFactor - 0.4f;
+            this.Font = new Font(FontFamily.GenericMonospace, this.Font.Size-1);
             //To re-locate the ListBox
-            autoCompleteListBox.Visible = false;
-            AutoShowListBox();
+            //autoCompleteListBox.Visible = false;
+            //AutoShowListBox();
         }
         
 
