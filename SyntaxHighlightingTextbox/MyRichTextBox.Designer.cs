@@ -34,9 +34,12 @@
             // 
             // lineNumberTextBox
             // 
+            this.lineNumberTextBox.BackColor = System.Drawing.SystemColors.Menu;
+            this.lineNumberTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lineNumberTextBox.Cursor = System.Windows.Forms.Cursors.PanNE;
             this.lineNumberTextBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.lineNumberTextBox.Font = new System.Drawing.Font("Courier New", 12F);
+            this.lineNumberTextBox.ForeColor = System.Drawing.Color.Gray;
             this.lineNumberTextBox.Location = new System.Drawing.Point(0, 0);
             this.lineNumberTextBox.Name = "lineNumberTextBox";
             this.lineNumberTextBox.ReadOnly = true;
@@ -51,6 +54,7 @@
             // 
             this.typingArea.AcceptsTab = true;
             this.typingArea.BlockAllAction = false;
+            this.typingArea.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.typingArea.CaseSensitive = true;
             this.typingArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.typingArea.EnableAutoComplete = true;
