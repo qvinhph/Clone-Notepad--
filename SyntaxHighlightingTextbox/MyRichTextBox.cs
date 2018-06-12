@@ -14,18 +14,47 @@ namespace SyntaxHighlightingTextbox
     {
         public MyRichTextBox()
         {
+            
             InitializeComponent();
+
+            //Default Font
+            this.Font = new Font(FontFamily.GenericMonospace, 12);
+
+            //Avoid Flickering
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+
+            //Catch Some Event
+            typingArea.VScroll += TypingArea_VScroll;
+            typingArea.TextChanged += TypingArea_TextChanged;
+            this.Resize += MyRichTextBox_Resize;
+            typingArea.SelectionChanged += TypingArea_SelectionChanged;
+            typingArea.FontChanged += TypingArea_FontChanged;
+            typingArea.MouseDown += TypingArea_MouseDown;
+            typingArea.SizeChanged += TypingArea_SizeChanged;
+
+        }
+        private void MyRichTextBox_Load(object sender, EventArgs e)
+        {
+            LineNumberTextBox.Font = TypingArea.Font;
+            TypingArea.Select();
+            AddLineNumbers();
         }
 
+        private void MyRichTextBox_Resize(object sender, EventArgs e)
+        {
+            AddLineNumbers();
+        }
 
+        //Update number margin when text in typing area changed
         private void TypingArea_TextChanged(object sender, EventArgs e)
         {
 
         AddLineNumbers();
-        this.Refresh();
         }
+
+
+        //Update number margin when change selection in typing area
         private void TypingArea_SelectionChanged(object sender, EventArgs e)
         {
             Point pt = typingArea.GetPositionFromCharIndex(typingArea.SelectionStart);
@@ -36,20 +65,38 @@ namespace SyntaxHighlightingTextbox
         }
         private void TypingArea_VScroll(object sender, EventArgs e)
         {
-            lineNumberTextBox.Text = "";
+            LineNumberTextBox.Text = "";
+            //AddLineNumbers();
             AddLineNumbers();
-            lineNumberTextBox.Invalidate();
+            LineNumberTextBox.Refresh();
         }
+
+        //Update font of number margin when font of typing area changed
         private void TypingArea_FontChanged(object sender, EventArgs e)
         {
-            lineNumberTextBox.Font = typingArea.Font;
+            LineNumberTextBox.Font = typingArea.Font;
             typingArea.Select();
             AddLineNumbers();
         }
+
         private void TypingArea_MouseDown(object sender, MouseEventArgs e)
         {
             typingArea.Select();
-            lineNumberTextBox.DeselectAll();
+            LineNumberTextBox.DeselectAll();
+        }
+        
+
+
+        private void TypingArea_SizeChanged(object sender, EventArgs e)
+        {
+            Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size);
+            LineNumberTextBox.Font = fnt;
+            AddLineNumbers();
+            LineNumberTextBox.Refresh();
+            LineNumberTextBox.Invalidate();
+            //LineNumberTextBox.ZoomFactor = typingArea.ZoomFactor;
+            //Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size * LineNumberTextBox.ZoomFactor);
+            //LineNumberTextBox.Font=fnt;
         }
 
         public int getWidth()
@@ -95,7 +142,7 @@ namespace SyntaxHighlightingTextbox
             // now add each line number to LineNumberTextBox upto last line    
             for (int i = First_Line; i <= Last_Line + 2; i++)
             {
-                lineNumberTextBox.Text += i + 1 + "\n";
+                LineNumberTextBox.Text += i + 1 + "\n";
             }
         }
 
