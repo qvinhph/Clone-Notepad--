@@ -74,8 +74,8 @@ namespace SyntaxHighlightingTextbox
         //Update font of number margin when font of typing area changed
         private void TypingArea_FontChanged(object sender, EventArgs e)
         {
-            LineNumberTextBox.Font = typingArea.Font;
-            typingArea.Select();
+            LineNumberTextBox.Font = TypingArea.Font;
+            TypingArea.Select();
             AddLineNumbers();
         }
 
@@ -89,6 +89,7 @@ namespace SyntaxHighlightingTextbox
 
         private void TypingArea_SizeChanged(object sender, EventArgs e)
         {
+            
             Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size);
             LineNumberTextBox.Font = fnt;
             AddLineNumbers();
@@ -105,11 +106,11 @@ namespace SyntaxHighlightingTextbox
             // get total lines of richTextBox1    
             int line = typingArea.Lines.Length;
 
-            if (line <= 99)
+            if (line <= 10)
             {
                 w = 20 + (int)typingArea.Font.Size;
             }
-            else if (line <= 999)
+            else if (line <= 50)
             {
                 w = 30 + (int)typingArea.Font.Size;
             }
