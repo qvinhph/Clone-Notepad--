@@ -317,8 +317,20 @@ namespace SyntaxHighlightingTextbox
                 //Set tab stop
                 case (Keys.Tab):
                     {
-                        this.SelectionLength = 4;
-                        this.SelectedText = "    ";
+                        string previousTabText = this.Text.Substring(0, SelectionStart);
+                        string afterTabText = this.Text.Substring(SelectionStart, this.Text.Length - SelectionStart);
+                        int caretPosition = this.SelectionStart + 4;
+
+                        //Insert 4 space-character to describe the tab size.
+                        this.Text = previousTabText + "    " + afterTabText;
+
+                        //Because when set the new this.Text, the caret will defaultly set to the 0 index
+                        //May cause the ListBox auto show, which we don't want
+                        //So we add this code to prevent it and set the caret to the right place
+                        if (autoCompleteListBox.Visible == true)
+                            autoCompleteListBox.Visible = false;
+
+                        this.SelectionStart = caretPosition;
                         return true;
                     }
                 default:
@@ -327,36 +339,6 @@ namespace SyntaxHighlightingTextbox
 
             return base.ProcessCmdKey(ref m, keyData);
         }
-
-        //protected override void WndProc(ref Message m)
-        //{
-        //    switch (m.Msg)
-        //    {
-        //        // Don't redraw the control windows if the text is parsing to avoid flicker.
-        //        case Win32.WM_PAINT: 
-        //            if (parsing)
-        //                return;
-        //            break;
-        //        case Win32.WM_KEYDOWN:
-        //            //Shortcut for undo
-        //            if (((Keys)m.WParam == Keys.Z) && (Win32.GetKeyState(Win32.VK_CONTROL) != 0))
-        //            {
-        //                Undo();
-        //                break;
-        //            }
-        //            //Shortcut for redo
-        //            else if (((Keys)m.WParam == Keys.Y) && (Win32.GetKeyState(Win32.VK_CONTROL) != 0))
-        //            {
-        //                Redo();
-        //                break;
-        //            }
-        //            break;
-        //        default:
-        //            break;
-        //    }
-
-        //    base.WndProc(ref m);
-        //}
 
         #endregion
 
