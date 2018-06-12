@@ -24,10 +24,11 @@ namespace GUI
             get
             {
                 if (tabControl.SelectedTab != null)
-                    return (tabControl.SelectedTab.Controls[0] as TypingArea);
+                    return (tabControl.SelectedTab.Controls[0] as MyRichTextBox).TypingArea;
                 return null;
             }
         }
+
 
         public static TabControl TabControl
         {
@@ -165,10 +166,12 @@ namespace GUI
             InitTabPageInfo(newTabPage);
 
             //Create the textbox inside
-            TypingArea typingArea = new TypingArea();
-            newTabPage.Controls.Add(typingArea);
-            typingArea.Dock = DockStyle.Fill;
-
+            //TypingArea typingArea = new TypingArea();
+            //newTabPage.Controls.Add(typingArea);
+            //typingArea.Dock = DockStyle.Fill;
+            MyRichTextBox myRichText = new MyRichTextBox();
+            newTabPage.Controls.Add(myRichText);
+            myRichText.Dock = DockStyle.Fill;
             tabControl.TabPages.Add(newTabPage);
             //Switch to the new tabpage
             tabControl.SelectedTab = newTabPage;
