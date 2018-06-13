@@ -12,9 +12,31 @@ namespace SyntaxHighlightingTextbox
 {
     public partial class MyRichTextBox : UserControl
     {
+
+        #region Fields
+        private LineNumbering lineNumberTextBox;
+        private TypingArea typingArea;
+        #endregion
+
+
+        #region Properties
+        public SyntaxHighlightingTextbox.LineNumbering LineNumberTextBox
+        {
+            get { return lineNumberTextBox; }
+            set { lineNumberTextBox = value; }
+        }
+        public SyntaxHighlightingTextbox.TypingArea TypingArea
+        {
+            get { return typingArea; }
+            set { typingArea = value; }
+        }
+        #endregion 
+
+
+        #region Constructor
         public MyRichTextBox()
         {
-            
+
             InitializeComponent();
 
             //Default Font
@@ -24,7 +46,16 @@ namespace SyntaxHighlightingTextbox
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-            //Catch Some Event
+            //Handle some comment event
+            HandleEvent();
+
+        }
+        #endregion
+
+
+        #region Event
+        private void HandleEvent()
+        {
             typingArea.VScroll += TypingArea_VScroll;
             typingArea.TextChanged += TypingArea_TextChanged;
             this.Resize += MyRichTextBox_Resize;
@@ -32,8 +63,13 @@ namespace SyntaxHighlightingTextbox
             typingArea.FontChanged += TypingArea_FontChanged;
             typingArea.MouseDown += TypingArea_MouseDown;
             typingArea.SizeChanged += TypingArea_SizeChanged;
-
         }
+        #endregion
+
+
+        #region Methods for Line Numbering
+
+        #region MyRichTextBox Event
         private void MyRichTextBox_Load(object sender, EventArgs e)
         {
             LineNumberTextBox.Font = TypingArea.Font;
@@ -45,12 +81,15 @@ namespace SyntaxHighlightingTextbox
         {
             AddLineNumbers();
         }
+        #endregion
 
+
+        #region Typing Area Event
         //Update number margin when text in typing area changed
+
         private void TypingArea_TextChanged(object sender, EventArgs e)
         {
-
-        AddLineNumbers();
+            AddLineNumbers();
         }
 
 
@@ -86,12 +125,12 @@ namespace SyntaxHighlightingTextbox
         }
         
 
-
+        //Update the number margin when zoom in or zoom out
         private void TypingArea_SizeChanged(object sender, EventArgs e)
         {
             
-            Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size);
-            LineNumberTextBox.Font = fnt;
+            //Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size);
+            LineNumberTextBox.Font = typingArea.Font;
             AddLineNumbers();
             LineNumberTextBox.Refresh();
             LineNumberTextBox.Invalidate();
@@ -99,7 +138,9 @@ namespace SyntaxHighlightingTextbox
             //Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size * LineNumberTextBox.ZoomFactor);
             //LineNumberTextBox.Font=fnt;
         }
+        #endregion
 
+        #region Main methods to display Line Numbering TextBox
         public int getWidth()
         {
             int w = 25;
@@ -146,10 +187,15 @@ namespace SyntaxHighlightingTextbox
                 LineNumberTextBox.Text += i + 1 + "\n";
             }
         }
+        #endregion
 
+        //Automatically added by VS
         private void lineNumberTextBox_TextChanged(object sender, EventArgs e)
         {
 
         }
+        #endregion
+
+
     }
 }

@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lineNumberTextBox = new System.Windows.Forms.RichTextBox();
+            //this.lineNumberTextBox = new System.Windows.Forms.RichTextBox();
+            lineNumberTextBox = new SyntaxHighlightingTextbox.LineNumbering();
             this.typingArea = new SyntaxHighlightingTextbox.TypingArea();
             this.SuspendLayout();
             // 
@@ -71,7 +72,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.typingArea);
-            this.Controls.Add(this.lineNumberTextBox);
+            this.Controls.Add(lineNumberTextBox);
             this.Name = "MyRichTextBox";
             this.Size = new System.Drawing.Size(601, 532);
             this.ResumeLayout(false);
@@ -80,18 +81,22 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox lineNumberTextBox;
-        private SyntaxHighlightingTextbox.TypingArea typingArea;
 
-        public System.Windows.Forms.RichTextBox LineNumberTextBox
-        {
-            get { return lineNumberTextBox; }
-            set { lineNumberTextBox = value; }
-        }
-        public SyntaxHighlightingTextbox.TypingArea TypingArea
-        {
-            get { return typingArea; }
-            set { typingArea = value; }
-        }
+        //At first i put everything below here, after some refactoring work i put them in MyRichTextBox.cs
+        
+        //private System.Windows.Forms.RichTextBox lineNumberTextBox;
+        //private SyntaxHighlightingTextbox.LineNumbering lineNumberTextBox;
+        //private SyntaxHighlightingTextbox.TypingArea typingArea;
+
+        //public SyntaxHighlightingTextbox.LineNumbering LineNumberTextBox
+        //{
+        //    get { return lineNumberTextBox; }
+        //    set { lineNumberTextBox = value; }
+        //}
+        //public SyntaxHighlightingTextbox.TypingArea TypingArea
+        //{
+        //    get { return typingArea; }
+        //    set { typingArea = value; }
+        //}
     }
 }

@@ -259,6 +259,11 @@ namespace SyntaxHighlightingTextbox
 
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
+            if (m.Msg == 0x020A && keyData == Keys.Control)
+            {
+
+            }
+
             //Complete matched word at ListBox
             if (autoCompleteListBox.Visible)
             {
@@ -296,10 +301,11 @@ namespace SyntaxHighlightingTextbox
                 }
             }
 
-
-            //Process Undo/Redo shortcut
+            
+            //Process shortcut and some specified keys
             switch (keyData)
             {
+                //Process Undo/Redo shortcut
                 case (Keys.Control | Keys.Z):
                     {
                         Undo();
@@ -1131,6 +1137,7 @@ namespace SyntaxHighlightingTextbox
         #endregion
 
         #endregion
+
 
         #region Other public functions
 
