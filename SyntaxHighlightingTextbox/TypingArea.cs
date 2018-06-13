@@ -1140,6 +1140,7 @@ namespace SyntaxHighlightingTextbox
 
         #endregion
 
+
         #region Other public functions
 
         /// <summary>

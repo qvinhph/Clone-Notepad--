@@ -45,6 +45,12 @@
     <Compile Include="FontDictionary.cs" />
     <Compile Include="HighlightDescriptor.cs" />
     <Compile Include="HighlightDescriptorCollection.cs" />
+    <Compile Include="LineNumbering.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LineNumbering.Designer.cs">
+      <DependentUpon>LineNumbering.cs</DependentUpon>
+    </Compile>
     <Compile Include="MyRichTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
