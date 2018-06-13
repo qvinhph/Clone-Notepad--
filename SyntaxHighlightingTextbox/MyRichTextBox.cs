@@ -49,8 +49,7 @@ namespace SyntaxHighlightingTextbox
         //Update number margin when text in typing area changed
         private void TypingArea_TextChanged(object sender, EventArgs e)
         {
-
-        AddLineNumbers();
+            AddLineNumbers();
         }
 
 
@@ -90,8 +89,8 @@ namespace SyntaxHighlightingTextbox
         private void TypingArea_SizeChanged(object sender, EventArgs e)
         {
             
-            Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size);
-            LineNumberTextBox.Font = fnt;
+            //Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size);
+            LineNumberTextBox.Font = typingArea.Font;
             AddLineNumbers();
             LineNumberTextBox.Refresh();
             LineNumberTextBox.Invalidate();
