@@ -194,6 +194,7 @@ namespace GUI
             }
 
             this.Visible = false;
+
             e.Cancel = true;
         }
     }
