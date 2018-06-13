@@ -78,7 +78,6 @@ namespace GUI
             replacementTextbox.Visible = false;
             replaceButton.Visible = false;
             replaceAllButton.Visible = false;
-            matchCaseCheckBox.Location = replacementLabel.Location;
             this.Width = 380;
             this.Show();
         }
@@ -90,7 +89,6 @@ namespace GUI
             replacementTextbox.Visible = true;
             replaceButton.Visible = true;
             replaceAllButton.Visible = true;
-            matchCaseCheckBox.Location = new Point(19, 110);
             this.AutoSize = true;
             this.Show();
         }
@@ -112,15 +110,11 @@ namespace GUI
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void matchCaseCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void findNextButton_Click(object sender, EventArgs e)
         {
             TypingArea currentTextArea = MyTabControl.CurrentTextArea;
 
+            //Check if the current string hasn't been search last turns
             if (previousText != currentTextArea.Text)
             {
                 previousText = currentTextArea.Text;
@@ -181,7 +175,10 @@ namespace GUI
 
         private void replaceButton_Click(object sender, EventArgs e)
         {
-            
+            TypingArea currentTextArea = MyTabControl.CurrentTextArea;
+
+            //Replace the selected found text by replacement text
+            currentTextArea.SelectedText = replacementTextbox.Text;
         }
 
 
@@ -196,6 +193,14 @@ namespace GUI
             this.Visible = false;
 
             e.Cancel = true;
+        }
+
+        private void replaceAllButton_Click(object sender, EventArgs e)
+        {
+            TypingArea currentTextArea = MyTabControl.CurrentTextArea;
+
+            //Replace all the selected found text by replacement text
+            currentTextArea.Text = currentTextArea.Text.Replace(searchTextbox.Text, replacementTextbox.Text);
         }
     }
 }

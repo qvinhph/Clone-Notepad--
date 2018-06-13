@@ -37,7 +37,6 @@
             this.findNextButton = new System.Windows.Forms.Button();
             this.replaceAllButton = new System.Windows.Forms.Button();
             this.findPreviousButton = new System.Windows.Forms.Button();
-            this.matchCaseCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -60,7 +59,7 @@
             // replacementLabel
             // 
             this.replacementLabel.AutoSize = true;
-            this.replacementLabel.Location = new System.Drawing.Point(16, 66);
+            this.replacementLabel.Location = new System.Drawing.Point(13, 66);
             this.replacementLabel.Name = "replacementLabel";
             this.replacementLabel.Size = new System.Drawing.Size(94, 13);
             this.replacementLabel.TabIndex = 2;
@@ -68,9 +67,9 @@
             // 
             // replacementTextbox
             // 
-            this.replacementTextbox.Location = new System.Drawing.Point(19, 83);
+            this.replacementTextbox.Location = new System.Drawing.Point(16, 83);
             this.replacementTextbox.Name = "replacementTextbox";
-            this.replacementTextbox.Size = new System.Drawing.Size(248, 20);
+            this.replacementTextbox.Size = new System.Drawing.Size(251, 20);
             this.replacementTextbox.TabIndex = 3;
             this.replacementTextbox.TextChanged += new System.EventHandler(this.replacementTextbox_TextChanged);
             // 
@@ -112,6 +111,7 @@
             this.replaceAllButton.TabIndex = 7;
             this.replaceAllButton.Text = "Replace &All";
             this.replaceAllButton.UseVisualStyleBackColor = true;
+            this.replaceAllButton.Click += new System.EventHandler(this.replaceAllButton_Click);
             // 
             // findPreviousButton
             // 
@@ -123,24 +123,11 @@
             this.findPreviousButton.UseVisualStyleBackColor = true;
             this.findPreviousButton.Click += new System.EventHandler(this.findPreviousButton_Click);
             // 
-            // matchCaseCheckBox
-            // 
-            this.matchCaseCheckBox.AutoSize = true;
-            this.matchCaseCheckBox.Location = new System.Drawing.Point(19, 110);
-            this.matchCaseCheckBox.Name = "matchCaseCheckBox";
-            this.matchCaseCheckBox.Size = new System.Drawing.Size(83, 17);
-            this.matchCaseCheckBox.TabIndex = 9;
-            this.matchCaseCheckBox.Text = "Match Case";
-            this.matchCaseCheckBox.UseVisualStyleBackColor = true;
-            this.matchCaseCheckBox.Visible = false;
-            this.matchCaseCheckBox.CheckedChanged += new System.EventHandler(this.matchCaseCheckBox_CheckedChanged);
-            // 
             // FindingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 131);
-            this.Controls.Add(this.matchCaseCheckBox);
             this.Controls.Add(this.findPreviousButton);
             this.Controls.Add(this.replaceAllButton);
             this.Controls.Add(this.findNextButton);
@@ -174,6 +161,5 @@
         internal System.Windows.Forms.Button findNextButton;
         internal System.Windows.Forms.Button replaceAllButton;
         internal System.Windows.Forms.Button findPreviousButton;
-        internal System.Windows.Forms.CheckBox matchCaseCheckBox;
     }
 }
