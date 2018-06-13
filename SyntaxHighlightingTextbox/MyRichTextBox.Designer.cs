@@ -53,7 +53,6 @@
             // typingArea
             // 
             this.typingArea.AcceptsTab = true;
-            this.typingArea.BlockAllAction = false;
             this.typingArea.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.typingArea.CaseSensitive = true;
             this.typingArea.Dock = System.Windows.Forms.DockStyle.Fill;

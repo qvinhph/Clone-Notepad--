@@ -13,12 +13,13 @@ namespace GUI
 {
     public partial class FindingForm : Form
     {
-        //int preSearchText_Length = 0;
         int indexOfSearchText = -1;
+
         List<int> textsFound = new List<int>();
         Color AllFoundTextBackColor = Color.Aquamarine;
-        //Color SelectedFoundTextBackColor = Color.Orange;
-        //Color MyDefaultBackColor = Color.White;
+       
+        Color SelectedFoundTextBackColor = Color.Orange;
+       
         string previousText = "";
 
         public FindingForm()
@@ -48,14 +49,12 @@ namespace GUI
 
             previousText = currentTextArea.Text;
 
-            ////Remove highlighted text of previous search        
+            //Remove the highlight backcolor of the privous search 
             currentTextArea.ClearBackColor(currentTextArea.BackColor);
 
-            // Highlighted backcolor of all found text
-            //TextFound = currentTextArea.FindAll(searchTermTextBox.Text);
-            //currentTextArea.ColorBackGround(TextFound, searchTermTextBox.Text.Length, AllFoundTextBackColor);
             textsFound.Clear();
             textsFound = currentTextArea.FindAndColorAll(searchTextbox.Text, AllFoundTextBackColor);
+            indexOfSearchText = -1;
         }
 
         private void FindForm_Deactivate(object sender, EventArgs e)
@@ -126,37 +125,25 @@ namespace GUI
             {
                 previousText = currentTextArea.Text;
 
-                //get this again because we might have changed the text in text area and it made some of the found text position changed
                 textsFound.Clear();
                 textsFound = currentTextArea.FindAll(searchTextbox.Text);
             }
-
-            //set this to prevent some disturb things
-            currentTextArea.BlockAllAction = true;
 
             if (textsFound.Count != 0)
             {
                 if (searchTextbox.Text.Length == 0)
                     return;
-                ////Change backcolor of current found text  
-                //if (indexOfSearchText != -1)
-                //{
-                //    currentTextArea.Select(TextFound[indexOfSearchText], searchTermTextBox.Text.Length);
-                //    currentTextArea.SelectionBackColor = AllFoundTextBackColor;
-                //}
-                //Reset the index
+
+
                 indexOfSearchText++;
                 if (indexOfSearchText == textsFound.Count)
                 {
                     indexOfSearchText = 0;
                 }
 
-                //Chose the highlight backcolor for select text        
+                //Each every text found next will be highlighted  
                 currentTextArea.Select(textsFound[indexOfSearchText], searchTextbox.Text.Length);
-                //currentTextArea.SelectionBackColor = SelectedFoundTextBackColor;
             }
-
-            currentTextArea.BlockAllAction = false;
 
             currentTextArea.Focus();
         }
@@ -169,25 +156,15 @@ namespace GUI
             {
                 previousText = currentTextArea.Text;
 
-                //get this again because we might have changed the text in text area and it made some of the found text position changed
                 textsFound.Clear();
                 textsFound = currentTextArea.FindAll(searchTextbox.Text);
             }
-
-            currentTextArea.BlockAllAction = true;
 
             if (textsFound.Count != 0)
             {
                 if (searchTextbox.Text.Length == 0)
                     return;
-                ////Change backcolor of current found text
-                //if (indexOfSearchText != -1)
-                //{
-                //    currentTextArea.Select(TextFound[indexOfSearchText], searchTermTextBox.Text.Length);
-                //    currentTextArea.SelectionBackColor = AllFoundTextBackColor;
-                //}
-
-                //Reset the index
+                
 
                 indexOfSearchText--;
                 if (indexOfSearchText <= -1)
@@ -195,12 +172,9 @@ namespace GUI
                     indexOfSearchText = textsFound.Count - 1;
                 }
 
-                //Chose the highlight backcolor for select text        
+                //Each every text found privous will be highlighted      
                 currentTextArea.Select(textsFound[indexOfSearchText], searchTextbox.Text.Length);
-                //currentTextArea.SelectionBackColor = SelectedFoundTextBackColor;
             }
-
-            currentTextArea.BlockAllAction = false;
 
             currentTextArea.Focus();
         }
@@ -208,6 +182,19 @@ namespace GUI
         private void replaceButton_Click(object sender, EventArgs e)
         {
             
+        }
+
+
+        private void FindingForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach (TabPage tabPage in MyTabControl.TabControl.TabPages)
+            {
+                TypingArea textArea = (tabPage.Controls[0] as MyRichTextBox).TypingArea;
+                textArea.ClearBackColor(textArea.BackColor);
+            }
+
+            this.Visible = false;
+            e.Cancel = true;
         }
     }
 }

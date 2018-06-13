@@ -156,6 +156,7 @@
             this.Name = "FindingForm";
             this.Text = "Find And Replace";
             this.TopMost = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FindingForm_FormClosing);
             this.Load += new System.EventHandler(this.FindingForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

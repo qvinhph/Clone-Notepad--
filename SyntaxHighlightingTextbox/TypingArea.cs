@@ -22,15 +22,13 @@ namespace SyntaxHighlightingTextbox
         private bool caseSensitive;
         private bool enableHighlight;
 
-        //the control to focus when highlighing to avoid flickings 
+        //The control to focus on the highligting
         private Control controlToFocus = null;
 
         //Internal use members.
         private bool parsing ;
         private char[] separatorArray;
 
-        //a boolean variable to help us prevent the record of undo action, hightlight, ...
-        private bool blockAllAction = false;
 
         //Members used for Highlight() function.
         private StringBuilder rtfHeader;
@@ -69,7 +67,7 @@ namespace SyntaxHighlightingTextbox
             public readonly string text;
         }
 
-        UndoRedoInfo currentUndoAction;
+ 
 
         #endregion
 
@@ -150,7 +148,7 @@ namespace SyntaxHighlightingTextbox
             }
         }
 
-        public bool BlockAllAction { get { return blockAllAction; } set { blockAllAction = value; } }
+
 
         #endregion
 
@@ -1136,32 +1134,26 @@ namespace SyntaxHighlightingTextbox
 
         #region Other public functions
 
-        /// <summary>
         /// Find all the positions of a string 
-        /// </summary>
         /// <param name="textToSearch"></param>
-        /// <returns></returns>
         public List<int> FindAll(string textToSearch)
         {
             if (controlToFocus != null)
             {
                 controlToFocus.Focus();
             }
-            //list to hold all the positions
+            //List to hold all the position
             List<int> listOfPositions = new List<int>();
             int position = -1;
             int searchStart = 0;
             int searchEnd = this.TextLength;
 
-            // A valid starting index should be specified.
-            // if index= -1, the end of search
             while (searchStart < this.Text.Length)
             {
-                // A valid ending index
-                // Find the position of search string in RichTextBox
+                // Find the position of search string in SyntaxHighlightingTextbox
                 position = this.Find(textToSearch, searchStart, searchEnd, RichTextBoxFinds.None);
 
-                // Determine whether the text was found in richTextBox1.
+                // Determine whether the text was found in the textbox
                 if (position != -1)
                 {
                     listOfPositions.Add(position);
@@ -1177,19 +1169,17 @@ namespace SyntaxHighlightingTextbox
 
             return listOfPositions;
         }
-
-        /// <summary>
-        /// Clear background color of all the text by specified color
-        /// Prevent recording Undo
+        /// <summary>       
+        /// Clear background color of selected text
         /// </summary>
         public void ClearBackColor(Color clearColor)
         {
-            BlockAllAction = true;
-            //Remove highlighted text of previous search        
+            
+            //Select the text, clear background color and unselect that text
             this.Select(0, this.TextLength);
             this.SelectionBackColor = clearColor;
             this.SelectionLength = 0;
-            BlockAllAction = false;
+
         }
 
         /// <summary>
@@ -1197,6 +1187,7 @@ namespace SyntaxHighlightingTextbox
         /// </summary>
         /// <param name="textToSearch"></param>
         /// <param name="backColor"></param>
+
         public List<int> FindAndColorAll(string textToSearch, Color backColor)
         {
             if (controlToFocus != null)
@@ -1204,26 +1195,22 @@ namespace SyntaxHighlightingTextbox
                 controlToFocus.Focus();
             }
 
-            BlockAllAction = true;
-
-            //list to hold all the positions
+            //List of position of the found texts
             List<int> listOfPositions = new List<int>();
 
             int position = -1;
             int searchStart = 0;
             int searchEnd = this.TextLength;
 
-            // A valid starting index should be specified.
-            // if index= -1, the end of search
             while (searchStart < this.Text.Length)
             {
-                // A valid ending index
-                // Find the position of search string in RichTextBox
+                // Find the position of search text in SyntaxHighlightingTextbox
                 position = this.Find(textToSearch, searchStart, searchEnd, RichTextBoxFinds.None);
 
-                // Determine whether the text was found in richTextBox1.
+                // Determine whether the text was found in the textbox
                 if (position != -1)
                 {
+                    //Add this pos to the list, remember this pos and the text
                     listOfPositions.Add(position);
                     this.Select(position, textToSearch.Length);
                     this.SelectionBackColor = backColor;
@@ -1234,8 +1221,6 @@ namespace SyntaxHighlightingTextbox
                     break;
                 }
             }
-
-            BlockAllAction = false;
 
             this.Focus();
 
