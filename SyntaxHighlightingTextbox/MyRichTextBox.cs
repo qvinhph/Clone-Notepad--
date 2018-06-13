@@ -67,7 +67,7 @@ namespace SyntaxHighlightingTextbox
         #endregion
 
 
-        #region Methods
+        #region Methods for Line Numbering
 
         #region MyRichTextBox Event
         private void MyRichTextBox_Load(object sender, EventArgs e)
@@ -83,8 +83,10 @@ namespace SyntaxHighlightingTextbox
         }
         #endregion
 
-        //Update number margin when text in typing area changed
+
         #region Typing Area Event
+        //Update number margin when text in typing area changed
+
         private void TypingArea_TextChanged(object sender, EventArgs e)
         {
 
@@ -124,7 +126,7 @@ namespace SyntaxHighlightingTextbox
         }
         
 
-
+        //Update the number margin when zoom in or zoom out
         private void TypingArea_SizeChanged(object sender, EventArgs e)
         {
             
