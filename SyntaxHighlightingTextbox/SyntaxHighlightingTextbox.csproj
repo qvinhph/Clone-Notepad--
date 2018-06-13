@@ -42,6 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentMap.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DocumentMap.Designer.cs">
+      <DependentUpon>DocumentMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="FontDictionary.cs" />
     <Compile Include="HighlightDescriptor.cs" />
     <Compile Include="HighlightDescriptorCollection.cs" />

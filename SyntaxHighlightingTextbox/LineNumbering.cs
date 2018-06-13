@@ -11,6 +11,7 @@ namespace SyntaxHighlightingTextbox
 {
     public partial class LineNumbering : RichTextBox
     {
+        #region Constructor
         public LineNumbering()
         {
             InitializeComponent();
@@ -23,5 +24,11 @@ namespace SyntaxHighlightingTextbox
 
             InitializeComponent();
         }
+        #endregion
+
+        #region Fields
+
+
+        #endregion
     }
 }

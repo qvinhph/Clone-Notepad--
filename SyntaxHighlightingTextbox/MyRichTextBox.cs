@@ -16,19 +16,25 @@ namespace SyntaxHighlightingTextbox
         #region Fields
         private LineNumbering lineNumberTextBox;
         private TypingArea typingArea;
+        private DocumentMap documentMap;
         #endregion
 
 
         #region Properties
-        public SyntaxHighlightingTextbox.LineNumbering LineNumberTextBox
+        public LineNumbering LineNumberTextBox
         {
             get { return lineNumberTextBox; }
             set { lineNumberTextBox = value; }
         }
-        public SyntaxHighlightingTextbox.TypingArea TypingArea
+        public TypingArea TypingArea
         {
             get { return typingArea; }
             set { typingArea = value; }
+        }
+        public DocumentMap DocumentMap
+        {
+            get { return documentMap; }
+            set { documentMap = value; }
         }
         #endregion 
 
@@ -75,6 +81,7 @@ namespace SyntaxHighlightingTextbox
             LineNumberTextBox.Font = TypingArea.Font;
             TypingArea.Select();
             AddLineNumbers();
+            DocumentMap.Text = TypingArea.Text;
         }
 
         private void MyRichTextBox_Resize(object sender, EventArgs e)
@@ -90,6 +97,7 @@ namespace SyntaxHighlightingTextbox
         private void TypingArea_TextChanged(object sender, EventArgs e)
         {
             AddLineNumbers();
+            DocumentMap.Text = TypingArea.Text;
         }
 
 
@@ -106,6 +114,7 @@ namespace SyntaxHighlightingTextbox
         {
             LineNumberTextBox.Text = "";
             //AddLineNumbers();
+            DocumentMap.Invalidate();
             AddLineNumbers();
             LineNumberTextBox.Refresh();
         }

@@ -38,6 +38,7 @@ namespace SyntaxHighlightingTextbox
         //Members uses for Auto Complete Word.
         private ListBox autoCompleteListBox;
         private bool enableAutoComplete;
+        public DocumentMap documentMap;
 
 
         //Undo/Redo members.
@@ -73,6 +74,18 @@ namespace SyntaxHighlightingTextbox
 
 
         #region Properties
+
+        public DocumentMap DocumentMap
+        {
+            get
+            {
+                return documentMap;
+            }
+            set
+            {
+                documentMap = value;
+            }
+        }
 
         /// <summary>
         /// Determines if token recognition is case sensitive.
@@ -247,6 +260,8 @@ namespace SyntaxHighlightingTextbox
             }
             this.ZoomFactor = 1;
             this.ZoomFactor = temp;
+
+            
 
             if (enableAutoComplete)
             {
