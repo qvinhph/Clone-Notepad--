@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace GUI
 {
-    partial class MyTabControl
+    static partial class MyTabControl 
     {
         //the "x" image 
         private static Image closeImage;
@@ -17,19 +17,29 @@ namespace GUI
         //A variable refer on current handling TabControl.
         private static TabControl tabControl;
 
+        public static int PreviousSelectedIndex { get; private set; }
+        public static TabPage PreviousSelectedTabpage { get; private set; }
+
+
         #region Properties
 
+        /// <summary>
+        /// Get the current typing area
+        /// </summary>
         public static TypingArea CurrentTextArea
         {
             get
             {
-                if (tabControl.SelectedTab != null)
-                    return (tabControl.SelectedTab.Controls[0] as MyRichTextBox).TypingArea;
+                if (TabControl.SelectedTab != null)
+                    return (TabControl.SelectedTab.Controls[0] as MyRichTextBox).TypingArea;
                 return null;
             }
         }
 
 
+        /// <summary>
+        /// Get the current TabControl
+        /// </summary>
         public static TabControl TabControl
         {
             get
@@ -37,7 +47,7 @@ namespace GUI
                 return tabControl;
             }
 
-            set
+            private set
             {
                 tabControl = value;
             }
@@ -45,42 +55,54 @@ namespace GUI
 
         #endregion
 
+
         public static void SetupTabControl(TabControl _tabControl)
         {
-            tabControl = _tabControl;
+            TabControl = _tabControl;
 
-            tabControl.AllowDrop = true;
+            TabControl.AllowDrop = true;
             
             //Allow to custom the way tab control are drawn through DrawItem event raising
             //whenever the tab redraw
-            tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            TabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
 
             //Set size of each tab page.
-            tabControl.Padding = new Point(15, 3);
+            TabControl.Padding = new Point(15, 4);
 
             //get the "x" image 
             closeImage = Properties.Resources.CloseImage;
 
             //draw the "x" button
-            tabControl.DrawItem += tabControl_DrawItem;
+            TabControl.DrawItem += TabControl_OnDrawItem;
 
             //click "x" button to close the tab page.
-            tabControl.MouseClick += tabControl_MouseDown;
+            TabControl.MouseClick += TabControl_OnMouseClick;
+
+            //
+            TabControl.Deselecting += TabControl_OnDeselecting;
+
+            //
+            TabControl.Selecting += TabControl_OnSelecting; 
+
+            //TabControl.SelectedIndexChanged += 
         }
+
+        private static void TabControl_OnSelecting(object sender, TabControlCancelEventArgs e)
+        {
+            
+        }
+
 
         #region TabControl event handlers
 
-        private static void tabControl_DrawItem(object sender, DrawItemEventArgs e)
+        private static void TabControl_OnDrawItem(object sender, DrawItemEventArgs e)
         {
             //Get the area of the tab being drawn.
-            Rectangle tabRect = tabControl.GetTabRect(e.Index);
+            Rectangle tabRect = TabControl.GetTabRect(e.Index);
 
-            if (e.Index == tabControl.SelectedIndex)
+            if (e.Index == TabControl.SelectedIndex)
             {
                 //If the tab being drawn is the selected tab.
-
-                //Get the rectangle of the selected tab
-                tabRect = tabControl.GetTabRect(tabControl.SelectedIndex);
 
                 //Set background color for this tab
                 e.Graphics.FillRectangle(Brushes.White, tabRect);
@@ -90,73 +112,69 @@ namespace GUI
             tabRect.Inflate(-2, -2);
 
             //Show name of the tab page.
-            e.Graphics.DrawString(tabControl.TabPages[e.Index].Text,
-                                  tabControl.Font, Brushes.Black, tabRect);
+            e.Graphics.DrawString(TabControl.TabPages[e.Index].Text,
+                                  TabControl.Font, Brushes.Black, tabRect);
 
             //"x" image
-            Rectangle imageRect = new Rectangle(tabRect.Right - closeImage.Width/3,
-                                                tabRect.Top, closeImage.Width/3, closeImage.Height/3);
-
-            //draw the string text 
-            e.Graphics.DrawString(tabControl.TabPages[e.Index].Text,
-                                  tabControl.Font, Brushes.Black, tabRect);
+            Rectangle imageXRect = new Rectangle(tabRect.Right - tabRect.Height,
+                                          tabRect.Top, tabRect.Height, tabRect.Height);
+            
             //draw the "x" image
-            e.Graphics.DrawImage(closeImage, imageRect);
+            e.Graphics.DrawImage(closeImage, imageXRect);           
         }
 
-        private static void tabControl_MouseDown(object sender, MouseEventArgs e)
-        { 
+
+        private static void TabControl_OnMouseClick(object sender, MouseEventArgs e)
+        {
             //Check all the tab to determind which tab that has mouse click fall into.
-            foreach (TabPage tabPage in tabControl.TabPages)
+            foreach (TabPage tabPage in TabControl.TabPages)
             {
                 //get the area of tab
-                Rectangle tabRect = tabControl.GetTabRect(tabControl.TabPages.IndexOf(tabPage));
+                Rectangle tabRect = TabControl.GetTabRect(TabControl.TabPages.IndexOf(tabPage));
                 //get the area of the "x" image
-                Rectangle imageRect = new Rectangle(tabRect.Right - closeImage.Width/3,
-                                         tabRect.Top,
-                                         closeImage.Width/3,
-                                         closeImage.Height/3);
-                
+                Rectangle imageXRect = new Rectangle(tabRect.Right - tabRect.Height,
+                                          tabRect.Top, tabRect.Height, tabRect.Height);
+
                 //Remove
-                if (imageRect.Contains(e.Location))
+                if (imageXRect.Contains(e.Location))
                 {
-                    //If the tab we are removing is not the selected tab.
-                    if (tabPage != (TabPage)tabControl.Tag)
+                    //When we close the unselected tab, it will be automatically selected
+                    //So we need reset to the previous selected tab.
+                    //Check whether the previous selected tab is existing
+                    if (TabControl.TabPages.Contains(PreviousSelectedTabpage))
                     {
-                        //When we click to this tag area, it will be selected tab.
-                        //So we need reset to the right selected tab.
-                        tabControl.SelectedTab = (TabPage)tabControl.Tag;
-
-                        //remove tabpage status
-                        RemoveTabPageInfo((TabPage)tabControl.Tag);
-
-                        //remove tab page
-                        tabControl.TabPages.Remove(tabPage);
+                        TabControl.SelectedTab = PreviousSelectedTabpage;
                     }
                     else
                     {
-                        //The selected tab is the first tab
-                        if (tabControl.SelectedIndex == 0)
-                        {
-                            //The next selected tab after this be removed
-                            tabControl.SelectedIndex = 1;
-                        }
+                        //if not, set the next selected tab to the nearest tab
+                        if (TabControl.SelectedIndex == 0)
+                            TabControl.SelectedIndex = 1;
                         else
-                        {
-                            tabControl.SelectedIndex -= 1;
-                        }
-
-                        //remove tabpage status
-                        RemoveTabPageInfo((TabPage)tabControl.Tag);
-
-                        //remove tab page
-                        tabControl.TabPages.Remove((TabPage)tabControl.Tag);
+                            TabControl.SelectedIndex -= 1;
                     }
+
+                    //remove tabpage status
+                    RemoveTabPageInfo(PreviousSelectedTabpage);
+
+                    //remove tab page
+                    TabControl.TabPages.Remove(tabPage);
+
+                    break;
                 }
             }
         }
 
+
+        private static void TabControl_OnDeselecting(object sender, TabControlCancelEventArgs e)
+        {
+            //Keep trach of the previous selected tabpage
+            if (e.TabPage != null)
+                PreviousSelectedTabpage = TabControl.SelectedTab;
+        }
+
         #endregion
+
 
         #region TabControl Add/Remove
 
@@ -172,14 +190,15 @@ namespace GUI
             MyRichTextBox myRichText = new MyRichTextBox();
             newTabPage.Controls.Add(myRichText);
             myRichText.Dock = DockStyle.Fill;
-            tabControl.TabPages.Add(newTabPage);
+            TabControl.TabPages.Add(newTabPage);
             //Switch to the new tabpage
-            tabControl.SelectedTab = newTabPage;
+            TabControl.SelectedTab = newTabPage;
 
             return newTabPage;
         }
 
         #endregion
+
 
         #region Manipulate the TabPageInfo
 
@@ -194,7 +213,7 @@ namespace GUI
             {
                 foreach (TabPageInfo tabPageInfo in listOfTabPageInfo)
                 {
-                    if (tabPageInfo.TabPage == tabControl.SelectedTab)
+                    if (tabPageInfo.TabPage == TabControl.SelectedTab)
                     {
                         return tabPageInfo;
                     }

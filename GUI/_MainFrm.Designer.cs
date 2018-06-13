@@ -652,11 +652,11 @@
             this.btZoomOut.Text = "Zoom Out";
             this.btZoomOut.Click += new System.EventHandler(this.btZoomOut_Click);
             // 
-            // tabControl
+            // TabControl
             // 
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 50);
-            this.tabControl.Name = "tabControl";
+            this.tabControl.Name = "TabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(1055, 466);
             this.tabControl.TabIndex = 2;
