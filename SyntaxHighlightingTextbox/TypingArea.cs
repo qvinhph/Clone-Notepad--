@@ -68,8 +68,6 @@ namespace SyntaxHighlightingTextbox
             public readonly string text;
         }
 
- 
-
         #endregion
 
 
