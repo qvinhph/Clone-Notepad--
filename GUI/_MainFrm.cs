@@ -187,5 +187,14 @@ namespace GUI
             }
             findingForm.ShowFindingForm();
         }
+
+        private void findToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (findingForm == null)
+            {
+                findingForm = new FindingForm();
+            }
+            findingForm.ShowFindAndReplaceForm();
+        }
     }
 }
