@@ -51,6 +51,7 @@
     <Compile Include="Classes\MyTabControl.cs" />
     <Compile Include="Classes\MyTextbox.cs" />
     <Compile Include="Classes\TabPageInfo.cs" />
+    <Compile Include="Classes\TabPageInfoCollection.cs" />
     <Compile Include="FindingForm.cs">
       <SubType>Form</SubType>
     </Compile>

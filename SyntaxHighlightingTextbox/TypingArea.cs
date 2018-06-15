@@ -207,6 +207,9 @@ namespace SyntaxHighlightingTextbox
 
         #region Methods
 
+        /// <summary>
+        /// Clear the highlight descriptors of the current typing area.
+        /// </summary>
         public new void Clear()
         {
             Descriptors.Clear();
@@ -598,26 +601,30 @@ namespace SyntaxHighlightingTextbox
                                     {
                                         StringBuilder sbOfTextToFormat = new StringBuilder();
 
-                                        while ((!line.Contains(item.closeToken)) && (lineCounter < lines.Length))
+                                        //Find the close token
+                                        int highlightStartFrom = i + item.token.Length;
+                                        while ((line.IndexOf(item.closeToken, highlightStartFrom) < 0) && (lineCounter < lines.Length))
                                         {
-                                            //Find the close token
+                                            //Add text between the boundary of two token.
                                             sbOfTextToFormat.Append(line.Remove(0, i)); /*Use for the line containing open token.*/
                                             lineCounter++;
-                                            if (lineCounter < lines.Length) 
+
+                                            if (lineCounter < lines.Length)
                                             {
                                                 //Not the last line.
                                                 AddNewLine(sbOfTextToFormat);
                                                 line = lines[lineCounter];
-                                                i = 0;
+                                                i = highlightStartFrom = 0;
                                             }
                                             else
-                                                i = line.Length;
+                                                i = highlightStartFrom = line.Length;
                                         }
 
-                                        bool hasCloseToken = line.Contains(item.closeToken);
+
+                                        bool hasCloseToken = (line.IndexOf(item.closeToken, highlightStartFrom) < 0) ? false : true;
                                         if (hasCloseToken)
                                         {
-                                            int closeTokenIndex = line.IndexOf(item.closeToken);
+                                            int closeTokenIndex = line.IndexOf(item.closeToken, highlightStartFrom);
                                             sbOfTextToFormat.Append(line.Substring(i, closeTokenIndex + item.closeToken.Length - i));
 
                                             //Because we might skip some token since add it to text to format.
@@ -897,9 +904,9 @@ namespace SyntaxHighlightingTextbox
         /// <param name="color">The color to highlight.</param>
         /// <param name="font">The font to highlight.</param>
         public void AddHighlightDescriptor(DescriptorRecognition descriptorRecognition, string openToken, HighlightType highlightType,
-            string closeToken, Color color, Font font)
+            string closeToken, Color color, Font font, UsedForAutoComplete used)
         {
-            Descriptors.Add(new HighlightDescriptor(openToken, closeToken, highlightType, descriptorRecognition, color, font, false));
+            Descriptors.Add(new HighlightDescriptor(openToken, closeToken, highlightType, descriptorRecognition, color, font, used));
         }
 
         /// <summary>
@@ -911,9 +918,9 @@ namespace SyntaxHighlightingTextbox
         /// <param name="color">The color to highlight.</param>
         /// <param name="font">The font to highlight.</param>
         public void AddHighlightDescriptor(DescriptorRecognition descriptorRecognition, string token, HighlightType highlightType,
-            Color color, Font font)
+            Color color, Font font, UsedForAutoComplete used)
         {
-            Descriptors.Add(new HighlightDescriptor(token, color, font, highlightType, descriptorRecognition));
+            Descriptors.Add(new HighlightDescriptor(token, color, font, highlightType, descriptorRecognition, used));
         }
 
 
@@ -927,7 +934,7 @@ namespace SyntaxHighlightingTextbox
         {
             foreach (string word in listOfKeyword)
             {
-                AddHighlightDescriptor(DescriptorRecognition.WholeWord, word, HighlightType.ToEOW, color, font);
+                AddHighlightDescriptor(DescriptorRecognition.WholeWord, word, HighlightType.ToEOW, color, font, UsedForAutoComplete.Yes);
             }
         }
 
@@ -948,7 +955,7 @@ namespace SyntaxHighlightingTextbox
             for (int i = 0; i < listOfPairToken.Count; i = i + 2)
             {
                 AddHighlightDescriptor(DescriptorRecognition.StartsWith, listOfPairToken[i],
-                    HighlightType.ToCloseToken, listOfPairToken[i + 1], color, font);
+                    HighlightType.ToCloseToken, listOfPairToken[i + 1], color, font, UsedForAutoComplete.No);
             }
         }
 
@@ -961,12 +968,13 @@ namespace SyntaxHighlightingTextbox
         /// <param name="highlightType"></param>
         /// <param name="color"></param>
         /// <param name="font"></param>
+        /// <param name="used"></param>
         public void AddListOfHighlightDescriptors(List<string> listDescriptor, DescriptorRecognition recognition,
-                                        HighlightType highlightType, Color color, Font font)
+                                        HighlightType highlightType, Color color, Font font, UsedForAutoComplete used)
         {
             foreach (string item in listDescriptor)
             {
-                AddHighlightDescriptor(recognition, item, highlightType, color, font);
+                AddHighlightDescriptor(recognition, item, highlightType, color, font, used);
             }
         }
 
@@ -1010,7 +1018,7 @@ namespace SyntaxHighlightingTextbox
         /// <param name="characters">The char.</param>
         private void LoadKeywordsToListBox(string characters)
         {
-            var listOfKeywords = Descriptors.Where(d => d.token.Contains(characters))
+            var listOfKeywords = Descriptors.Where(d => d.token.Contains(characters) && d.isUsedForAutoComplete == UsedForAutoComplete.Yes)
                                             .Select(d => d.token);
 
             AddKeywordsToListBox(listOfKeywords.ToArray());
@@ -1247,9 +1255,10 @@ namespace SyntaxHighlightingTextbox
             return listOfPositions;
         }
 
-        
+
 
         #endregion
+    
     }
 
 }

@@ -10,12 +10,10 @@ namespace GUI
     /// <summary>
     /// A class to store tab info
     /// </summary>
-    class TabPageInfo
+    public class TabPageInfo
     {
         private TabPage tabPage;
         private string language;
-        private bool canUndo;
-        private bool canRedo;
 
         public TabPage TabPage
         {
@@ -42,31 +40,6 @@ namespace GUI
                 language = value;
             }
         }
-
-        public bool CanUndo
-        {
-            get
-            {
-                return canUndo;
-            }
-
-            set
-            {
-                canUndo = value;
-            }
-        }
-
-        public bool CanRedo
-        {
-            get
-            {
-                return canRedo;
-            }
-
-            set
-            {
-                canRedo = value;
-            }
-        }
+        
     }
 }
