@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GUI.Classes;
 using SyntaxHighlightingTextbox;
 
 namespace GUI
@@ -195,6 +196,74 @@ namespace GUI
                 findingForm = new FindingForm();
             }
             findingForm.ShowFindAndReplaceForm();
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btNew.PerformClick();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dialog.ShowOpenDialog(tabControl);
+        }
+
+        private void btOpen_Click(object sender, EventArgs e)
+        {
+            openToolStripMenuItem.PerformClick();
+        }
+
+        private void toolStripButton4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btSave_Click(object sender, EventArgs e)
+        {
+            saveToolStripMenuItem.PerformClick();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dialog.ShowSaveDialog(tabControl.SelectedTab);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dialog.ShowSaveAsDialog(tabControl.SelectedTab);
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl.TabPages.Count > 1) //we don't remove tab page when tabControl has only one tab page
+            {
+                //we can use this one line of code below to easily remove selected tab page but it causes flinking  
+                // tabControl.TabPages.Remove(tabControl.SelectedTab);
+
+                //Show SaveDialog
+                string result = Dialog.ShowSafeCloseTabDialog(tabControl.SelectedTab);
+
+                if (result == "Cancel") return;
+
+                ////Delete the selected tab page status
+                //MyTabControl.RemoveTabPageStatus(tabControl.SelectedTab);
+
+                //that's the reason why use the number lines of code below 
+                //somehow if we set the tab page we are about to remove to another one (in this case we are about to remove selected tab page),
+                //it doesn't cause the flinking
+                TabPage tabToRemove = tabControl.SelectedTab;
+                if (tabControl.SelectedIndex != 0)
+                {
+                    //set the selectedtab to the first tab page
+                    tabControl.SelectedIndex = tabControl.SelectedIndex - 1;
+                }
+                else //if the tab we are about to remove is the first tab, just simply set selectedtab to 1
+                {
+                    tabControl.SelectedTab = tabControl.TabPages[1];
+                }
+                //remove tab 
+                tabControl.TabPages.Remove(tabToRemove);
+            }
         }
     }
 }
