@@ -87,6 +87,7 @@ namespace GUI
 
             //Dragging event
             TabControl.DragOver += TabControl_DragTab;
+            
         }
 
 
@@ -161,7 +162,13 @@ namespace GUI
                     break;
                 }
             }
-        }
+
+            if (TabControl.TabPages.Count > 0)
+            {
+                CurrentTextArea.Focus();
+            }
+
+          }
 
 
         private static void TabControl_OnDeselecting(object sender, TabControlCancelEventArgs e)
@@ -175,7 +182,7 @@ namespace GUI
         private static void TabControl_DragDrop(object sender, MouseEventArgs e)
         {
             //Just do when the left-mouse is clicked
-            if (e.Button != MouseButtons.Left) return;
+            if (e.Button != MouseButtons.Left || TabControl.TabPages.Count == 0) return;
             tabControl.DoDragDrop(tabControl.SelectedTab, DragDropEffects.All);
         }
 
@@ -195,7 +202,7 @@ namespace GUI
             int hoveredTabIndex = GetHoverTabIndex();
 
             //If the mouse is not on any Tab
-            if (hoveredTabIndex == -1)
+            if (hoveredTabIndex < 0)
             {
                 e.Effect = DragDropEffects.None;
                 return;
@@ -213,8 +220,9 @@ namespace GUI
 
             //Set the selected tab to the dragged tab
             TabControl.SelectedTab = draggedTab;
+            CurrentTextArea.Focus();
         }
-
+               
 
         #endregion
 

@@ -271,15 +271,9 @@ namespace SyntaxHighlightingTextbox
             
             base.OnTextChanged(e);
         }
-
-
+        
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
-            if (m.Msg == 0x020A && keyData == Keys.Control)
-            {
-
-            }
-
             //Complete matched word at ListBox
             if (autoCompleteListBox.Visible)
             {
@@ -421,6 +415,9 @@ namespace SyntaxHighlightingTextbox
             this.Text = info.text;
             this.SelectionStart = info.caretPosition;
             SetScrollPos(info.scrollPosition);
+            if (autoCompleteListBox.Visible == true)
+                autoCompleteListBox.Visible = false;
+
             lastInfo = info;
             isUndoRedo = false;
         }
@@ -437,6 +434,9 @@ namespace SyntaxHighlightingTextbox
             Text = info.text;
             SelectionStart = info.caretPosition;
             SetScrollPos(info.scrollPosition);
+            if (autoCompleteListBox.Visible == true)
+                autoCompleteListBox.Visible = false;
+
             lastInfo = info;
             isUndoRedo = false;
         }
