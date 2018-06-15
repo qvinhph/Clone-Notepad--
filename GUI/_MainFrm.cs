@@ -28,18 +28,20 @@ namespace GUI
             InitializeComponent();
             TabControlMethods.SetupTabControl(tabControl);
         }
-          
+
+        #region Event handler methods
 
         private void cToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Language = "C#";
-            
+
             foreach (var item in languageToolStripMenuItem.DropDownItems)
             {
                 ((ToolStripMenuItem)item).Checked = false;
             }
             cToolStripMenuItem.Checked = true;
-            
+
+            if (TabControlMethods.IsEmpty()) return;
             SetHighlightRule(Language);
         }
 
@@ -47,98 +49,15 @@ namespace GUI
         private void normalTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Language = "Normal Text";
-
             foreach (var item in languageToolStripMenuItem.DropDownItems)
             {
                 ((ToolStripMenuItem)item).Checked = false;
             }
             normalTextToolStripMenuItem.Checked = true;
 
+            if (TabControlMethods.IsEmpty()) return;
             SetHighlightRule(Language);
-        }
-
-
-        private void SetHighlightRule(string language)
-        {
-            TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
-            if (currentTextArea == null) return;
-
-            Font fontToSet; /*Use for the specified keyword highlighting.*/
-            var typingFont = currentTextArea.Font;
-
-            TabControlMethods.CurrentTextArea.EnableHighlight = true;
-            TabControlMethods.CurrentTextArea.Clear();
-
-            switch (language)
-            {
-                case "C#":
-                    {
-                        //Number highlight
-                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
-                                                    HighlightType.ToEOW, Color.IndianRed, typingFont, UsedForAutoComplete.No);
-
-
-                        //Keyword highlight
-                        var keywords = new List<string>()
-                        {
-                            "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
-                            "class", "const", "continue" , "decimal", "default", "delegate", "do", "double", "else",
-                            "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach",
-                            "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace",
-                            "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public",
-                            "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
-                            "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe"
-                        };
-                        fontToSet = new Font(typingFont, FontStyle.Bold);
-                        currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
-
-
-                        //Keyword highlight another color
-                        var keywords2 = new List<string>()
-                        {
-                            "define", "error", "import", "undef", "elif", "if", "include", "using", "else",
-                            "ifdef", "line", "endif", "ifndef", "pragma"
-                        };
-                        currentTextArea.AddHighlightKeywords(keywords2, Color.SlateGray, typingFont);
-
-
-                        //Comment highlight
-                        var commentSymbols = new List<string>()
-                        {
-                            "//", "///", "////"
-                        };
-                        currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
-                                                HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
-
-                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
-                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont, UsedForAutoComplete.No);
-
-
-                        //Highlight text between begin and end token
-                        var listPair = new List<string>()
-                        {
-                            "\"", "\"", "\'", "\'",
-                        };
-                        //currentTextArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
-                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "\"",
-                                                            HighlightType.ToCloseToken, "\"", Color.Red, typingFont, UsedForAutoComplete.No);
-
-
-                        //Highlight string start with '#'
-                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
-                                                        Color.SlateGray, typingFont, UsedForAutoComplete.No);
-                        
-                    }
-                    break;
-                case "Normal Text":
-                    {
-                        TabControlMethods.CurrentTextArea.EnableHighlight = false;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+        }       
 
 
         private void cToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -151,10 +70,10 @@ namespace GUI
         {
             int newTabIndex = 1;
             string newTabName = "new 1";
-            for (int i = 0; i <tabControl.TabPages.Count; i++)
+            for (int i = 0; i < tabControl.TabPages.Count; i++)
             {
                 string tabName = tabControl.TabPages[i].Text;
-                
+
                 if (tabName == newTabName)
                 {
                     newTabIndex++;
@@ -223,40 +142,42 @@ namespace GUI
             findingForm.ShowFindAndReplaceForm();
         }
 
+
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btNew.PerformClick();
         }
+
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Dialog.ShowOpenDialog(tabControl);
         }
 
+
         private void btOpen_Click(object sender, EventArgs e)
         {
             openToolStripMenuItem.PerformClick();
         }
 
-        private void toolStripButton4_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btSave_Click(object sender, EventArgs e)
         {
             saveToolStripMenuItem.PerformClick();
         }
 
+
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Dialog.ShowSaveDialog(tabControl.SelectedTab);
         }
 
+
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Dialog.ShowSaveAsDialog(tabControl.SelectedTab);
         }
+
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -290,7 +211,114 @@ namespace GUI
                 tabControl.TabPages.Remove(tabToRemove);
             }
         }
-        
+
+        #endregion
+
+
+        #region Other methods
+
+        /// <summary>
+        /// Set syntax highlight to the specified language.
+        /// </summary>
+        /// <param name="language"></param>
+        private void SetHighlightRule(string language)
+        {
+            if (TabControlMethods.IsEmpty()) return;
+            TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
+
+            Font fontToSet; /*Use for the specified keyword highlighting.*/
+            var typingFont = currentTextArea.Font;
+
+            TabControlMethods.CurrentTabPageInfo.Language = language;
+            TabControlMethods.CurrentTextArea.EnableHighlight = true;
+            TabControlMethods.CurrentTextArea.Clear();
+
+            switch (language)
+            {
+                case "C#":
+                    {
+                        //Number highlight
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
+                                                    HighlightType.ToEOW, Color.IndianRed, typingFont, UsedForAutoComplete.No);
+
+
+                        //Keyword highlight
+                        var keywords = new List<string>()
+                        {
+                            "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
+                            "class", "const", "continue" , "decimal", "default", "delegate", "do", "double", "else",
+                            "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach",
+                            "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace",
+                            "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public",
+                            "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
+                            "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe"
+                        };
+                        fontToSet = new Font(typingFont, FontStyle.Bold);
+                        currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
+
+
+                        //Keyword highlight another color
+                        var keywords2 = new List<string>()
+                        {
+                            "define", "error", "import", "undef", "elif", "if", "include", "using", "else",
+                            "ifdef", "line", "endif", "ifndef", "pragma"
+                        };
+                        currentTextArea.AddHighlightKeywords(keywords2, Color.SlateGray, typingFont);
+
+
+                        //Comment highlight
+                        var commentSymbols = new List<string>()
+                        {
+                            "//", "///", "////"
+                        };
+                        currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
+                                                HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
+
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
+                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont, UsedForAutoComplete.No);
+
+
+                        //Highlight text between begin and end token
+                        var listPair = new List<string>()
+                        {
+                            "\"", "\"", "\'", "\'",
+                        };
+                        //currentTextArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "\"",
+                                                            HighlightType.ToCloseToken, "\"", Color.Red, typingFont, UsedForAutoComplete.No);
+
+
+                        //Highlight string start with '#'
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
+                                                        Color.SlateGray, typingFont, UsedForAutoComplete.No);
+
+                    }
+                    
+                    break;
+                case "Normal Text":
+                    {
+                        TabControlMethods.CurrentTextArea.EnableHighlight = false;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        private void UpdateStatusBar()
+        {
+            //slbLanguage.Text = @"Language: "
+        }
+
+
+
+        #endregion
+
+        private void slbLanguage_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

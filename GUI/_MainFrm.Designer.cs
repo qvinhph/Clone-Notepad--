@@ -99,8 +99,15 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.slbLanguage = new System.Windows.Forms.ToolStripStatusLabel();
+            this.slbSpaceAndSeparator = new System.Windows.Forms.ToolStripStatusLabel();
+            this.slbTextLength = new System.Windows.Forms.ToolStripStatusLabel();
+            this.slbSpaceAndSlash = new System.Windows.Forms.ToolStripStatusLabel();
+            this.slbLine = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -528,7 +535,6 @@
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(25, 24);
             this.toolStripButton4.Text = "toolStripButton4";
-            this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
             // closeCurrentFile
             // 
@@ -687,11 +693,57 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.slbLanguage,
+            this.slbSpaceAndSeparator,
+            this.slbTextLength,
+            this.slbSpaceAndSlash,
+            this.slbLine});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 494);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1055, 22);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // slbLanguage
+            // 
+            this.slbLanguage.Name = "slbLanguage";
+            this.slbLanguage.Size = new System.Drawing.Size(65, 17);
+            this.slbLanguage.Text = "Language: ";
+            this.slbLanguage.Click += new System.EventHandler(this.slbLanguage_Click);
+            // 
+            // slbSpaceAndSeparator
+            // 
+            this.slbSpaceAndSeparator.Name = "slbSpaceAndSeparator";
+            this.slbSpaceAndSeparator.Size = new System.Drawing.Size(223, 17);
+            this.slbSpaceAndSeparator.Text = "                                                                       |";
+            // 
+            // slbTextLength
+            // 
+            this.slbTextLength.Name = "slbTextLength";
+            this.slbTextLength.Size = new System.Drawing.Size(50, 17);
+            this.slbTextLength.Text = "Length: ";
+            // 
+            // slbSpaceAndSlash
+            // 
+            this.slbSpaceAndSlash.Name = "slbSpaceAndSlash";
+            this.slbSpaceAndSlash.Size = new System.Drawing.Size(28, 17);
+            this.slbSpaceAndSlash.Text = "      |";
+            // 
+            // slbLine
+            // 
+            this.slbLine.Name = "slbLine";
+            this.slbLine.Size = new System.Drawing.Size(35, 17);
+            this.slbLine.Text = "Line: ";
+            // 
             // _MainFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1055, 516);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -702,6 +754,8 @@
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -779,6 +833,12 @@
         internal System.Windows.Forms.ToolStripButton btOpen;
         private System.Windows.Forms.ToolStripButton btSave;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel slbLanguage;
+        private System.Windows.Forms.ToolStripStatusLabel slbTextLength;
+        private System.Windows.Forms.ToolStripStatusLabel slbLine;
+        private System.Windows.Forms.ToolStripStatusLabel slbSpaceAndSeparator;
+        private System.Windows.Forms.ToolStripStatusLabel slbSpaceAndSlash;
     }
 }
 

@@ -87,6 +87,9 @@ namespace GUI
 
             //Dragging event
             TabControl.DragOver += TabControl_DragTab;
+
+            //Raise event when a tab is selected.
+            //TabControl.Selected += TabControl_OnSelected;
             
         }
 
@@ -229,6 +232,7 @@ namespace GUI
 
         #region TabControl Add/Remove
 
+
         public static TabPage CreateNewTabPage(String tabName)
         {
             TabPage newTabPage = new TabPage(tabName);
@@ -247,10 +251,17 @@ namespace GUI
             return newTabPage;
         }
 
+
         #endregion
 
 
         #region Some other methods
+
+        public static bool IsEmpty()
+        {
+            return (TabControl.TabPages.Count == 0);
+        }
+
 
         /// <summary>
         /// Swap two Tab pages
@@ -283,12 +294,19 @@ namespace GUI
             return -1;
         }
 
+
+        private static void UpdateStatusBar()
+        {
+            
+        }
+
         #endregion
 
 
         #region Manipulate the TabPageInfo
 
         static TabPageInfoCollection listOfTabPageInfo = new TabPageInfoCollection();
+
 
         /// <summary>
         /// Get the selected tab page info.
@@ -308,6 +326,7 @@ namespace GUI
             }
         }
 
+
         /// <summary>
         /// Init the tab page info.
         /// </summary>
@@ -316,9 +335,9 @@ namespace GUI
         {
             TabPageInfo tabPageInfo = new TabPageInfo();
             tabPageInfo.TabPage = tabPage;
-            //tabPageInfo.Language = .DefaultLanguage;
             listOfTabPageInfo.Add(tabPageInfo);
         }
+
 
         /// <summary>
         /// Delete the tab page info.
