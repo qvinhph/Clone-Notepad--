@@ -31,10 +31,10 @@ namespace GUI.Classes
                 }
 
                 //Create a new tab page
-                TabPage newTabPage = MyTabControl.CreateNewTabPage(openDialog.SafeFileName);
+                TabPage newTabPage = TabControlMethods.CreateNewTabPage(openDialog.SafeFileName);
 
                 //a variable to hold text box contained in tab page
-                TypingArea newTypingArea = MyTabControl.CurrentTextArea;
+                TypingArea newTypingArea = TabControlMethods.CurrentTextArea;
 
                 //Get the path of the File
                 string filePath = openDialog.FileName;
