@@ -45,7 +45,7 @@ namespace GUI
 
         private void findButton_Click(object sender, EventArgs e)
         {
-            TypingArea currentTextArea = MyTabControl.CurrentTextArea;
+            TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
 
             previousText = currentTextArea.Text;
 
@@ -112,7 +112,7 @@ namespace GUI
 
         private void findNextButton_Click(object sender, EventArgs e)
         {
-            TypingArea currentTextArea = MyTabControl.CurrentTextArea;
+            TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
 
             //Check if the current string hasn't been search last turns
             if (previousText != currentTextArea.Text)
@@ -144,7 +144,7 @@ namespace GUI
 
         private void findPreviousButton_Click(object sender, EventArgs e)
         {
-            TypingArea currentTextArea = MyTabControl.CurrentTextArea;
+            TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
 
             if (previousText != currentTextArea.Text)
             {
@@ -175,7 +175,7 @@ namespace GUI
 
         private void replaceButton_Click(object sender, EventArgs e)
         {
-            TypingArea currentTextArea = MyTabControl.CurrentTextArea;
+            TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
 
             //Replace the selected found text by replacement text
             currentTextArea.SelectedText = replacementTextbox.Text;
@@ -184,7 +184,7 @@ namespace GUI
 
         private void FindingForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            foreach (TabPage tabPage in MyTabControl.TabControl.TabPages)
+            foreach (TabPage tabPage in TabControlMethods.TabControl.TabPages)
             {
                 TypingArea textArea = (tabPage.Controls[0] as MyRichTextBox).TypingArea;
                 textArea.ClearBackColor(textArea.BackColor);
@@ -197,7 +197,7 @@ namespace GUI
 
         private void replaceAllButton_Click(object sender, EventArgs e)
         {
-            TypingArea currentTextArea = MyTabControl.CurrentTextArea;
+            TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
 
             //Replace all the selected found text by replacement text
             currentTextArea.Text = currentTextArea.Text.Replace(searchTextbox.Text, replacementTextbox.Text);

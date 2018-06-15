@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace GUI
 {
-    static partial class MyTabControl 
+    static partial class TabControlMethods 
     {
         //the "x" image 
         private static Image closeImage;
@@ -17,7 +17,6 @@ namespace GUI
         //A variable refer on current handling TabControl.
         private static TabControl tabControl;
 
-        public static int PreviousSelectedIndex { get; private set; }
         public static TabPage PreviousSelectedTabpage { get; private set; }
 
 
@@ -58,8 +57,10 @@ namespace GUI
 
         public static void SetupTabControl(TabControl _tabControl)
         {
+            //Store the reference of _tabControl
             TabControl = _tabControl;
 
+            //Allow drop
             TabControl.AllowDrop = true;
             
             //Allow to custom the way tab control are drawn through DrawItem event raising
@@ -69,31 +70,28 @@ namespace GUI
             //Set size of each tab page.
             TabControl.Padding = new Point(15, 4);
 
-            //get the "x" image 
+            //Get the "x" image 
             closeImage = Properties.Resources.CloseImage;
 
-            //draw the "x" button
+            //Draw the "x" button
             TabControl.DrawItem += TabControl_OnDrawItem;
 
-            //click "x" button to close the tab page.
+            //Click "x" button to close the tab page.
             TabControl.MouseClick += TabControl_OnMouseClick;
 
-            //
+            //To track the previous TabPage
             TabControl.Deselecting += TabControl_OnDeselecting;
 
-            //
-            TabControl.Selecting += TabControl_OnSelecting; 
+            //Allow to do drag and drop when mouse move around
+            TabControl.MouseMove += TabControl_DragDrop;
 
-            //TabControl.SelectedIndexChanged += 
-        }
-
-        private static void TabControl_OnSelecting(object sender, TabControlCancelEventArgs e)
-        {
-            
+            //Draging
+            TabControl.DragOver += TabControl_DragTab;
         }
 
 
         #region TabControl event handlers
+
 
         private static void TabControl_OnDrawItem(object sender, DrawItemEventArgs e)
         {
@@ -173,6 +171,51 @@ namespace GUI
                 PreviousSelectedTabpage = TabControl.SelectedTab;
         }
 
+
+        private static void TabControl_DragDrop(object sender, MouseEventArgs e)
+        {
+            //Just do when the left-mouse is clicked
+            if (e.Button != MouseButtons.Left) return;
+            tabControl.DoDragDrop(tabControl.SelectedTab, DragDropEffects.All);
+        }
+
+
+        private static void TabControl_DragTab(object sender, DragEventArgs e)
+        {
+            //If the thing dragged over isn't a Tab
+            if (!e.Data.GetDataPresent(typeof(TabPage))) return;
+
+            //Get the tab being dragged
+            TabPage draggedTab = (TabPage)e.Data.GetData(typeof(TabPage));
+
+            //Get the index of the tab being dragged
+            int draggedTabIndex = TabControl.TabPages.IndexOf(draggedTab);
+
+            //Get the index of the tab having the mouse on it
+            int hoveredTabIndex = GetHoverTabIndex();
+
+            //If the mouse is not on any Tab
+            if (hoveredTabIndex == -1)
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
+            //Change the type of cursor showing while dragging
+            e.Effect = DragDropEffects.Move;
+
+            TabPage hoveredTab = TabControl.TabPages[hoveredTabIndex];
+
+            if (draggedTab == hoveredTab)
+                return;
+
+            SwapTabPages(draggedTab, hoveredTab);
+
+            //Set the selected tab to the dragged tab
+            TabControl.SelectedTab = draggedTab;
+        }
+
+
         #endregion
 
 
@@ -182,19 +225,54 @@ namespace GUI
         {
             TabPage newTabPage = new TabPage(tabName);
             InitTabPageInfo(newTabPage);
-
-            //Create the textbox inside
-            //TypingArea typingArea = new TypingArea();
-            //newTabPage.Controls.Add(typingArea);
-            //typingArea.Dock = DockStyle.Fill;
+            
+            //Add the MyRichTextBox inside
             MyRichTextBox myRichText = new MyRichTextBox();
             newTabPage.Controls.Add(myRichText);
             myRichText.Dock = DockStyle.Fill;
+
             TabControl.TabPages.Add(newTabPage);
+
             //Switch to the new tabpage
             TabControl.SelectedTab = newTabPage;
 
             return newTabPage;
+        }
+
+        #endregion
+
+
+        #region Some other methods
+
+        /// <summary>
+        /// Swap two Tab pages
+        /// </summary>
+        /// <param name="srcTab">The first tab</param>
+        /// <param name="dstTab">The second tab</param>
+        private static void SwapTabPages(TabPage srcTab, TabPage dstTab)
+        {
+            int indexSrc = TabControl.TabPages.IndexOf(srcTab);
+            int indexDst = TabControl.TabPages.IndexOf(dstTab);
+            TabControl.TabPages[indexDst] = srcTab;
+            TabControl.TabPages[indexSrc] = dstTab;
+        }
+
+
+        /// <summary>
+        /// Get the index of the tab having the mouse on it
+        /// </summary>
+        /// <returns></returns>
+        private static int GetHoverTabIndex()
+        {
+            for (int i = 0; i < TabControl.TabPages.Count; i++)
+            {
+                Rectangle tabArea = TabControl.GetTabRect(i);
+                if (tabArea.Contains(TabControl.PointToClient(Cursor.Position)))
+                    return i;
+            }
+
+            //The mouse is not on the Tab
+            return -1;
         }
 
         #endregion
@@ -259,5 +337,7 @@ namespace GUI
         }
 
         #endregion
+           
+        
     }
 }
