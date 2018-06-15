@@ -19,7 +19,7 @@ namespace SyntaxHighlightingTextbox
         /// <param name="dr">The dr.</param>
         /// <param name="useForAutoComplete">if set to <c>true</c> [use for auto complete].</param>
         public HighlightDescriptor(string token, Color color, Font font, HighlightType highlightType, 
-            DescriptorRecognition descriptorRecognition, bool isUsedForAutoComplete = true)
+            DescriptorRecognition descriptorRecognition, UsedForAutoComplete isUsedForAutoComplete = UsedForAutoComplete.Yes)
         {
             if (highlightType == HighlightType.ToCloseToken)
             {
@@ -45,7 +45,7 @@ namespace SyntaxHighlightingTextbox
         /// <param name="font">The font.</param>
         /// <param name="useForAutoComplete">if set to <c>true</c> [use for auto complete].</param>
         public HighlightDescriptor(string token, string closeToken, HighlightType highlightType,
-            DescriptorRecognition descriptorRecognition, Color color, Font font, bool isUsedForAutoComplete = true)
+            DescriptorRecognition descriptorRecognition, Color color, Font font, UsedForAutoComplete isUsedForAutoComplete = UsedForAutoComplete.Yes)
         {
             this.color = color;
             this.font = font;
@@ -62,7 +62,7 @@ namespace SyntaxHighlightingTextbox
         public readonly string closeToken;
         public readonly HighlightType highlightType;
         public readonly DescriptorRecognition descriptorRecognition;
-        public readonly bool isUsedForAutoComplete;
+        public readonly UsedForAutoComplete isUsedForAutoComplete;
     }
 
     public enum HighlightType
@@ -99,5 +99,11 @@ namespace SyntaxHighlightingTextbox
         /// If the word is the number.
         /// </summary>
         IsNumber
+    }
+
+    public enum UsedForAutoComplete
+    {
+        No,
+        Yes
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SyntaxHighlightingTextbox;
 
-namespace GUI.Classes
+namespace GUI
 {
     static class MyTextbox
     {

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using GUI.Classes;
 using SyntaxHighlightingTextbox;
 
 namespace GUI
@@ -15,6 +14,7 @@ namespace GUI
     public partial class _MainFrm : Form
     {
         private string language = "C#";
+        private FindingForm findingForm = null;
 
         public string Language
         {
@@ -26,52 +26,56 @@ namespace GUI
         public _MainFrm()
         {
             InitializeComponent();
-        }
-
-        private FindingForm findingForm = null;
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
             TabControlMethods.SetupTabControl(tabControl);
         }
+          
 
         private void cToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Language = "C#";
+            
             foreach (var item in languageToolStripMenuItem.DropDownItems)
             {
                 ((ToolStripMenuItem)item).Checked = false;
             }
             cToolStripMenuItem.Checked = true;
-            Language = "C#";
-            TabControlMethods.CurrentTextArea.EnableHighlight = true;
+            
             SetHighlightRule(Language);
         }
+
 
         private void normalTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Language = "Normal Text";
+
             foreach (var item in languageToolStripMenuItem.DropDownItems)
             {
                 ((ToolStripMenuItem)item).Checked = false;
             }
             normalTextToolStripMenuItem.Checked = true;
+
             SetHighlightRule(Language);
         }
 
+
         private void SetHighlightRule(string language)
         {
-            var currentTypingArea = TabControlMethods.CurrentTextArea;
-            Font fontToSet; //Use for the specified keyword highlighting.
-            var typingFont = currentTypingArea.Font;
+            TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
+            if (currentTextArea == null) return;
+
+            Font fontToSet; /*Use for the specified keyword highlighting.*/
+            var typingFont = currentTextArea.Font;
+
             TabControlMethods.CurrentTextArea.EnableHighlight = true;
             TabControlMethods.CurrentTextArea.Clear();
+
             switch (language)
             {
                 case "C#":
                     {
                         //Number highlight
-                        currentTypingArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
-                                                    HighlightType.ToEOW, Color.IndianRed, null);
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
+                                                    HighlightType.ToEOW, Color.IndianRed, typingFont, UsedForAutoComplete.No);
 
 
                         //Keyword highlight
@@ -86,7 +90,7 @@ namespace GUI
                             "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe"
                         };
                         fontToSet = new Font(typingFont, FontStyle.Bold);
-                        currentTypingArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
+                        currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
 
 
                         //Keyword highlight another color
@@ -95,7 +99,7 @@ namespace GUI
                             "define", "error", "import", "undef", "elif", "if", "include", "using", "else",
                             "ifdef", "line", "endif", "ifndef", "pragma"
                         };
-                        currentTypingArea.AddHighlightKeywords(keywords2, Color.SlateGray, typingFont);
+                        currentTextArea.AddHighlightKeywords(keywords2, Color.SlateGray, typingFont);
 
 
                         //Comment highlight
@@ -103,10 +107,11 @@ namespace GUI
                         {
                             "//", "///", "////"
                         };
-                        currentTypingArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
-                                                HighlightType.ToEOL, Color.Green, null);
-                        currentTypingArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
-                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont);
+                        currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
+                                                HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
+
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
+                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont, UsedForAutoComplete.No);
 
 
                         //Highlight text between begin and end token
@@ -114,12 +119,14 @@ namespace GUI
                         {
                             "\"", "\"", "\'", "\'",
                         };
-                        currentTypingArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+                        //currentTextArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "\"",
+                                                            HighlightType.ToCloseToken, "\"", Color.Red, typingFont, UsedForAutoComplete.No);
 
 
                         //Highlight string start with '#'
-                        currentTypingArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
-                                                        Color.SlateGray, typingFont);
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
+                                                        Color.SlateGray, typingFont, UsedForAutoComplete.No);
                         
                     }
                     break;
@@ -133,10 +140,12 @@ namespace GUI
             }
         }
 
+
         private void cToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             Language = "C";
         }
+
 
         private void btNew_Click(object sender, EventArgs e)
         {
@@ -157,28 +166,43 @@ namespace GUI
             }
 
             TabControlMethods.CreateNewTabPage(newTabName);
+
+            //Set the highlight language for new tab
+            string currentLanguage = "";
+            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            {
+                if (((ToolStripMenuItem)item).Checked == true)
+                    currentLanguage = ((ToolStripMenuItem)item).Text;
+            }
+            SetHighlightRule(currentLanguage);
+
             TabControlMethods.CurrentTextArea.Focus();
         }
+
 
         private void btUndo_Click(object sender, EventArgs e)
         {
             TabControlMethods.CurrentTextArea.Undo();
         }
 
+
         private void btRedo_Click(object sender, EventArgs e)
         {
             TabControlMethods.CurrentTextArea.Redo();
         }
+
 
         private void btZoomIn_Click(object sender, EventArgs e)
         {
             TabControlMethods.CurrentTextArea.ZoomIn();
         }
 
+
         private void btZoomOut_Click(object sender, EventArgs e)
         {
             TabControlMethods.CurrentTextArea.ZoomOut();
         }
+
 
         private void findToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
@@ -189,6 +213,7 @@ namespace GUI
             findingForm.ShowFindingForm();
         }
 
+
         private void findToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (findingForm == null)
@@ -198,72 +223,9 @@ namespace GUI
             findingForm.ShowFindAndReplaceForm();
         }
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            btNew.PerformClick();
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Dialog.ShowOpenDialog(tabControl);
-        }
-
-        private void btOpen_Click(object sender, EventArgs e)
-        {
-            openToolStripMenuItem.PerformClick();
-        }
-
-        private void toolStripButton4_Click(object sender, EventArgs e)
+        private void languageToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-        }
-
-        private void btSave_Click(object sender, EventArgs e)
-        {
-            saveToolStripMenuItem.PerformClick();
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Dialog.ShowSaveDialog(tabControl.SelectedTab);
-        }
-
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Dialog.ShowSaveAsDialog(tabControl.SelectedTab);
-        }
-
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (tabControl.TabPages.Count > 1) //we don't remove tab page when tabControl has only one tab page
-            {
-                //we can use this one line of code below to easily remove selected tab page but it causes flinking  
-                // tabControl.TabPages.Remove(tabControl.SelectedTab);
-
-                //Show SaveDialog
-                string result = Dialog.ShowSafeCloseTabDialog(tabControl.SelectedTab);
-
-                if (result == "Cancel") return;
-
-                ////Delete the selected tab page status
-                //MyTabControl.RemoveTabPageStatus(tabControl.SelectedTab);
-
-                //that's the reason why use the number lines of code below 
-                //somehow if we set the tab page we are about to remove to another one (in this case we are about to remove selected tab page),
-                //it doesn't cause the flinking
-                TabPage tabToRemove = tabControl.SelectedTab;
-                if (tabControl.SelectedIndex != 0)
-                {
-                    //set the selectedtab to the first tab page
-                    tabControl.SelectedIndex = tabControl.SelectedIndex - 1;
-                }
-                else //if the tab we are about to remove is the first tab, just simply set selectedtab to 1
-                {
-                    tabControl.SelectedTab = tabControl.TabPages[1];
-                }
-                //remove tab 
-                tabControl.TabPages.Remove(tabToRemove);
-            }
         }
     }
 }

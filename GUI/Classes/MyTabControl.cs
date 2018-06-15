@@ -77,7 +77,7 @@ namespace GUI
             TabControl.DrawItem += TabControl_OnDrawItem;
 
             //Click "x" button to close the tab page.
-            TabControl.MouseClick += TabControl_OnMouseClick;
+            TabControl.MouseDown += TabControl_OnMouseDown;
 
             //To track the previous TabPage
             TabControl.Deselecting += TabControl_OnDeselecting;
@@ -85,7 +85,7 @@ namespace GUI
             //Allow to do drag and drop when mouse move around
             TabControl.MouseMove += TabControl_DragDrop;
 
-            //Draging
+            //Dragging event
             TabControl.DragOver += TabControl_DragTab;
         }
 
@@ -122,7 +122,7 @@ namespace GUI
         }
 
 
-        private static void TabControl_OnMouseClick(object sender, MouseEventArgs e)
+        private static void TabControl_OnMouseDown(object sender, MouseEventArgs e)
         {
             //Check all the tab to determind which tab that has mouse click fall into.
             foreach (TabPage tabPage in TabControl.TabPages)
@@ -280,7 +280,7 @@ namespace GUI
 
         #region Manipulate the TabPageInfo
 
-        static List<TabPageInfo> listOfTabPageInfo = new List<TabPageInfo>();
+        static TabPageInfoCollection listOfTabPageInfo = new TabPageInfoCollection();
 
         /// <summary>
         /// Get the selected tab page info.
@@ -309,8 +309,6 @@ namespace GUI
             TabPageInfo tabPageInfo = new TabPageInfo();
             tabPageInfo.TabPage = tabPage;
             //tabPageInfo.Language = .DefaultLanguage;
-            tabPageInfo.CanUndo = false;
-            tabPageInfo.CanRedo = false;
             listOfTabPageInfo.Add(tabPageInfo);
         }
 
@@ -318,26 +316,23 @@ namespace GUI
         /// Delete the tab page info.
         /// </summary>
         /// <param name="tabPage"></param>
-        public static void RemoveTabPageInfo(TabPage tabPage)
+        public static bool RemoveTabPageInfo(TabPage tabPage)
         {
             //Locate the tab page info to remove.
-            TabPageInfo tabStatusToDelete = null;
-            foreach (TabPageInfo tabPageStatus in listOfTabPageInfo)
+            TabPageInfo tabInfoToDelelte = null;
+            foreach (TabPageInfo tabPageInfo in listOfTabPageInfo)
             {
-                if (tabPageStatus.TabPage == tabPage)
+                if (tabPageInfo.TabPage == tabPage)
                 {
-                    tabStatusToDelete = tabPageStatus;
+                    tabInfoToDelelte = tabPageInfo;
+                    break;
                 }
             }
 
-            if (tabStatusToDelete != null)
-            {
-                listOfTabPageInfo.Remove(tabStatusToDelete);
-            }
+            return listOfTabPageInfo.Remove(tabInfoToDelelte);            
         }
 
         #endregion
-           
         
     }
 }
