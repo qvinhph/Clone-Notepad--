@@ -32,7 +32,7 @@ namespace GUI
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            MyTabControl.SetupTabControl(tabControl);
+            TabControlMethods.SetupTabControl(tabControl);
         }
 
         private void cToolStripMenuItem_Click(object sender, EventArgs e)
@@ -43,7 +43,7 @@ namespace GUI
             }
             cToolStripMenuItem.Checked = true;
             Language = "C#";
-            MyTabControl.CurrentTextArea.EnableHighlight = true;
+            TabControlMethods.CurrentTextArea.EnableHighlight = true;
             SetHighlightRule(Language);
         }
 
@@ -60,11 +60,11 @@ namespace GUI
 
         private void SetHighlightRule(string language)
         {
-            var currentTypingArea = MyTabControl.CurrentTextArea;
+            var currentTypingArea = TabControlMethods.CurrentTextArea;
             Font fontToSet; //Use for the specified keyword highlighting.
             var typingFont = currentTypingArea.Font;
-            MyTabControl.CurrentTextArea.EnableHighlight = true;
-            MyTabControl.CurrentTextArea.Clear();
+            TabControlMethods.CurrentTextArea.EnableHighlight = true;
+            TabControlMethods.CurrentTextArea.Clear();
             switch (language)
             {
                 case "C#":
@@ -125,7 +125,7 @@ namespace GUI
                     break;
                 case "Normal Text":
                     {
-                        MyTabControl.CurrentTextArea.EnableHighlight = false;
+                        TabControlMethods.CurrentTextArea.EnableHighlight = false;
                     }
                     break;
                 default:
@@ -156,28 +156,28 @@ namespace GUI
                 }
             }
 
-            MyTabControl.CreateNewTabPage(newTabName);
-            MyTabControl.CurrentTextArea.Focus();
+            TabControlMethods.CreateNewTabPage(newTabName);
+            TabControlMethods.CurrentTextArea.Focus();
         }
 
         private void btUndo_Click(object sender, EventArgs e)
         {
-            MyTabControl.CurrentTextArea.Undo();
+            TabControlMethods.CurrentTextArea.Undo();
         }
 
         private void btRedo_Click(object sender, EventArgs e)
         {
-            MyTabControl.CurrentTextArea.Redo();
+            TabControlMethods.CurrentTextArea.Redo();
         }
 
         private void btZoomIn_Click(object sender, EventArgs e)
         {
-            MyTabControl.CurrentTextArea.ZoomIn();
+            TabControlMethods.CurrentTextArea.ZoomIn();
         }
 
         private void btZoomOut_Click(object sender, EventArgs e)
         {
-            MyTabControl.CurrentTextArea.ZoomOut();
+            TabControlMethods.CurrentTextArea.ZoomOut();
         }
 
         private void findToolStripMenuItem_Click_1(object sender, EventArgs e)
