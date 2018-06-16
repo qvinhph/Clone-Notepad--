@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace SyntaxHighlightingTextbox
 {
@@ -36,7 +37,31 @@ namespace SyntaxHighlightingTextbox
             get { return documentMap; }
             set { documentMap = value; }
         }
-        #endregion 
+
+        public enum ScrollBarType : uint
+        {
+            SbHorz = 0,
+            SbVert = 1,
+            SbCtl = 2,
+            SbBoth = 3
+        }
+
+        public enum Message : uint
+        {
+            WM_VSCROLL = 0x0115
+        }
+
+        public enum ScrollBarCommands : uint
+        {
+            SB_THUMBPOSITION = 4
+        }
+        [DllImport("User32.dll")]
+        public extern static int GetScrollPos(IntPtr hWnd, int nBar);
+
+        [DllImport("User32.dll")]
+        public extern static int SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+        #endregion
 
 
         #region Constructor
@@ -98,6 +123,8 @@ namespace SyntaxHighlightingTextbox
         {
             AddLineNumbers();
             DocumentMap.Text = TypingArea.Text;
+            DocumentMap.Rtf = TypingArea.Rtf;
+            DocumentMap.Font = new Font(FontFamily.GenericMonospace, 3);
         }
 
 
@@ -114,9 +141,16 @@ namespace SyntaxHighlightingTextbox
         {
             LineNumberTextBox.Text = "";
             //AddLineNumbers();
-            DocumentMap.Invalidate();
             AddLineNumbers();
             LineNumberTextBox.Refresh();
+            DocumentMap.Refresh();
+
+            //Method to synchronize scroll between Typing Area and Document Map
+            //Reference: https://stackoverflow.com/questions/1827323/c-synchronize-scroll-position-of-two-richtextboxes
+            int nPos = GetScrollPos(TypingArea.Handle, (int)ScrollBarType.SbVert);
+            nPos <<= 16;
+            uint wParam = (uint)ScrollBarCommands.SB_THUMBPOSITION | (uint)nPos;
+            SendMessage(DocumentMap.Handle, (int)Message.WM_VSCROLL, new IntPtr(wParam), new IntPtr(0));
         }
 
         //Update font of number margin when font of typing area changed
