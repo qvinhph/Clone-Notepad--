@@ -87,13 +87,14 @@ namespace SyntaxHighlightingTextbox
         #region Event
         private void HandleEvent()
         {
-            typingArea.VScroll += TypingArea_VScroll;
-            typingArea.TextChanged += TypingArea_TextChanged;
-            this.Resize += MyRichTextBox_Resize;
-            typingArea.SelectionChanged += TypingArea_SelectionChanged;
-            typingArea.FontChanged += TypingArea_FontChanged;
-            typingArea.MouseDown += TypingArea_MouseDown;
-            typingArea.SizeChanged += TypingArea_SizeChanged;
+            typingArea.VScroll += OnTypingArea_VScroll;
+            typingArea.TextChanged += OnTypingArea_TextChanged;
+            this.Resize += OnMyRichTextBox_Resize;
+            typingArea.SelectionChanged += OnTypingArea_SelectionChanged;
+            typingArea.FontChanged += OnTypingArea_FontChanged;
+            typingArea.MouseDown += OnTypingArea_MouseDown;
+            typingArea.SizeChanged += OnTypingArea_SizeChanged;
+            //documentMap.SelectionChanged += OnDocumentMap_SelectionChanged;
         }
         #endregion
 
@@ -109,7 +110,7 @@ namespace SyntaxHighlightingTextbox
             DocumentMap.Text = TypingArea.Text;
         }
 
-        private void MyRichTextBox_Resize(object sender, EventArgs e)
+        private void OnMyRichTextBox_Resize(object sender, EventArgs e)
         {
             AddLineNumbers();
         }
@@ -119,17 +120,17 @@ namespace SyntaxHighlightingTextbox
         #region Typing Area Event
         //Update number margin when text in typing area changed
 
-        private void TypingArea_TextChanged(object sender, EventArgs e)
+        private void OnTypingArea_TextChanged(object sender, EventArgs e)
         {
             AddLineNumbers();
             DocumentMap.Text = TypingArea.Text;
             DocumentMap.Rtf = TypingArea.Rtf;
-            DocumentMap.Font = new Font(FontFamily.GenericMonospace, 3);
+            DocumentMap.Font = new Font(FontFamily.GenericMonospace, 5);
         }
 
 
         //Update number margin when change selection in typing area
-        private void TypingArea_SelectionChanged(object sender, EventArgs e)
+        private void OnTypingArea_SelectionChanged(object sender, EventArgs e)
         {
             Point pt = typingArea.GetPositionFromCharIndex(typingArea.SelectionStart);
             if (pt.X == 1)
@@ -137,7 +138,7 @@ namespace SyntaxHighlightingTextbox
                 AddLineNumbers();
             }
         }
-        private void TypingArea_VScroll(object sender, EventArgs e)
+        private void OnTypingArea_VScroll(object sender, EventArgs e)
         {
             LineNumberTextBox.Text = "";
             //AddLineNumbers();
@@ -154,14 +155,14 @@ namespace SyntaxHighlightingTextbox
         }
 
         //Update font of number margin when font of typing area changed
-        private void TypingArea_FontChanged(object sender, EventArgs e)
+        private void OnTypingArea_FontChanged(object sender, EventArgs e)
         {
             LineNumberTextBox.Font = TypingArea.Font;
             TypingArea.Select();
             AddLineNumbers();
         }
 
-        private void TypingArea_MouseDown(object sender, MouseEventArgs e)
+        private void OnTypingArea_MouseDown(object sender, MouseEventArgs e)
         {
             typingArea.Select();
             LineNumberTextBox.DeselectAll();
@@ -169,7 +170,7 @@ namespace SyntaxHighlightingTextbox
         
 
         //Update the number margin when zoom in or zoom out
-        private void TypingArea_SizeChanged(object sender, EventArgs e)
+        private void OnTypingArea_SizeChanged(object sender, EventArgs e)
         {
             //Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size);
             LineNumberTextBox.Font = typingArea.Font;
@@ -180,6 +181,10 @@ namespace SyntaxHighlightingTextbox
             //Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size * LineNumberTextBox.ZoomFactor);
             //LineNumberTextBox.Font=fnt;
         }
+        //private void OnDocumentMap_SelectionChanged(object sender, EventArgs e)
+        //{
+        //    DocumentMap.SelectionStart = DocumentMap.TextLength;
+        //}
         #endregion
 
         #region Main methods to display Line Numbering TextBox

@@ -51,6 +51,7 @@
     <Compile Include="DocumentMap.Designer.cs">
       <DependentUpon>DocumentMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="FoldFinder.cs" />
     <Compile Include="FontDictionary.cs" />
     <Compile Include="HighlightDescriptor.cs" />
     <Compile Include="HighlightDescriptorCollection.cs" />
