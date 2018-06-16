@@ -196,15 +196,18 @@ namespace GUI
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         { 
-            if (tabControl.TabPages.Count > 1)
+            if (tabControl.TabPages.Count > 0)
             {
                 //Show SaveDialog
                 string result = Dialog.ShowSafeCloseTabDialog(tabControl.SelectedTab);
 
+
                 if (result == "Cancel") return;
+
 
                 //Choose the selected tab to remove
                 TabPage tabToRemove = tabControl.SelectedTab;
+
 
                 if (tabControl.SelectedIndex != 0)
                 {
@@ -214,10 +217,22 @@ namespace GUI
                 //if the tab we are about to remove is the first tab, just simply set selectedtab to 1
                 else
                 {
-                    tabControl.SelectedTab = tabControl.TabPages[1];
+                    tabControl.SelectedIndex = tabControl.SelectedIndex + 1;
                 }
+
+
+                //remove app info
+                TabControlMethods.RemoveTabPageInfo(tabToRemove);
+
+
                 //remove tab 
                 tabControl.TabPages.Remove(tabToRemove);
+
+
+                if (tabControl.TabPages.Count > 0)
+                {
+                    TabControlMethods.CurrentTextArea.Focus();
+                }
             }
         }
 

@@ -15,9 +15,6 @@ namespace SyntaxHighlightingTextbox
     {
         #region Fields
 
-
-
-
         //Members exposed via properties.
         private SeparatorCollection separators;
         /// <summary>
@@ -182,6 +179,7 @@ namespace SyntaxHighlightingTextbox
             parsing = false;
             isUndoRedo = false;
             EnableAutoComplete = true;
+
             this.Font = new Font(FontFamily.GenericMonospace, 12);
 
             rtfHeader = new StringBuilder();
@@ -207,6 +205,7 @@ namespace SyntaxHighlightingTextbox
             AddListOfSeparators(separators);
 
         }
+        
 
         #endregion
 
@@ -277,12 +276,14 @@ namespace SyntaxHighlightingTextbox
         {
             if (parsing) return;
 
+
             if (!isUndoRedo)
             {
                 redoStack.Clear();
                 undoStack.Push(lastInfo);
                 lastInfo = new UndoRedoInfo(this.Text, this.SelectionStart, GetScrollPos());
             }
+
 
             var temp = this.ZoomFactor;
             if (EnableHighlight)
@@ -291,14 +292,14 @@ namespace SyntaxHighlightingTextbox
             }
             this.ZoomFactor = 1;
             this.ZoomFactor = temp;
-                        
+            
 
             if (enableAutoComplete)
             {
                 AutoShowListBox();
             }
-            
 
+            
             base.OnTextChanged(e);
         }
         
@@ -443,6 +444,7 @@ namespace SyntaxHighlightingTextbox
             autoCompleteListBox.Visible = false;
             base.OnVScroll(e);
         }
+        
 
         #endregion
 
@@ -752,10 +754,12 @@ namespace SyntaxHighlightingTextbox
             SelectionStart = caretPosition;
             SelectionLength = 0;
             SetScrollPos(scrollPosition);
+            this.Focus();
+
             FinishUpdate();
 
             parsing = false;
-        }
+        }      
 
 
         /// <summary>
