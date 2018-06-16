@@ -108,13 +108,13 @@ namespace GUI
 
         private void btUndo_Click(object sender, EventArgs e)
         {
-            TabControlMethods.CurrentTextArea.Undo();
+            undoToolStripMenuItem.PerformClick();
         }
 
 
         private void btRedo_Click(object sender, EventArgs e)
         {
-            TabControlMethods.CurrentTextArea.Redo();
+            redoToolStripMenuItem.PerformClick();
         }
         
 
@@ -140,7 +140,7 @@ namespace GUI
         }
 
 
-        private void findToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void findAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (findingForm == null)
             {
@@ -188,29 +188,24 @@ namespace GUI
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (tabControl.TabPages.Count > 1) //we don't remove tab page when tabControl has only one tab page
+            //we don't remove tab page when tabControl has only one tab page
+            if (tabControl.TabPages.Count > 1)
             {
-                //we can use this one line of code below to easily remove selected tab page but it causes flinking  
-                // tabControl.TabPages.Remove(tabControl.SelectedTab);
-
                 //Show SaveDialog
                 string result = Dialog.ShowSafeCloseTabDialog(tabControl.SelectedTab);
 
                 if (result == "Cancel") return;
 
-                ////Delete the selected tab page status
-                //MyTabControl.RemoveTabPageStatus(tabControl.SelectedTab);
-
-                //that's the reason why use the number lines of code below 
-                //somehow if we set the tab page we are about to remove to another one (in this case we are about to remove selected tab page),
-                //it doesn't cause the flinking
+                //Choose the selected tab to remove
                 TabPage tabToRemove = tabControl.SelectedTab;
+
                 if (tabControl.SelectedIndex != 0)
                 {
                     //set the selectedtab to the first tab page
                     tabControl.SelectedIndex = tabControl.SelectedIndex - 1;
                 }
-                else //if the tab we are about to remove is the first tab, just simply set selectedtab to 1
+                //if the tab we are about to remove is the first tab, just simply set selectedtab to 1
+                else
                 {
                     tabControl.SelectedTab = tabControl.TabPages[1];
                 }
@@ -337,6 +332,7 @@ namespace GUI
         public void UpdateStatusBar()
         {
             //Get the current caret location of the current typing area
+            if (TabControlMethods.IsEmpty()) return;
             int caretLocation = TabControlMethods.CurrentTextArea.SelectionStart;
 
             slbLanguage.Text = "Language: " + TabControlMethods.CurrentTabPageInfo.Language;
@@ -371,6 +367,107 @@ namespace GUI
         private void TextArea_TextChanged(object sender, EventArgs e)
         {
             UpdateStatusBar();
+        }
+
+        private void closeAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //remove all the tab except the selected Tab
+            foreach (TabPage tabPage in tabControl.TabPages)
+            {
+                if (tabPage != tabControl.SelectedTab)
+                {
+                    string result = Dialog.ShowSafeCloseTabDialog(tabPage);
+                    if (result == "Cancel") return;
+
+                    ////Delete tab status
+                    //TabControlMethods.RemoveTabPageStatus(tabPage);
+
+                    //Remove tab Page
+                    tabControl.TabPages.Remove(tabPage);
+                }
+            }
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea.CanUndo)
+            {
+                TabControlMethods.CurrentTextArea.Undo();
+            }
+        }
+
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea.CanRedo)
+            {
+                TabControlMethods.CurrentTextArea.Redo();
+            }
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.Cut();
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //check to make sure no exception occur
+            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.Copy();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.Paste();
+        }
+
+        private void btCopy_Click(object sender, EventArgs e)
+        {
+            copyToolStripMenuItem.PerformClick();
+        }
+
+        private void btCut_Click(object sender, EventArgs e)
+        {
+            cutToolStripMenuItem.PerformClick();
+        }
+
+        private void btPaste_Click(object sender, EventArgs e)
+        {
+            pasteToolStripMenuItem.PerformClick();
+        }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.SelectAll();
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.Clear();
+        }
+
+        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TabControlMethods.CurrentTextArea.ZoomIn();
+        }
+
+        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TabControlMethods.CurrentTextArea.ZoomOut();
+        }
+
+        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void btFind_Click(object sender, EventArgs e)
+        {
+            findToolStripMenuItem.PerformClick();
+        }
+
+        private void btFindAndReplace_Click(object sender, EventArgs e)
+        {
+            findAndReplaceToolStripMenuItem.PerformClick();
         }
     }
 }
