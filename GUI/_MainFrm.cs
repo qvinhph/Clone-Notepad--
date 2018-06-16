@@ -219,10 +219,44 @@ namespace GUI
             }
         }
 
+
         #region TabControl Event Handlers
 
 
+        /// <summary>
+        /// Event handler helping update status bar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateStatusBar();
+        }
+        
+
+        /// <summary>
+        /// Raise when a new tab page added
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tabControl_ControlAdded(object sender, ControlEventArgs e)
+        {
+            //We cannot use TabControlMethods.CurrentArea 
+            //Because this event raise before the SelectedTab is set.
+            MyRichTextBox currentRTB = tabControl.TabPages[tabControl.TabPages.Count - 1].Controls[0] as MyRichTextBox;
+            TypingArea currentArea = currentRTB.TypingArea;
+
+            //Set the event handler helping update status bar
+            currentArea.TextChanged += TextArea_TextChanged;
+        }
+
+
+        /// <summary>
+        /// Event handler helping update status bar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextArea_TextChanged(object sender, EventArgs e)
         {
             UpdateStatusBar();
         }
@@ -230,8 +264,7 @@ namespace GUI
 
         #endregion
 
-
-
+        
 
         #endregion
 
@@ -337,6 +370,8 @@ namespace GUI
         public void UpdateStatusBar()
         {
             //Get the current caret location of the current typing area
+            if (TabControlMethods.IsEmpty()) return;
+
             int caretLocation = TabControlMethods.CurrentTextArea.SelectionStart;
 
             slbLanguage.Text = "Language: " + TabControlMethods.CurrentTabPageInfo.Language;
@@ -347,30 +382,9 @@ namespace GUI
 
         #endregion
 
-
-        private void slbLanguage_Click(object sender, EventArgs e)
+        private void closeCurrentFile_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void _MainFrm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tabControl_ControlAdded(object sender, ControlEventArgs e)
-        {
-            //We cannot use TabControlMethods.CurrentArea 
-            //Because this event raise before the SelectedTab is set.
-            MyRichTextBox currentRTB = tabControl.TabPages[tabControl.TabPages.Count - 1].Controls[0] as MyRichTextBox;
-            TypingArea currentArea = currentRTB.TypingArea;
-
-            currentArea.TextChanged += TextArea_TextChanged;
-        }
-
-        private void TextArea_TextChanged(object sender, EventArgs e)
-        {
-            UpdateStatusBar();
+            TabControlMethods.CloseCurrentTabPage();
         }
     }
 }

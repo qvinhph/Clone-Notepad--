@@ -26,7 +26,7 @@ namespace SyntaxHighlightingTextbox
         private Control controlToFocus = null;
 
         //Internal use members.
-        private bool parsing ;
+        private bool parsing; /*Help us prevent another action while parsing*/
         private char[] separatorArray;
 
 
@@ -67,6 +67,7 @@ namespace SyntaxHighlightingTextbox
             public readonly Win32.POINT scrollPosition;
             public readonly string text;
         }
+
 
         #endregion
 
@@ -220,10 +221,10 @@ namespace SyntaxHighlightingTextbox
         {
             //if (this.ZoomFactor > 10f) return;
             //this.ZoomFactor = this.ZoomFactor + 0.4f;
-            this.Font = new Font(FontFamily.GenericMonospace,this.Font.Size+1);
-            //To re-locate the ListBox
-            //autoCompleteListBox.Visible = false;
-            //AutoShowListBox();
+            this.Font = new Font(FontFamily.GenericMonospace,this.Font.Size + 1);
+            
+            this.Refresh();
+            autoCompleteListBox.Visible = false;
         }
             
 
@@ -231,11 +232,12 @@ namespace SyntaxHighlightingTextbox
         {
             //if (this.ZoomFactor < 1f) return;
             //this.ZoomFactor = this.ZoomFactor - 0.4f;
-            this.Font = new Font(FontFamily.GenericMonospace, this.Font.Size-1);
-            //To re-locate the ListBox
-            //autoCompleteListBox.Visible = false;
-            //AutoShowListBox();
+            this.Font = new Font(FontFamily.GenericMonospace, this.Font.Size - 1);
+
+            this.Refresh();
+            autoCompleteListBox.Visible = false;
         }
+
 
         /// <summary>
         /// Reload the typing area
@@ -274,7 +276,7 @@ namespace SyntaxHighlightingTextbox
             {
                 redoStack.Clear();
                 undoStack.Push(lastInfo);
-                lastInfo = new UndoRedoInfo(Text, SelectionStart, GetScrollPos());
+                lastInfo = new UndoRedoInfo(this.Text, this.SelectionStart, GetScrollPos());
             }
 
             var temp = this.ZoomFactor;
@@ -284,17 +286,18 @@ namespace SyntaxHighlightingTextbox
             }
             this.ZoomFactor = 1;
             this.ZoomFactor = temp;
-
-            
+                        
 
             if (enableAutoComplete)
             {
                 AutoShowListBox();
             }
             
+
             base.OnTextChanged(e);
         }
         
+
         /// <summary>
         /// Catch the keyboard input events for auto completing, undo, redo
         /// </summary>
@@ -357,25 +360,53 @@ namespace SyntaxHighlightingTextbox
                         return true;
                     }
 
+
                 //Set tab stop
                 case (Keys.Tab):
                     {
-                        string previousTabText = this.Text.Substring(0, SelectionStart);
-                        string afterTabText = this.Text.Substring(SelectionStart, this.Text.Length - SelectionStart);
-                        int caretPosition = this.SelectionStart + 4;
+                        //string previousTabText = this.Text.Substring(0, SelectionStart);
+                        //string afterTabText = this.Text.Substring(SelectionStart, this.Text.Length - SelectionStart);
+                        //int caretPosition = this.SelectionStart + 4;
 
-                        //Insert 4 space-character to describe the tab size.
-                        this.Text = previousTabText + "    " + afterTabText;
+                        ////Insert 4 space-character to describe the tab size.
+                        //this.Text = previousTabText + "    " + afterTabText;
 
-                        //Because when set the new this.Text, the caret will defaultly set to the 0 index
-                        //May cause the ListBox auto show, which we don't want
-                        //So we add this code to prevent it and set the caret to the right place
-                        if (autoCompleteListBox.Visible == true)
-                            autoCompleteListBox.Visible = false;
+                        ////Because when set the new this.Text, the caret will defaultly set to the 0 index
+                        ////May cause the ListBox auto show, which we don't want
+                        ////So we add this code to prevent it and set the caret to the right place
+                        //if (autoCompleteListBox.Visible == true)
+                        //    autoCompleteListBox.Visible = false;
 
-                        this.SelectionStart = caretPosition;
+                        //this.SelectionStart = caretPosition;
+                        //return true;
+                        this.SelectedText = "    ";
                         return true;
                     }
+
+
+                //Use for brace matching
+                case (Keys.OemOpenBrackets):
+                    BraceMatching('[');
+                    return true;
+
+                case (Keys.OemOpenBrackets | Keys.Shift):
+                    BraceMatching('{');
+                    return true;
+
+                case (Keys.OemQuotes | Keys.Shift):
+                    BraceMatching('\"');
+                    return true;
+
+                case (Keys.Shift | Keys.D9):
+                    BraceMatching('(');
+                    return true;
+
+                //Use for auto indenting
+                case (Keys.Enter):
+                    if (AutoIndenting())
+                        return true;
+                    else
+                        break;                
                 default:
                     break;
             }
@@ -383,6 +414,30 @@ namespace SyntaxHighlightingTextbox
             return base.ProcessCmdKey(ref m, keyData);
         }
 
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            //Hide ListBox on mouse down
+            autoCompleteListBox.Visible = false;
+            base.OnMouseDown(e);
+        }
+
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            //Hide ListBox if lose focus
+            autoCompleteListBox.Visible = false;
+            base.OnLostFocus(e);
+        }
+
+
+        protected override void OnVScroll(EventArgs e)
+        {
+            //Hide ListBox while scrolling
+            if (parsing) return;
+            autoCompleteListBox.Visible = false;
+            base.OnVScroll(e);
+        }
 
         #endregion
 
@@ -400,6 +455,7 @@ namespace SyntaxHighlightingTextbox
             return scrollPos;
         }
 
+
         /// <summary>
         /// Sends a win32 message to set scrollbars position.
         /// </summary>
@@ -408,8 +464,7 @@ namespace SyntaxHighlightingTextbox
         {
             Win32.SendMessage(Handle, Win32.EM_SETSCROLLPOS, 0, ref point);
         }
-
-
+        
 
         #endregion
 
@@ -423,6 +478,7 @@ namespace SyntaxHighlightingTextbox
                 return undoStack.Count > 0;
             }
         }
+
 
         public new bool CanRedo
         {
@@ -445,12 +501,14 @@ namespace SyntaxHighlightingTextbox
             this.Text = info.text;
             this.SelectionStart = info.caretPosition;
             SetScrollPos(info.scrollPosition);
-            if (autoCompleteListBox.Visible == true)
-                autoCompleteListBox.Visible = false;
+
+            //In case the first index of this.Text is the character matching auto complete word table
+            autoCompleteListBox.Visible = false;
 
             lastInfo = info;
             isUndoRedo = false;
         }
+
 
         public new void Redo()
         {
@@ -464,8 +522,8 @@ namespace SyntaxHighlightingTextbox
             Text = info.text;
             SelectionStart = info.caretPosition;
             SetScrollPos(info.scrollPosition);
-            if (autoCompleteListBox.Visible == true)
-                autoCompleteListBox.Visible = false;
+            //In case the first index of this.Text is the character matching auto complete word table
+            autoCompleteListBox.Visible = false;
 
             lastInfo = info;
             isUndoRedo = false;
@@ -474,16 +532,6 @@ namespace SyntaxHighlightingTextbox
 
 
         #region Highlight Syntax code
-
-        /// <summary>
-        /// Raises the <see cref="E:System.Windows.Forms.RichTextBox.VScroll"></see> event.
-        /// </summary>
-        /// <param name="e">An <see cref="T:System.EventArgs"></see> that contains the event data.</param>
-        protected override void OnVScroll(EventArgs e)
-        {
-            if (parsing) return;
-            base.OnVScroll(e);
-        }
 
 
         public void Highlight()
@@ -829,7 +877,8 @@ namespace SyntaxHighlightingTextbox
             if (descriptor.font != null)
             {
                 SetFont(rtfBody, descriptor.font, fonts);
-                SetFontSize(rtfBody, descriptor.font.Size);
+                //SetFontSize(rtfBody, descriptor.font.Size);
+                SetFontSize(rtfBody, this.Font.Size);
             }
 
             EndTags(rtfBody);
@@ -1129,6 +1178,8 @@ namespace SyntaxHighlightingTextbox
                 this.SelectedText = autoCompleteListBox.SelectedItem.ToString();
             }
         }
+        
+
 
         #region Get Word Position
 
@@ -1190,7 +1241,8 @@ namespace SyntaxHighlightingTextbox
         #endregion
 
 
-        #region Other public methods
+        #region Find and replace code
+
 
         /// Find all the positions of a string 
         /// <param name="textToSearch"></param>
@@ -1227,25 +1279,25 @@ namespace SyntaxHighlightingTextbox
 
             return listOfPositions;
         }
+
+
         /// <summary>       
         /// Clear background color of selected text
         /// </summary>
         public void ClearBackColor(Color clearColor)
-        {
-            
+        { 
             //Select the text, clear background color and unselect that text
             this.Select(0, this.TextLength);
             this.SelectionBackColor = clearColor;
             this.SelectionLength = 0;
-
         }
+
 
         /// <summary>
         /// Find all and color background
         /// </summary>
         /// <param name="textToSearch"></param>
         /// <param name="backColor"></param>
-
         public List<int> FindAndColorAll(string textToSearch, Color backColor)
         {
             if (controlToFocus != null)
@@ -1286,9 +1338,125 @@ namespace SyntaxHighlightingTextbox
         }
 
 
+        #endregion
+
+
+        #region Brace matching and Auto indenting code
+
+
+        /// <summary>
+        /// Auto add close braces
+        /// This will be use in ProcessWnd as a helper
+        /// </summary>
+        /// <param name="input"></param>
+        private void BraceMatching(char input)
+        {
+            List<char> braceList = new List<char> { '{', '(', '[', '\"' };
+
+            if (braceList.Contains(input))
+            {
+                switch (input)
+                {
+                    case '{':
+                        {
+                            this.SelectedText = "{ }";
+                            break;
+                        }
+                    case '(':
+                        {
+                            this.SelectedText = "()";
+                            break;
+                        }
+                    case '[':
+                        {
+                            this.SelectedText = "[]";
+                            break;
+                        }
+                    case '"':
+                        {
+                            this.SelectedText = "\"\"";
+                            break;
+                        }
+                    default:
+                        break;
+                }
+                
+                this.SelectionStart -= 1;
+            }
+        }
+
+
+        /// <summary>
+        /// Use for auto indent when press Enter.
+        /// This will be used in ProcessWndKey as a helper.
+        /// </summary>
+        /// <returns>Whether the auto indent has done or not</returns>
+        private bool AutoIndenting()
+        {
+            //Because I will use this method in ProcessWndKey, it will process before KeyDown event
+            //So the caret will remain the same position
+            int currentLineNumber = this.GetLineFromCharIndex(this.SelectionStart);
+
+
+            if (currentLineNumber >= this.Lines.Count())
+                return false;
+
+
+            string currentLine = this.Lines[currentLineNumber];
+            int amountOfIndent = 0;
+
+
+            //Calculate the amount of indenting ( by space character)
+            foreach(char c in currentLine)
+            {
+                if (c == ' ')
+                {
+                    amountOfIndent++;
+                }
+                else
+                    break;
+            }
+
+
+            //We will only indent by Tab Size ( 1 Tab = 4 space character)
+            //So we need to calculate the number of Tab 
+            int numberOfTab = amountOfIndent / 4;
+            string indent = "";
+            
+
+            //Get the amount of indent according to Tab size
+            for (int i = 0; i < numberOfTab; i++)
+            {
+                indent += "    ";
+            }
+
+
+            //After the caret is the '}' 
+            if (this.SelectionStart < this.Text.Length && this.Text[this.SelectionStart] == '}')
+            {
+                this.SelectedText = "\n" + indent + "    ";
+                int caretPos = this.SelectionStart;
+                this.SelectedText = "\n" + indent;
+
+                //Convenient caret position for inputing
+                this.SelectionStart = caretPos;
+                return true;
+            }
+            
+            
+            if (numberOfTab > 0)
+            {
+                this.SelectedText = "\n" + indent;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         #endregion
-    
+
     }
 
 }

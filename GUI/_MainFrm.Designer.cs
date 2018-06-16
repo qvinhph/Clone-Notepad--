@@ -73,8 +73,6 @@
             this.cToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.sQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.javascriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btNew = new System.Windows.Forms.ToolStripButton();
@@ -118,7 +116,6 @@
             this.searchToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.languageToolStripMenuItem,
-            this.settingToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -440,20 +437,6 @@
             this.javascriptToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.javascriptToolStripMenuItem.Text = "Javascript";
             // 
-            // settingToolStripMenuItem
-            // 
-            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.preferencesToolStripMenuItem});
-            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            this.settingToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingToolStripMenuItem.Text = "Settings";
-            // 
-            // preferencesToolStripMenuItem
-            // 
-            this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.preferencesToolStripMenuItem.Text = "Preferences...";
-            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
@@ -545,6 +528,7 @@
             this.closeCurrentFile.Name = "closeCurrentFile";
             this.closeCurrentFile.Size = new System.Drawing.Size(25, 24);
             this.closeCurrentFile.Text = "Close current file";
+            this.closeCurrentFile.Click += new System.EventHandler(this.closeCurrentFile_Click);
             // 
             // toolStripSeparator2
             // 
@@ -714,7 +698,6 @@
             this.slbLanguage.Name = "slbLanguage";
             this.slbLanguage.Size = new System.Drawing.Size(65, 17);
             this.slbLanguage.Text = "Language: ";
-            this.slbLanguage.Click += new System.EventHandler(this.slbLanguage_Click);
             // 
             // slbSpaceAndSeparator
             // 
@@ -752,7 +735,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "_MainFrm";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this._MainFrm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -829,8 +811,6 @@
         private System.Windows.Forms.ToolStripMenuItem normalTextToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sQLToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem javascriptToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem settingToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         internal System.Windows.Forms.ToolStripButton btNew;
         internal System.Windows.Forms.ToolStripButton btOpen;

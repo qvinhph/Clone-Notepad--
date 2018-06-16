@@ -156,8 +156,8 @@ namespace GUI
                             TabControl.SelectedIndex -= 1;
                     }
 
-                    //remove tabpage status
-                    RemoveTabPageInfo(PreviousSelectedTabpage);
+                    //remove tabpage info in listOfTabPageInfo
+                    RemoveTabPageInfo(tabPage);
 
                     //remove tab page
                     TabControl.TabPages.Remove(tabPage);
@@ -165,6 +165,7 @@ namespace GUI
                     break;
                 }
             }
+
 
             if (TabControl.TabPages.Count > 0)
             {
@@ -251,6 +252,37 @@ namespace GUI
             return newTabPage;
         }
 
+
+        public static void CloseCurrentTabPage()
+        {
+            if (IsEmpty())
+                return;
+
+            TabPage currentTab = TabControl.SelectedTab;
+
+
+            //Set the new SelectedTab
+            if (TabControl.TabPages.Contains(PreviousSelectedTabpage))
+            {
+                TabControl.SelectedTab = PreviousSelectedTabpage;
+            }
+            else
+            {
+                //if not, set the next selected tab to the nearest tab
+                if (TabControl.SelectedIndex == 0)
+                    TabControl.SelectedIndex = 1;
+                else
+                    TabControl.SelectedIndex -= 1;
+            }
+
+
+            //remove tabpage info in listOfTabPageInfo
+            RemoveTabPageInfo(currentTab);
+
+
+            //remove tab page
+            TabControl.TabPages.Remove(currentTab);
+        }
 
         #endregion
 
