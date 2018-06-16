@@ -482,6 +482,11 @@ namespace GUI
         {
             findAndReplaceToolStripMenuItem.PerformClick();
         }
+
+        private void _MainFrm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
