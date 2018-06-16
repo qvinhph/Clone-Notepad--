@@ -120,18 +120,24 @@ namespace GUI
 
         private void btZoomIn_Click(object sender, EventArgs e)
         {
+            if (TabControlMethods.IsEmpty()) return;
+            
             TabControlMethods.CurrentTextArea.ZoomIn();
         }
 
 
         private void btZoomOut_Click(object sender, EventArgs e)
         {
+            if (TabControlMethods.IsEmpty()) return;
+            
             TabControlMethods.CurrentTextArea.ZoomOut();
         }
 
 
         private void findToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
+            if (TabControlMethods.IsEmpty()) return;
+
             if (findingForm == null)
             {
                 findingForm = new FindingForm();
@@ -142,6 +148,8 @@ namespace GUI
 
         private void findAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (TabControlMethods.IsEmpty()) return;
+
             if (findingForm == null)
             {
                 findingForm = new FindingForm();
@@ -187,8 +195,7 @@ namespace GUI
 
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //we don't remove tab page when tabControl has only one tab page
+        { 
             if (tabControl.TabPages.Count > 1)
             {
                 //Show SaveDialog
@@ -403,6 +410,8 @@ namespace GUI
 
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (TabControlMethods.IsEmpty()) return;
+
             if (TabControlMethods.CurrentTextArea.CanUndo)
             {
                 TabControlMethods.CurrentTextArea.Undo();
@@ -411,6 +420,8 @@ namespace GUI
 
         private void redoToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (TabControlMethods.IsEmpty()) return;
+
             if (TabControlMethods.CurrentTextArea.CanRedo)
             {
                 TabControlMethods.CurrentTextArea.Redo();
@@ -419,18 +430,21 @@ namespace GUI
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.Cut();
+            if (TabControlMethods.CurrentTextArea != null)
+                TabControlMethods.CurrentTextArea.Cut();
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //check to make sure no exception occur
-            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.Copy();
+            if (TabControlMethods.CurrentTextArea != null)
+                TabControlMethods.CurrentTextArea.Copy();
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.Paste();
+            if (TabControlMethods.CurrentTextArea != null)
+                TabControlMethods.CurrentTextArea.Paste();
         }
 
         private void btCopy_Click(object sender, EventArgs e)
@@ -455,31 +469,35 @@ namespace GUI
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.Clear();
+            if (TabControlMethods.CurrentTextArea != null)
+                TabControlMethods.CurrentTextArea.Rtf = "";
         }
 
         private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (TabControlMethods.IsEmpty()) return;
+
             TabControlMethods.CurrentTextArea.ZoomIn();
         }
 
         private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TabControlMethods.CurrentTextArea.ZoomOut();
-        }
+            if (TabControlMethods.IsEmpty()) return;
 
-        private void preferencesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-         
+            TabControlMethods.CurrentTextArea.ZoomOut();
         }
 
         private void btFind_Click(object sender, EventArgs e)
         {
+            if (TabControlMethods.IsEmpty()) return;
+
             findToolStripMenuItem.PerformClick();
         }
 
         private void btFindAndReplace_Click(object sender, EventArgs e)
-        {
+        { 
+            if (TabControlMethods.IsEmpty()) return;
+
             findAndReplaceToolStripMenuItem.PerformClick();
         }
 

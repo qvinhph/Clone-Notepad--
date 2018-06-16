@@ -143,7 +143,7 @@ namespace GUI
                     //When we close the unselected tab, it will be automatically selected
                     //So we need reset to the previous selected tab.
                     //Check whether the previous selected tab is existing
-                    if (TabControl.TabPages.Contains(PreviousSelectedTabpage))
+                    if (PreviousSelectedTabpage != null && TabControl.TabPages.Contains(PreviousSelectedTabpage))
                     {
                         TabControl.SelectedTab = PreviousSelectedTabpage;
                     }

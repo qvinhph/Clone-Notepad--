@@ -54,6 +54,8 @@ namespace GUI
 
         public static void ShowSaveDialog(TabPage tabPage)
         {
+            if (TabControlMethods.IsEmpty()) return;
+
             //Choose the current typing area
             TypingArea currentTextArea = (tabPage.Controls[0] as MyRichTextBox).TypingArea;
 
@@ -105,6 +107,8 @@ namespace GUI
 
         public static void ShowSaveAsDialog(TabPage tabPage)
         {
+            if (TabControlMethods.IsEmpty()) return;
+
             TypingArea currentTextArea = (tabPage.Controls[0] as MyRichTextBox).TypingArea;
 
             //Create a save dialog

@@ -442,7 +442,7 @@
             this.btSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btSave.Name = "btSave";
             this.btSave.Size = new System.Drawing.Size(23, 23);
-            this.btSave.Text = "toolStripButton3";
+            this.btSave.Text = "Save";
             this.btSave.Click += new System.EventHandler(this.btSave_Click);
             // 
             // toolStripSeparator12
