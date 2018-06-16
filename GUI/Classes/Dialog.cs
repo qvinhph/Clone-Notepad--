@@ -57,44 +57,44 @@ namespace GUI
             //Choose the current typing area
             TypingArea currentTextArea = (tabPage.Controls[0] as MyRichTextBox).TypingArea;
 
+            //If the tab opening typing area already has a name, just save it
+            if (tabPage.Name != "")
+            {
+                using (Stream s = File.Open(tabPage.Name, FileMode.Create))
+                {
+                    //get the streamwriter of the new file 
+                    using (StreamWriter sw = new StreamWriter(s))
+                    {
+                        //Get the text of the current typing area and write it to streamwriter
+                        sw.Write(currentTextArea.Text);
+                        tabPage.Text = Path.GetFileName(tabPage.Name);
+                        return;
+                    }
+                }
+            }
+
             //Create a save file Dialog
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.Filter = "txt Files (*txt)|*txt";
             saveDialog.DefaultExt = "txt";
 
+            //Open save dialog and check if user press save button
             if (saveDialog.ShowDialog() == DialogResult.OK)
+
             {
-                //If the tab opening typing area already has a name, just save it
-                if (tabPage.Name != "")
+                //Declare a Stream variable to hold the open file to write in
+                using (Stream s = File.Open(saveDialog.FileName, FileMode.Create))
                 {
-                    using (Stream s = File.Open(tabPage.Name, FileMode.Create))
+                    //get the streamwriter of the new file 
+                    using (StreamWriter sw = new StreamWriter(s))
                     {
-                        //get the streamwriter of the new file 
-                        using (StreamWriter sw = new StreamWriter(s))
-                        {
-                            //Get the text of the current typing area and write it to streamwriter
-                            sw.Write(currentTextArea.Text);
-                            tabPage.Text = Path.GetFileName(tabPage.Name);
-                            return;
-                        }
-                    }
-                }
-                //Else open a dialog to set the name and choose path to save
-                else
-                {
-                    using (Stream s = File.Open(saveDialog.FileName, FileMode.Create))
-                    {
-                        //get the streamwriter of the new file 
-                        using (StreamWriter sw = new StreamWriter(s))
-                        {
-                            sw.Write(currentTextArea.Text);
+                        sw.Write(currentTextArea.Text);
 
-                            //change the text title of the tab by file name
-                            tabPage.Text = Path.GetFileName(saveDialog.FileName);
+                        //change the text title of the tab by file name
+                        tabPage.Text = Path.GetFileName(saveDialog.FileName);
 
-                            //In the next time, if this tab page already has a name, just save it 
-                            tabPage.Name = saveDialog.FileName;
-                        }
+                        //In the next time, if this tab page already has a name, just save it 
+                        tabPage.Name = saveDialog.FileName;
                     }
                 }
             }
@@ -107,10 +107,12 @@ namespace GUI
         {
             TypingArea currentTextArea = (tabPage.Controls[0] as MyRichTextBox).TypingArea;
 
+            //Create a save dialog
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.Filter = "txt Files (*txt)|*txt";
             saveDialog.DefaultExt = "txt";
 
+            //Pop up the save dialog check if user press save button
             if (saveDialog.ShowDialog() == DialogResult.OK)
             {
                 using (Stream s = File.Open(saveDialog.FileName, FileMode.Create))
@@ -132,7 +134,6 @@ namespace GUI
         /// This string make sure that you want to close all or close when there is only one tab 
         /// </summary>
         /// <param name="tabPage"></param>
-        /// <returns></returns>
         public static string ShowSafeCloseTabDialog(TabPage tabPage)
         {
             if (tabPage.Text.Contains("*"))
@@ -169,7 +170,6 @@ namespace GUI
         /// Safe Close Form Dialog
         /// </summary>
         /// <param name="tabPage"></param>
-        /// <returns></returns>
         public static string ShowSafeCloseFormDialog(TabControl tabControl)
         {
             foreach (TabPage tabPage in tabControl.TabPages)

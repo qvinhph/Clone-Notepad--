@@ -7,12 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace SyntaxHighlightingTextbox
 {
     public partial class TypingArea : RichTextBox
     {
         #region Fields
+
+
+
+
         //Members exposed via properties.
         private SeparatorCollection separators;
         /// <summary>
