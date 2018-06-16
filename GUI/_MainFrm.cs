@@ -16,6 +16,7 @@ namespace GUI
         private string language = "C#";
         private FindingForm findingForm = null;
 
+
         public string Language
         {
             get { return language; }
@@ -31,10 +32,12 @@ namespace GUI
 
         #region Event handler methods
 
+
         private void cToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Language = "C#";
 
+            //Remove the previous check and set the new one
             foreach (var item in languageToolStripMenuItem.DropDownItems)
             {
                 ((ToolStripMenuItem)item).Checked = false;
@@ -49,6 +52,8 @@ namespace GUI
         private void normalTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Language = "Normal Text";
+
+            //Remove the previous check and set the new one
             foreach (var item in languageToolStripMenuItem.DropDownItems)
             {
                 ((ToolStripMenuItem)item).Checked = false;
@@ -56,6 +61,8 @@ namespace GUI
             normalTextToolStripMenuItem.Checked = true;
 
             if (TabControlMethods.IsEmpty()) return;
+            TabControlMethods.CurrentTextArea.Refresh();
+
             SetHighlightRule(Language);
         }       
 
@@ -109,7 +116,7 @@ namespace GUI
         {
             TabControlMethods.CurrentTextArea.Redo();
         }
-
+        
 
         private void btZoomIn_Click(object sender, EventArgs e)
         {
@@ -212,10 +219,25 @@ namespace GUI
             }
         }
 
+        #region TabControl Event Handlers
+
+
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateStatusBar();
+        }
+
+
+        #endregion
+
+
+
+
         #endregion
 
 
         #region Other methods
+
 
         /// <summary>
         /// Set syntax highlight to the specified language.
@@ -229,7 +251,6 @@ namespace GUI
             Font fontToSet; /*Use for the specified keyword highlighting.*/
             var typingFont = currentTextArea.Font;
 
-            TabControlMethods.CurrentTabPageInfo.Language = language;
             TabControlMethods.CurrentTextArea.EnableHighlight = true;
             TabControlMethods.CurrentTextArea.Clear();
 
@@ -251,7 +272,7 @@ namespace GUI
                             "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace",
                             "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public",
                             "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
-                            "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe"
+                            "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe",
                         };
                         fontToSet = new Font(typingFont, FontStyle.Bold);
                         currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
@@ -303,21 +324,53 @@ namespace GUI
                 default:
                     break;
             }
+
+            UpdateStatusBar();
+            TabControlMethods.CurrentTextArea.Refresh();
+            TabControlMethods.CurrentTabPageInfo.Language = language;
         }
 
 
-        private void UpdateStatusBar()
+        /// <summary>
+        /// Update the status bar with current tab page infomation
+        /// </summary>
+        public void UpdateStatusBar()
         {
-            //slbLanguage.Text = @"Language: "
-        }
+            //Get the current caret location of the current typing area
+            int caretLocation = TabControlMethods.CurrentTextArea.SelectionStart;
 
+            slbLanguage.Text = "Language: " + TabControlMethods.CurrentTabPageInfo.Language;
+            slbTextLength.Text = "Length: " + TabControlMethods.CurrentTextArea.TextLength;
+            slbLine.Text = "Line: " + (TabControlMethods.CurrentTextArea.GetLineFromCharIndex(caretLocation) + 1);
+        }
 
 
         #endregion
 
+
         private void slbLanguage_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void _MainFrm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tabControl_ControlAdded(object sender, ControlEventArgs e)
+        {
+            //We cannot use TabControlMethods.CurrentArea 
+            //Because this event raise before the SelectedTab is set.
+            MyRichTextBox currentRTB = tabControl.TabPages[tabControl.TabPages.Count - 1].Controls[0] as MyRichTextBox;
+            TypingArea currentArea = currentRTB.TypingArea;
+
+            currentArea.TextChanged += TextArea_TextChanged;
+        }
+
+        private void TextArea_TextChanged(object sender, EventArgs e)
+        {
+            UpdateStatusBar();
         }
     }
 }

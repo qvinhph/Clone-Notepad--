@@ -294,12 +294,6 @@ namespace GUI
             return -1;
         }
 
-
-        private static void UpdateStatusBar()
-        {
-            
-        }
-
         #endregion
 
 
@@ -360,6 +354,18 @@ namespace GUI
         }
 
         #endregion
-        
+
+
+        #region Manipulate the Status Bar according to each TabPage
+
+
+        public static void UpdateStatusBar()
+        {
+
+        }
+
+
+        #endregion
+
     }
 }

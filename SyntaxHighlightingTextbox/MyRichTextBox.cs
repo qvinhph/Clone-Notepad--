@@ -137,7 +137,6 @@ namespace SyntaxHighlightingTextbox
         //Update the number margin when zoom in or zoom out
         private void TypingArea_SizeChanged(object sender, EventArgs e)
         {
-            
             //Font fnt = new Font(FontFamily.GenericMonospace, typingArea.Font.Size);
             LineNumberTextBox.Font = typingArea.Font;
             AddLineNumbers();

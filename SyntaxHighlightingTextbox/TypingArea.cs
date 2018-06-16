@@ -236,12 +236,35 @@ namespace SyntaxHighlightingTextbox
             //autoCompleteListBox.Visible = false;
             //AutoShowListBox();
         }
-        
+
+        /// <summary>
+        /// Reload the typing area
+        /// </summary>
+        public new void Refresh()
+        {
+            BeginUpdate();
+
+            //Save the current information
+            string currentText = this.Text;
+            int currentCaretPos = this.SelectionStart;
+            Win32.POINT scrollPos = GetScrollPos();
+
+
+            this.Rtf = "";
+
+            //Return the information
+            this.Text = currentText;
+            this.SelectionStart = currentCaretPos;
+            SetScrollPos(scrollPos);
+
+            FinishUpdate();
+        }
 
         #endregion
 
 
         #region Override Methods
+
 
         protected override void OnTextChanged(EventArgs e)
         {
@@ -272,6 +295,12 @@ namespace SyntaxHighlightingTextbox
             base.OnTextChanged(e);
         }
         
+        /// <summary>
+        /// Catch the keyboard input events for auto completing, undo, redo
+        /// </summary>
+        /// <param name="m"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
         protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
             //Complete matched word at ListBox
@@ -353,6 +382,7 @@ namespace SyntaxHighlightingTextbox
 
             return base.ProcessCmdKey(ref m, keyData);
         }
+
 
         #endregion
 
@@ -1160,7 +1190,7 @@ namespace SyntaxHighlightingTextbox
         #endregion
 
 
-        #region Other public functions
+        #region Other public methods
 
         /// Find all the positions of a string 
         /// <param name="textToSearch"></param>

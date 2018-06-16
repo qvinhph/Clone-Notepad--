@@ -672,6 +672,8 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(1055, 466);
             this.tabControl.TabIndex = 2;
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
+            this.tabControl.ControlAdded += new System.Windows.Forms.ControlEventHandler(this.tabControl_ControlAdded);
             // 
             // tabPage1
             // 
@@ -750,6 +752,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "_MainFrm";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this._MainFrm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
