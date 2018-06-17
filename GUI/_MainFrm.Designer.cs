@@ -69,6 +69,10 @@
             this.btNew = new System.Windows.Forms.ToolStripButton();
             this.btOpen = new System.Windows.Forms.ToolStripButton();
             this.btSave = new System.Windows.Forms.ToolStripButton();
+            this.btSaveAs = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btCloseCurFile = new System.Windows.Forms.ToolStripButton();
+            this.btSaveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.btCopy = new System.Windows.Forms.ToolStripButton();
             this.btCut = new System.Windows.Forms.ToolStripButton();
@@ -91,10 +95,6 @@
             this.slbTextLength = new System.Windows.Forms.ToolStripStatusLabel();
             this.slbSpaceAndSlash = new System.Windows.Forms.ToolStripStatusLabel();
             this.slbLine = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btSaveAll = new System.Windows.Forms.ToolStripButton();
-            this.btCloseCurFile = new System.Windows.Forms.ToolStripButton();
-            this.btSaveAs = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -310,27 +310,27 @@
             // 
             this.zoomInToolStripMenuItem.Name = "zoomInToolStripMenuItem";
             this.zoomInToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Plus";
-            this.zoomInToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
-            this.zoomInToolStripMenuItem.Text = "Zoom In (Ctrl + Wheel Up)";
+            this.zoomInToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.zoomInToolStripMenuItem.Text = "Zoom In";
             this.zoomInToolStripMenuItem.Click += new System.EventHandler(this.zoomInToolStripMenuItem_Click);
             // 
             // zoomOutToolStripMenuItem
             // 
             this.zoomOutToolStripMenuItem.Name = "zoomOutToolStripMenuItem";
             this.zoomOutToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Minus";
-            this.zoomOutToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
-            this.zoomOutToolStripMenuItem.Text = "Zoom Out (Ctrl + Wheel Down)";
+            this.zoomOutToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.zoomOutToolStripMenuItem.Text = "Zoom Out";
             this.zoomOutToolStripMenuItem.Click += new System.EventHandler(this.zoomOutToolStripMenuItem_Click);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(304, 6);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(193, 6);
             // 
             // documentMapToolStripMenuItem
             // 
             this.documentMapToolStripMenuItem.Name = "documentMapToolStripMenuItem";
-            this.documentMapToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.documentMapToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.documentMapToolStripMenuItem.Text = "Document Map";
             // 
             // languageToolStripMenuItem
@@ -452,6 +452,39 @@
             this.btSave.Size = new System.Drawing.Size(23, 23);
             this.btSave.Text = "Save";
             this.btSave.Click += new System.EventHandler(this.btSave_Click);
+            // 
+            // btSaveAs
+            // 
+            this.btSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAs.Image")));
+            this.btSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btSaveAs.Name = "btSaveAs";
+            this.btSaveAs.Size = new System.Drawing.Size(23, 23);
+            this.btSaveAs.Text = "Save As ";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
+            // 
+            // btCloseCurFile
+            // 
+            this.btCloseCurFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btCloseCurFile.Image = ((System.Drawing.Image)(resources.GetObject("btCloseCurFile.Image")));
+            this.btCloseCurFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btCloseCurFile.Name = "btCloseCurFile";
+            this.btCloseCurFile.Size = new System.Drawing.Size(23, 23);
+            this.btCloseCurFile.Text = "closeCurrentFile";
+            this.btCloseCurFile.Click += new System.EventHandler(this.btCloseCurFile_Click);
+            // 
+            // btSaveAll
+            // 
+            this.btSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAll.Image")));
+            this.btSaveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btSaveAll.Name = "btSaveAll";
+            this.btSaveAll.Size = new System.Drawing.Size(23, 23);
+            this.btSaveAll.Text = "Save All";
             // 
             // toolStripSeparator12
             // 
@@ -643,39 +676,6 @@
             this.slbLine.Name = "slbLine";
             this.slbLine.Size = new System.Drawing.Size(35, 17);
             this.slbLine.Text = "Line: ";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
-            // 
-            // btSaveAll
-            // 
-            this.btSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAll.Image")));
-            this.btSaveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btSaveAll.Name = "btSaveAll";
-            this.btSaveAll.Size = new System.Drawing.Size(23, 23);
-            this.btSaveAll.Text = "Save All";
-            // 
-            // btCloseCurFile
-            // 
-            this.btCloseCurFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btCloseCurFile.Image = ((System.Drawing.Image)(resources.GetObject("btCloseCurFile.Image")));
-            this.btCloseCurFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btCloseCurFile.Name = "btCloseCurFile";
-            this.btCloseCurFile.Size = new System.Drawing.Size(23, 23);
-            this.btCloseCurFile.Text = "closeCurrentFile";
-            this.btCloseCurFile.Click += new System.EventHandler(this.btCloseCurFile_Click);
-            // 
-            // btSaveAs
-            // 
-            this.btSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAs.Image")));
-            this.btSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btSaveAs.Name = "btSaveAs";
-            this.btSaveAs.Size = new System.Drawing.Size(23, 23);
-            this.btSaveAs.Text = "Save As ";
             // 
             // _MainFrm
             // 
