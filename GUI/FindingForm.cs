@@ -81,7 +81,7 @@ namespace GUI
             replacementTextbox.Visible = false;
             replaceButton.Visible = false;
             replaceAllButton.Visible = false;
-            this.Width = 380;
+            this.Width = 400;
             this.Show();
         }
 

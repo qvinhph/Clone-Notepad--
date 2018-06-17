@@ -262,7 +262,7 @@ namespace GUI
 
 
             //Set the new SelectedTab
-            if (TabControl.TabPages.Contains(PreviousSelectedTabpage))
+            if (PreviousSelectedTabpage != null && TabControl.TabPages.Contains(PreviousSelectedTabpage))
             {
                 TabControl.SelectedTab = PreviousSelectedTabpage;
             }

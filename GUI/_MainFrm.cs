@@ -29,6 +29,7 @@ namespace GUI
         {
             InitializeComponent();
             TabControlMethods.SetupTabControl(tabControl);
+            this.FormClosing += _MainFrm_FormClosing;
         }
 
 
@@ -935,6 +936,7 @@ namespace GUI
 
         private void _MainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
+
             if (Dialog.ShowSafeCloseFormDialog(tabControl) == "Cancel")
             {
                 e.Cancel = true;

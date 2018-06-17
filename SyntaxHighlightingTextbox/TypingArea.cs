@@ -42,6 +42,8 @@ namespace SyntaxHighlightingTextbox
         private bool enableAutoComplete;
         public DocumentMap documentMap;
 
+        //Require Saving after editing
+        public bool requiresSaving = false;
 
         //Undo/Redo members.
         private Stack<UndoRedoInfo> undoStack;
@@ -339,7 +341,9 @@ namespace SyntaxHighlightingTextbox
                 AutoShowListBox();
             }
 
-            
+            //require saving after text changed
+            requiresSaving = true;
+
             base.OnTextChanged(e);
         }
         
