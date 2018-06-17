@@ -276,7 +276,40 @@ namespace SyntaxHighlightingTextbox
 
         #region Override Methods
 
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+        #region Disable Zoom By Ctrl and Scroll
+        //Reference: https://social.msdn.microsoft.com/Forums/windows/en-US/8701593f-47ff-403c-ba19-a7aa1b622c15/how-can-i-disable-text-zoom-in-richtextbox-when-holding-the-ctrl-key-and-mouse-wheeling?forum=winforms
+        static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
+
+
+        const int WM_MOUSEWHEEL = 0x020A;
+
+        const int EM_SETZOOM = 0x04E1;
+
+
+
+        protected override void WndProc(ref Message m)
+
+        {
+
+            base.WndProc(ref m);
+
+
+
+            if (m.Msg == WM_MOUSEWHEEL)
+
+            {
+
+                if (Control.ModifierKeys == Keys.Control)
+
+                    SendMessage(this.Handle, EM_SETZOOM, IntPtr.Zero, IntPtr.Zero);
+
+            }
+
+        }
+
+        #endregion
         protected override void OnTextChanged(EventArgs e)
         {
             if (parsing) return;
