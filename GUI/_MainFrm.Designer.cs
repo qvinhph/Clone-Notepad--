@@ -460,8 +460,7 @@
             this.btSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btSaveAs.Name = "btSaveAs";
             this.btSaveAs.Size = new System.Drawing.Size(23, 23);
-            this.btSaveAs.Text = "Save As ";
-            // 
+            this.btSaveAs.Text = "Save As ";            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
