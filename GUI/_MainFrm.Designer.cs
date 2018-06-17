@@ -311,27 +311,27 @@
             // 
             this.zoomInToolStripMenuItem.Name = "zoomInToolStripMenuItem";
             this.zoomInToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Plus";
-            this.zoomInToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
-            this.zoomInToolStripMenuItem.Text = "Zoom In (Ctrl + Wheel Up)";
+            this.zoomInToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.zoomInToolStripMenuItem.Text = "Zoom In";
             this.zoomInToolStripMenuItem.Click += new System.EventHandler(this.zoomInToolStripMenuItem_Click);
             // 
             // zoomOutToolStripMenuItem
             // 
             this.zoomOutToolStripMenuItem.Name = "zoomOutToolStripMenuItem";
             this.zoomOutToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Minus";
-            this.zoomOutToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
-            this.zoomOutToolStripMenuItem.Text = "Zoom Out (Ctrl + Wheel Down)";
+            this.zoomOutToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.zoomOutToolStripMenuItem.Text = "Zoom Out";
             this.zoomOutToolStripMenuItem.Click += new System.EventHandler(this.zoomOutToolStripMenuItem_Click);
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(304, 6);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(193, 6);
             // 
             // documentMapToolStripMenuItem
             // 
             this.documentMapToolStripMenuItem.Name = "documentMapToolStripMenuItem";
-            this.documentMapToolStripMenuItem.Size = new System.Drawing.Size(307, 22);
+            this.documentMapToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.documentMapToolStripMenuItem.Text = "Document Map";
             // 
             // languageToolStripMenuItem
@@ -467,6 +467,38 @@
             this.btSaveAs.Size = new System.Drawing.Size(23, 23);
             this.btSaveAs.Text = "Save As ";
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
+            // 
+            // btCloseCurFile
+            // 
+            this.btCloseCurFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btCloseCurFile.Image = ((System.Drawing.Image)(resources.GetObject("btCloseCurFile.Image")));
+            this.btCloseCurFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btCloseCurFile.Name = "btCloseCurFile";
+            this.btCloseCurFile.Size = new System.Drawing.Size(23, 23);
+            this.btCloseCurFile.Text = "closeCurrentFile";
+            this.btCloseCurFile.Click += new System.EventHandler(this.btCloseCurFile_Click);
+            // 
+            // btSaveAll
+            // 
+            this.btSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAll.Image")));
+            this.btSaveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btSaveAll.Name = "btSaveAll";
+            this.btSaveAll.Size = new System.Drawing.Size(23, 23);
+            this.btSaveAll.Text = "Save All";
+            // 
+            // btSaveAs
+            // 
+            this.btSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAs.Image")));
+            this.btSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btSaveAs.Name = "btSaveAs";
+            this.btSaveAs.Size = new System.Drawing.Size(23, 23);
+            this.btSaveAs.Text = "Save As ";            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
