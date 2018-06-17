@@ -140,6 +140,11 @@ namespace GUI
                 //Remove
                 if (imageXRect.Contains(e.Location))
                 {
+                    //Safe close
+                    if ((Dialog.ShowSafeCloseTabDialog(tabPage) == "Cancel"))
+                    {
+                        break;
+                    }
                     //When we close the unselected tab, it will be automatically selected
                     //So we need reset to the previous selected tab.
                     //Check whether the previous selected tab is existing
@@ -255,10 +260,14 @@ namespace GUI
 
         public static void CloseCurrentTabPage()
         {
+
             if (IsEmpty())
                 return;
 
             TabPage currentTab = TabControl.SelectedTab;
+            if ((Dialog.ShowSafeCloseTabDialog(currentTab) == "Cancel"))
+            {
+            }
 
 
             //Set the new SelectedTab

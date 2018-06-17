@@ -43,7 +43,7 @@ namespace SyntaxHighlightingTextbox
         public DocumentMap documentMap;
 
         //Require Saving after editing
-        public bool requiresSaving = false;
+        public int requiresSaving = 0;
 
         //Undo/Redo members.
         private Stack<UndoRedoInfo> undoStack;
@@ -342,7 +342,7 @@ namespace SyntaxHighlightingTextbox
             }
 
             //require saving after text changed
-            requiresSaving = true;
+            requiresSaving = 1;
 
             base.OnTextChanged(e);
         }

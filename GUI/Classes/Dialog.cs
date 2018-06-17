@@ -140,8 +140,8 @@ namespace GUI
         /// <param name="tabPage"></param>
         public static string ShowSafeCloseTabDialog(TabPage tabPage)
         {
-            if (tabPage.Text.Contains("*"))
-            {
+            //if (tabPage.Text.Contains("*"))
+            //{
                 //Get the real name of the tab page
                 string tabName = tabPage.Text;
                 tabName = tabName.Replace("*", "");
@@ -166,8 +166,8 @@ namespace GUI
                         return "Cancel";
                     }
                 }
-            }
-            return "Nothing";
+            //}
+            //return "Nothing";
         }
 
         /// <summary>
