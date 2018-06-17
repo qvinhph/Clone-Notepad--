@@ -179,7 +179,6 @@ namespace SyntaxHighlightingTextbox
             parsing = false;
             isUndoRedo = false;
             EnableAutoComplete = true;
-
             this.Font = new Font(FontFamily.GenericMonospace, 12);
 
             rtfHeader = new StringBuilder();
@@ -203,9 +202,7 @@ namespace SyntaxHighlightingTextbox
                             '%', '^', '=', '~', '!', '|', ' ', '\r', '\n', '\t'
                         };
             AddListOfSeparators(separators);
-
         }
-        
 
         #endregion
 
@@ -263,6 +260,11 @@ namespace SyntaxHighlightingTextbox
             this.SelectionStart = currentCaretPos;
             SetScrollPos(scrollPos);
 
+
+            //Hide the ListBox if it is showing
+            autoCompleteListBox.Visible = false;
+
+
             FinishUpdate();
         }
 
@@ -285,14 +287,14 @@ namespace SyntaxHighlightingTextbox
             }
 
 
-            var temp = this.ZoomFactor;
+            //var temp = this.ZoomFactor;
             if (EnableHighlight)
             {
                 Highlight();
             }
-            this.ZoomFactor = 1;
-            this.ZoomFactor = temp;
-            
+            //this.ZoomFactor = 1;
+            //this.ZoomFactor = temp;
+
 
             if (enableAutoComplete)
             {
@@ -370,21 +372,7 @@ namespace SyntaxHighlightingTextbox
                 //Set tab stop
                 case (Keys.Tab):
                     {
-                        //string previousTabText = this.Text.Substring(0, SelectionStart);
-                        //string afterTabText = this.Text.Substring(SelectionStart, this.Text.Length - SelectionStart);
-                        //int caretPosition = this.SelectionStart + 4;
-
-                        ////Insert 4 space-character to describe the tab size.
-                        //this.Text = previousTabText + "    " + afterTabText;
-
-                        ////Because when set the new this.Text, the caret will defaultly set to the 0 index
-                        ////May cause the ListBox auto show, which we don't want
-                        ////So we add this code to prevent it and set the caret to the right place
-                        //if (autoCompleteListBox.Visible == true)
-                        //    autoCompleteListBox.Visible = false;
-
-                        //this.SelectionStart = caretPosition;
-                        //return true;
+                        //Tab size will be set to 4 space characters.
                         this.SelectedText = "    ";
                         return true;
                     }
@@ -393,11 +381,7 @@ namespace SyntaxHighlightingTextbox
                 //Use for brace matching
                 case (Keys.OemOpenBrackets):
                     BraceMatching('[');
-                    return true;
-
-                case (Keys.OemOpenBrackets | Keys.Shift):
-                    BraceMatching('{');
-                    return true;
+                    return true;                
 
                 case (Keys.OemQuotes | Keys.Shift):
                     BraceMatching('\"');
@@ -405,6 +389,10 @@ namespace SyntaxHighlightingTextbox
 
                 case (Keys.Shift | Keys.D9):
                     BraceMatching('(');
+                    return true;
+
+                case (Keys.OemOpenBrackets | Keys.Shift):
+                    BraceMatching('{');
                     return true;
 
                 //Use for auto indenting
@@ -419,15 +407,7 @@ namespace SyntaxHighlightingTextbox
 
             return base.ProcessCmdKey(ref m, keyData);
         }
-
-
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            //Hide ListBox on mouse down
-            autoCompleteListBox.Visible = false;
-            base.OnMouseDown(e);
-        }
-
+        
 
         protected override void OnLostFocus(EventArgs e)
         {
@@ -444,7 +424,6 @@ namespace SyntaxHighlightingTextbox
             autoCompleteListBox.Visible = false;
             base.OnVScroll(e);
         }
-        
 
         #endregion
 
@@ -636,10 +615,6 @@ namespace SyntaxHighlightingTextbox
                                     if (currentToken.StartsWith(stringToCompare))
                                         match = true;
                                     break;
-                                //case DescriptorRecognition.Contains:
-                                //    if (currentToken.Contains(stringToCompare))
-                                //        match = true;
-                                //    break;
                                 case DescriptorRecognition.IsNumber:
                                     double number = 0;
                                     //To check if it is a real number.
@@ -683,7 +658,7 @@ namespace SyntaxHighlightingTextbox
                                     i = line.Length;
                                     break;
                                 case HighlightType.ToCloseToken:
-                                    {
+                                   {
                                         StringBuilder sbOfTextToFormat = new StringBuilder();
 
                                         //Find the close token
@@ -759,9 +734,9 @@ namespace SyntaxHighlightingTextbox
             FinishUpdate();
 
             parsing = false;
-        }      
+        }
 
-
+        
         /// <summary>
         /// Disable the ability to repaint of RichTextBox to avoid flicker.
         /// </summary>
@@ -1106,7 +1081,7 @@ namespace SyntaxHighlightingTextbox
         /// <param name="characters">The char.</param>
         private void LoadKeywordsToListBox(string characters)
         {
-            var listOfKeywords = Descriptors.Where(d => d.token.Contains(characters) && d.isUsedForAutoComplete == UsedForAutoComplete.Yes)
+            var listOfKeywords = Descriptors.Where(d => d.token.StartsWith(characters) && d.isUsedForAutoComplete == UsedForAutoComplete.Yes)
                                             .Select(d => d.token);
 
             AddKeywordsToListBox(listOfKeywords.ToArray());
@@ -1360,7 +1335,7 @@ namespace SyntaxHighlightingTextbox
         /// <param name="input"></param>
         private void BraceMatching(char input)
         {
-            List<char> braceList = new List<char> { '{', '(', '[', '\"' };
+            List<char> braceList = new List<char> { '{', '\"', '(', '[' };
 
             if (braceList.Contains(input))
             {
@@ -1369,6 +1344,11 @@ namespace SyntaxHighlightingTextbox
                     case '{':
                         {
                             this.SelectedText = "{ }";
+                            break;
+                        }
+                    case '"':
+                        {
+                            this.SelectedText = "\"\"";
                             break;
                         }
                     case '(':
@@ -1381,11 +1361,7 @@ namespace SyntaxHighlightingTextbox
                             this.SelectedText = "[]";
                             break;
                         }
-                    case '"':
-                        {
-                            this.SelectedText = "\"\"";
-                            break;
-                        }
+
                     default:
                         break;
                 }

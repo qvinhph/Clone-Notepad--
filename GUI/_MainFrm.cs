@@ -30,48 +30,148 @@ namespace GUI
             TabControlMethods.SetupTabControl(tabControl);
         }
 
+
         #region Event handler methods
 
 
-        private void cToolStripMenuItem_Click(object sender, EventArgs e)
+        private void closeCurrentFile_Click(object sender, EventArgs e)
         {
-            Language = "C#";
-
-            //Remove the previous check and set the new one
-            foreach (var item in languageToolStripMenuItem.DropDownItems)
-            {
-                ((ToolStripMenuItem)item).Checked = false;
-            }
-            cToolStripMenuItem.Checked = true;
-
-            if (TabControlMethods.IsEmpty()) return;
-            SetHighlightRule(Language);
+            TabControlMethods.CloseCurrentTabPage();
         }
 
 
-        private void normalTextToolStripMenuItem_Click(object sender, EventArgs e)
+        private void closeAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Language = "Normal Text";
-
-            //Remove the previous check and set the new one
-            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            //remove all the tab except the selected Tab
+            foreach (TabPage tabPage in tabControl.TabPages)
             {
-                ((ToolStripMenuItem)item).Checked = false;
+                if (tabPage != tabControl.SelectedTab)
+                {
+                    string result = Dialog.ShowSafeCloseTabDialog(tabPage);
+                    if (result == "Cancel") return;
+
+                    ////Delete tab status
+                    //TabControlMethods.RemoveTabPageStatus(tabPage);
+
+                    //Remove tab Page
+                    tabControl.TabPages.Remove(tabPage);
+                }
             }
-            normalTextToolStripMenuItem.Checked = true;
-
-            if (TabControlMethods.IsEmpty()) return;
-            TabControlMethods.CurrentTextArea.Refresh();
-
-            SetHighlightRule(Language);
-        }       
-
-
-        private void cToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            Language = "C";
         }
 
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.IsEmpty()) return;
+
+            if (TabControlMethods.CurrentTextArea.CanUndo)
+            {
+                TabControlMethods.CurrentTextArea.Undo();
+            }
+        }
+
+
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.IsEmpty()) return;
+
+            if (TabControlMethods.CurrentTextArea.CanRedo)
+            {
+                TabControlMethods.CurrentTextArea.Redo();
+            }
+        }
+
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea != null)
+                TabControlMethods.CurrentTextArea.Cut();
+        }
+
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //check to make sure no exception occur
+            if (TabControlMethods.CurrentTextArea != null)
+                TabControlMethods.CurrentTextArea.Copy();
+        }
+
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea != null)
+                TabControlMethods.CurrentTextArea.Paste();
+        }
+
+
+        private void btCopy_Click(object sender, EventArgs e)
+        {
+            copyToolStripMenuItem.PerformClick();
+        }
+
+
+        private void btCut_Click(object sender, EventArgs e)
+        {
+            cutToolStripMenuItem.PerformClick();
+        }
+
+
+        private void btPaste_Click(object sender, EventArgs e)
+        {
+            pasteToolStripMenuItem.PerformClick();
+        }
+
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.SelectAll();
+        }
+
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.CurrentTextArea != null)
+                TabControlMethods.CurrentTextArea.Rtf = "";
+        }
+
+
+        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.IsEmpty()) return;
+
+            TabControlMethods.CurrentTextArea.ZoomIn();
+        }
+
+
+        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.IsEmpty()) return;
+
+            TabControlMethods.CurrentTextArea.ZoomOut();
+        }
+
+
+        private void btFind_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.IsEmpty()) return;
+
+            findToolStripMenuItem.PerformClick();
+        }
+
+
+        private void btFindAndReplace_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.IsEmpty()) return;
+
+            findAndReplaceToolStripMenuItem.PerformClick();
+        }
+
+
+        private void btCloseCurFile_Click(object sender, EventArgs e)
+        {
+            TabControlMethods.CloseCurrentTabPage();
+        }
+        
 
         private void btNew_Click(object sender, EventArgs e)
         {
@@ -281,7 +381,137 @@ namespace GUI
 
         #endregion
 
-        
+
+        #region Click Language Menu handlers 
+
+
+        private void cToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Language = "C#";
+
+            //Remove the previous check and set the new one
+            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            {
+                ((ToolStripMenuItem)item).Checked = false;
+            }
+            cToolStripMenuItem.Checked = true;
+
+            if (TabControlMethods.IsEmpty()) return;
+
+            SetHighlightRule(Language);
+            TabControlMethods.CurrentTextArea.CaseSensitive = true;
+        }
+
+
+        private void normalTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Language = "Normal Text";
+
+            //Remove the previous check and set the new one
+            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            {
+                ((ToolStripMenuItem)item).Checked = false;
+            }
+            normalTextToolStripMenuItem.Checked = true;
+
+            if (TabControlMethods.IsEmpty()) return;
+
+            SetHighlightRule(Language);
+        }
+
+
+        private void cToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Language = "C";
+
+            //Remove the previous check and set the new one
+            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            {
+                ((ToolStripMenuItem)item).Checked = false;
+            }
+            cToolStripMenuItem1.Checked = true;
+
+            if (TabControlMethods.IsEmpty()) return;
+
+            SetHighlightRule(Language);
+            TabControlMethods.CurrentTextArea.CaseSensitive = true;
+        }
+
+
+        private void sQLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Language = "SQL";
+
+            //Remove the previous check and set the new one
+            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            {
+                ((ToolStripMenuItem)item).Checked = false;
+            }
+            sQLToolStripMenuItem.Checked = true;
+
+            if (TabControlMethods.IsEmpty()) return;
+
+            SetHighlightRule(Language);
+            TabControlMethods.CurrentTextArea.CaseSensitive = false;
+        }
+
+
+        private void cToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            Language = "C++";
+
+            //Remove the previous check and set the new one
+            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            {
+                ((ToolStripMenuItem)item).Checked = false;
+            }
+            cToolStripMenuItem2.Checked = true;
+
+            if (TabControlMethods.IsEmpty()) return;
+
+            SetHighlightRule(Language);
+            TabControlMethods.CurrentTextArea.CaseSensitive = true;
+        }
+
+
+        private void javascriptToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Language = "Javascript";
+
+            //Remove the previous check and set the new one
+            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            {
+                ((ToolStripMenuItem)item).Checked = false;
+            }
+            javascriptToolStripMenuItem.Checked = true;
+
+            if (TabControlMethods.IsEmpty()) return;
+
+            SetHighlightRule(Language);
+            TabControlMethods.CurrentTextArea.CaseSensitive = true;
+        }
+
+
+        private void vBToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Language = "Javascript";
+
+            //Remove the previous check and set the new one
+            foreach (var item in languageToolStripMenuItem.DropDownItems)
+            {
+                ((ToolStripMenuItem)item).Checked = false;
+            }
+            vBToolStripMenuItem.Checked = true;
+
+            if (TabControlMethods.IsEmpty()) return;
+
+            SetHighlightRule(Language);
+            TabControlMethods.CurrentTextArea.CaseSensitive = true;
+        }
+
+
+        #endregion
+
 
         #endregion
 
@@ -323,6 +553,7 @@ namespace GUI
                             "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public",
                             "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
                             "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe",
+                            "elif"
                         };
                         fontToSet = new Font(typingFont, FontStyle.Bold);
                         currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
@@ -331,10 +562,163 @@ namespace GUI
                         //Keyword highlight another color
                         var keywords2 = new List<string>()
                         {
-                            "define", "error", "import", "undef", "elif", "if", "include", "using", "else",
+                            "define", "error", "import", "undef", "include", "using",
                             "ifdef", "line", "endif", "ifndef", "pragma"
                         };
-                        currentTextArea.AddHighlightKeywords(keywords2, Color.SlateGray, typingFont);
+                        currentTextArea.AddHighlightKeywords(keywords2, Color.LightSeaGreen, typingFont);
+
+
+                        //Comment highlight
+                        var commentSymbols = new List<string>()
+                        {
+                            "//", "///", "////"
+                        };
+                        currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
+                                                HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
+
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
+                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont, UsedForAutoComplete.No);
+
+
+                        //Highlight text between begin and end token
+                        var listPair = new List<string>()
+                        {
+                            "\"", "\"", "\'", "\'",
+                        };
+                        currentTextArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+
+
+                        //Highlight string start with '#'
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
+                                                        Color.LightSeaGreen, typingFont, UsedForAutoComplete.No);
+                    }
+                    break;
+
+                case "C++":
+                    {
+                        //Number highlight
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
+                                                    HighlightType.ToEOW, Color.IndianRed, typingFont, UsedForAutoComplete.No);
+
+
+                        //Comment highlight
+                        var commentSymbols = new List<string>()
+                        {
+                            "//", "///", "////"
+                        };
+                        currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
+                                                HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
+
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
+                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont, UsedForAutoComplete.No);
+
+
+                        //Keyword highlight
+                        var keywords = new List<string>()
+                        {
+                           "asm", "auto", "bool", "break", "case", "catch", "char","class", "const_cast", "continue", "default", "delete", "double", "else",
+                           "enum", "dynamic_cast", "extern", "false", "float", "for", "union", "unsigned", "using", "friend", "goto", "if", "inline", "int",
+                           "long", "mutable", "virtual", "namespace", "new", "operator", "private", "protected", "public", "register", "void", "reinterpret_cast",
+                           "return", "short", "signed", "sizeof", "static", "static_cast", "volatile", "struct", "switch", "template", "this", "throw", "true",
+                           "try", "typedef", "typeid", "unsigned", "wchar_t", "while"
+                        };
+                        fontToSet = new Font(typingFont, FontStyle.Bold);
+                        currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
+                       
+
+                        //Highlight text between begin and end token
+                        var listPair = new List<string>()
+                        {
+                            "\"", "\"", "\'", "\'",
+                        };
+                        //currentTextArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "\"",
+                                                            HighlightType.ToCloseToken, "\"", Color.Red, typingFont, UsedForAutoComplete.No);
+
+
+                        //Highlight string start with '#'
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
+                                                        Color.SlateGray, typingFont, UsedForAutoComplete.No);
+                    }
+                    break;
+
+                case "C":
+                    {
+                        //Number highlight
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
+                                                    HighlightType.ToEOW, Color.IndianRed, typingFont, UsedForAutoComplete.No);
+
+
+                        //Keyword highlight
+                        var keywords = new List<string>()
+                        {
+                            "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
+                            "class", "const", "continue" , "decimal", "default", "delegate", "do", "double", "else",
+                            "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach",
+                            "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace",
+                            "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public",
+                            "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string",
+                            "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe"
+                        };
+                        fontToSet = new Font(typingFont, FontStyle.Bold);
+                        currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
+                        
+
+                        //Comment highlight
+                        var commentSymbols = new List<string>()
+                        {
+                            "//", "///", "////"
+                        };
+                        currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
+                                                HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
+
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
+                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont, UsedForAutoComplete.No);
+
+
+                        //Highlight text between begin and end token
+                        var listPair = new List<string>()
+                        {
+                            "\"", "\"", "\'", "\'",
+                        };
+                        //currentTextArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "\"",
+                                                            HighlightType.ToCloseToken, "\"", Color.Red, typingFont, UsedForAutoComplete.No);
+
+
+                        //Highlight string start with '#'
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
+                                                        Color.SlateGray, typingFont, UsedForAutoComplete.No);
+                    }
+                    break;
+
+                case "VB":
+                    {
+                        //Number highlight
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
+                                                    HighlightType.ToEOW, Color.IndianRed, typingFont, UsedForAutoComplete.No);
+
+
+                        //Keyword highlight
+                        var keywords = new List<string>()
+                        {
+                            "addhandler", "addressof", "alias", "and", "andalso", "as", "boolean", "byref", "byte", "byval",
+                            "call", "case ", "catch", "cbool", "cbyte", "cchar", "cdate", "cdbl", "cdec", "char", "cint", "class",
+                            "clng", "cobj", "const", "continue", "csbyte", "cshort", "csng", "cstr", "ctype", "cuint", "culng", "cushort",
+                            "date", "decimal", "declare", "default", "delegate", "dim", "directcast", "do", "double", "each", "else",
+                            "elseif", "end", "endif", "enum", "erase", "error", "event", "exit", "false", "finally", "for", "friend",
+                            "function", "get", "gettype", "getxmlnamespace", "global", "gosub", "goto", "handles", "if", "implements",
+                            "imports", "in", "inherits", "integer", "interface", "is", "isnot", "let", "lib", "like", "long", "loop", "me",
+                            "mod", "module", "mustinherit", "mustoverride", "mybase", "myclass", "namespace", "narrowing", "new", "not", "nothing",
+                            "notinheritable", "notoverridable", "object", "of", "on", "operator", "option", "optional", "or", "orelse", "out",
+                            "overloads", "overridable", "overrides", "paramarray", "partial", "private", "property", "protected", "public",
+                            "raiseevent", "readonly", "redim", "rem", "removehandler", "resume", "return", "sbyte", "select", "set", "shadows",
+                            "shared", "short", "single", "static", "step", "stop", "string", "structure", "sub", "synclock", "then", "throw",
+                            "to", "true", "try", "trycast", "typeof", "uinteger", "ulong", "ushort", "using", "variant", "wend", "when", "while",
+                            "widening", "with", "withevents", "writeonly", "xor"
+                        };
+                        fontToSet = new Font(typingFont, FontStyle.Bold);
+                        currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
 
 
                         //Comment highlight
@@ -362,15 +746,123 @@ namespace GUI
                         //Highlight string start with '#'
                         currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "#", HighlightType.ToEOW,
                                                         Color.SlateGray, typingFont, UsedForAutoComplete.No);
-
                     }
-                    
                     break;
+
+                case "Javascript":
+                    {
+                        //Number highlight
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
+                                                    HighlightType.ToEOW, Color.IndianRed, typingFont, UsedForAutoComplete.No);
+
+
+                        //Keyword highlight
+                        var keywords = new List<string>()
+                        {
+                            "abstract", "arguments", "await", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue",
+                            "debugger", "default", "delete", "do", "double", "elseenum", "eval", "export", "extends", "false", "final", "finally",
+                            "float", "for", "function", "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "let",
+                            "long", "native", "newnull", "package", "private", "protected", "public", "return", "short", "static", "super",
+                            "switch", "synchronized", "this", "throw", "throws", "transient", "truetry", "typeof", "var", "void", "volatile",
+                            "while", "with", "yield", "abstract", "boolean", "byte", "char", "double", "final", "float", "goto", "int",
+                            "long", "native", "short", "synchronized", "throws", "transient", "volatile"
+                        };
+                        fontToSet = new Font(typingFont, FontStyle.Bold);
+                        currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
+
+
+                        //Keyword highlight another color
+                        var keywords2 = new List<string>()
+                        {
+                            "Array", "Date,  eval", "function", "hasOwnProperty", "Infinity", "isFinite", "isNaN", "isPrototypeOf",
+                            "length", "Math", "NaN", "name", "Number", "Object", "prototype", "String", "toString", "undefined", "valueOf"
+                        };
+                        currentTextArea.AddHighlightKeywords(keywords2, Color.LightSeaGreen, typingFont);
+
+
+                        //Comment highlight
+                        var commentSymbols = new List<string>()
+                        {
+                            "//"
+                        };
+                        currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
+                                                HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
+
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
+                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont, UsedForAutoComplete.No);
+
+
+                        //Highlight text between begin and end token
+                        var listPair = new List<string>()
+                        {
+                            "\"", "\"", "\'", "\'",
+                        };
+                        currentTextArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+                    }
+                    break;
+
+                case "SQL":
+                    {
+                        //Number highlight
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.IsNumber, "",
+                                                    HighlightType.ToEOW, Color.IndianRed, typingFont, UsedForAutoComplete.No);
+
+
+                        //Keyword highlight
+                        var keywords = new List<string>()
+                        {
+                            "add", "except", "percent", "all", "exec", "plan", "alter", "execute", "precision",
+                            "and", "exists", "primary", "any", "exit", "print", "as", "fetch", "proc", "asc",
+                            "file", "procedure", "authorizationfillfactor", "public", "backup", "for", "raiserror",
+                            "begin", "foreign", "read", "between", "freetext", "readtext", "break", "freetexttable",
+                            "reconfigure", "browse", "from", "references", "bulk", "full", "replication", "by",
+                            "function", "restore", "cascade", "goto", "restrict", "case", "grant", "return", "check",
+                            "group", "revoke", "checkpoint", "having", "right", "close", "holdlock", "rollback",
+                            "clustered", "identity", "rowcount", "coalesce", "identity_insert", "rowguidcol", "collate",
+                            "identitycol", "rule", "column", "if", "save", "commit", "in", "schema", "compute", "index",
+                            "select", "constraint", "inner", "session_user", "contains", "insert", "set", "containstable",
+                            "intersect", "setuser", "continue", "into", "shutdown", "convert", "is", "some", "create",
+                            "join", "statistics", "cross", "key", "system_user", "current", "kill", "table", "current_date",
+                            "left", "textsize", "current_time", "like", "then", "current_timestamp", "lineno", "to",
+                            "current_user", "load", "top", "cursor", "national", "tran", "database", "nocheck", "transaction",
+                            "dbcc", "nonclustered", "trigger", "deallocate", "not", "truncate", "declare", "null",
+                            "tsequal", "default", "nullif", "union", "delete", "of", "unique", "deny", "off", "update",
+                            "desc", "offsets", "updatetext", "disk", "on", "use", "distinct", "open", "user", "distributed",
+                            "opendatasource", "values", "double", "openquery", "varying", "drop", "openrowset", "view", "dummy",
+                            "openxml", "waitfor", "dump", "option", "when", "else", "or", "where", "end", "order", "while",
+                            "errlvl", "outer", "with", "escape", "over", "writetext"
+                        };
+                        fontToSet = new Font(typingFont, FontStyle.Bold);
+                        currentTextArea.AddHighlightKeywords(keywords, Color.CornflowerBlue, fontToSet);
+
+
+                        //Comment highlight
+                        var commentSymbols = new List<string>()
+                        {
+                            "'"
+                        };
+                        currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
+                                                HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
+
+                        currentTextArea.AddHighlightDescriptor(DescriptorRecognition.StartsWith, "/*",
+                                                            HighlightType.ToCloseToken, "*/", Color.Green, typingFont, UsedForAutoComplete.No);
+
+
+                        //Highlight text between begin and end token
+                        var listPair = new List<string>()
+                        {
+                            "\'", "\'",
+                        };
+                        currentTextArea.AddHighlightBoundaries(listPair, Color.Red, typingFont);
+                    }
+                    break;
+
                 case "Normal Text":
                     {
                         TabControlMethods.CurrentTextArea.EnableHighlight = false;
                     }
                     break;
+
                 default:
                     break;
             }
@@ -398,128 +890,14 @@ namespace GUI
 
 
         #endregion
+               
 
-        private void closeCurrentFile_Click(object sender, EventArgs e)
+        private void _MainFrm_Load(object sender, EventArgs e)
         {
-            TabControlMethods.CloseCurrentTabPage();
+
         }
 
-        private void closeAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //remove all the tab except the selected Tab
-            foreach (TabPage tabPage in tabControl.TabPages)
-            {
-                if (tabPage != tabControl.SelectedTab)
-                {
-                    string result = Dialog.ShowSafeCloseTabDialog(tabPage);
-                    if (result == "Cancel") return;
-
-                    ////Delete tab status
-                    //TabControlMethods.RemoveTabPageStatus(tabPage);
-
-                    //Remove tab Page
-                    tabControl.TabPages.Remove(tabPage);
-                }
-            }
-        }
-
-        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.IsEmpty()) return;
-
-            if (TabControlMethods.CurrentTextArea.CanUndo)
-            {
-                TabControlMethods.CurrentTextArea.Undo();
-            }
-        }
-
-        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.IsEmpty()) return;
-
-            if (TabControlMethods.CurrentTextArea.CanRedo)
-            {
-                TabControlMethods.CurrentTextArea.Redo();
-            }
-        }
-
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.CurrentTextArea != null)
-                TabControlMethods.CurrentTextArea.Cut();
-        }
-
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //check to make sure no exception occur
-            if (TabControlMethods.CurrentTextArea != null)
-                TabControlMethods.CurrentTextArea.Copy();
-        }
-
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.CurrentTextArea != null)
-                TabControlMethods.CurrentTextArea.Paste();
-        }
-
-        private void btCopy_Click(object sender, EventArgs e)
-        {
-            copyToolStripMenuItem.PerformClick();
-        }
-
-        private void btCut_Click(object sender, EventArgs e)
-        {
-            cutToolStripMenuItem.PerformClick();
-        }
-
-        private void btPaste_Click(object sender, EventArgs e)
-        {
-            pasteToolStripMenuItem.PerformClick();
-        }
-
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.CurrentTextArea != null) TabControlMethods.CurrentTextArea.SelectAll();
-        }
-
-        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.CurrentTextArea != null)
-                TabControlMethods.CurrentTextArea.Rtf = "";
-        }
-
-        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.IsEmpty()) return;
-
-            TabControlMethods.CurrentTextArea.ZoomIn();
-        }
-
-        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.IsEmpty()) return;
-
-            TabControlMethods.CurrentTextArea.ZoomOut();
-        }
-
-        private void btFind_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.IsEmpty()) return;
-
-            findToolStripMenuItem.PerformClick();
-        }
-
-        private void btFindAndReplace_Click(object sender, EventArgs e)
-        { 
-            if (TabControlMethods.IsEmpty()) return;
-
-            findAndReplaceToolStripMenuItem.PerformClick();
-        }
-
-        private void btCloseCurFile_Click(object sender, EventArgs e)
-        {
-            TabControlMethods.CloseCurrentTabPage();
-        }
+        
     }
 }
 
