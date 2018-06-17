@@ -91,6 +91,10 @@
             this.slbTextLength = new System.Windows.Forms.ToolStripStatusLabel();
             this.slbSpaceAndSlash = new System.Windows.Forms.ToolStripStatusLabel();
             this.slbLine = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btSaveAll = new System.Windows.Forms.ToolStripButton();
+            this.btCloseCurFile = new System.Windows.Forms.ToolStripButton();
+            this.btSaveAs = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -396,6 +400,10 @@
             this.btNew,
             this.btOpen,
             this.btSave,
+            this.btSaveAs,
+            this.toolStripSeparator2,
+            this.btCloseCurFile,
+            this.btSaveAll,
             this.toolStripSeparator12,
             this.btCopy,
             this.btCut,
@@ -636,6 +644,38 @@
             this.slbLine.Size = new System.Drawing.Size(35, 17);
             this.slbLine.Text = "Line: ";
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
+            // 
+            // btSaveAll
+            // 
+            this.btSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAll.Image")));
+            this.btSaveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btSaveAll.Name = "btSaveAll";
+            this.btSaveAll.Size = new System.Drawing.Size(23, 23);
+            this.btSaveAll.Text = "Save All";
+            // 
+            // btCloseCurFile
+            // 
+            this.btCloseCurFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btCloseCurFile.Image = ((System.Drawing.Image)(resources.GetObject("btCloseCurFile.Image")));
+            this.btCloseCurFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btCloseCurFile.Name = "btCloseCurFile";
+            this.btCloseCurFile.Size = new System.Drawing.Size(23, 23);
+            this.btCloseCurFile.Text = "closeCurrentFile";
+            // 
+            // btSaveAs
+            // 
+            this.btSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAs.Image")));
+            this.btSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btSaveAs.Name = "btSaveAs";
+            this.btSaveAs.Size = new System.Drawing.Size(23, 23);
+            this.btSaveAs.Text = "Save As ";
+            // 
             // _MainFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -724,6 +764,10 @@
         private System.Windows.Forms.ToolStripStatusLabel slbSpaceAndSeparator;
         private System.Windows.Forms.ToolStripStatusLabel slbSpaceAndSlash;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripButton btSaveAs;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btCloseCurFile;
+        private System.Windows.Forms.ToolStripButton btSaveAll;
     }
 }
 
