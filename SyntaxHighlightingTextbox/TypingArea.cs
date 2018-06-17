@@ -1119,6 +1119,11 @@ namespace SyntaxHighlightingTextbox
         /// <param name="characters">The char.</param>
         private void LoadKeywordsToListBox(string characters)
         {
+            if (CaseSensitive == false)
+            {
+                characters = characters.ToLower();
+            }
+
             var listOfKeywords = Descriptors.Where(d => d.token.StartsWith(characters) && d.isUsedForAutoComplete == UsedForAutoComplete.Yes)
                                             .Select(d => d.token);
 

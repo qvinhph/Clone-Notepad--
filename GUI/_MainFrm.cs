@@ -668,7 +668,7 @@ namespace GUI
                         //Comment highlight
                         var commentSymbols = new List<string>()
                         {
-                            "//", "///", "////"
+                            "//"
                         };
                         currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
                                                 HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
@@ -840,7 +840,7 @@ namespace GUI
                         //Comment highlight
                         var commentSymbols = new List<string>()
                         {
-                            "'"
+                            "//"
                         };
                         currentTextArea.AddListOfHighlightDescriptors(commentSymbols, DescriptorRecognition.StartsWith,
                                                 HighlightType.ToEOL, Color.Green, typingFont, UsedForAutoComplete.No);
@@ -898,20 +898,18 @@ namespace GUI
 
         }
 
-        private void btCloseCurFile_Click(object sender, EventArgs e)
-        {
-            TabControlMethods.CloseCurrentTabPage();
-        }
 
         private void btSaveAs_Click(object sender, EventArgs e)
         {
             saveAsToolStripMenuItem.PerformClick();
         }
 
+
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
+
 
         private void versionToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -923,6 +921,7 @@ namespace GUI
             }
             aboutEasyType.ShowAboutEasyType();
         }
+
 
         private void _MainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
