@@ -76,8 +76,13 @@ namespace SyntaxHighlightingTextbox
             SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 
-            //Handle some comment event
+            //Handle some common event
             HandleEvent();
+
+            //Some other setup
+            TypingArea.WordWrap = false;
+            DocumentMap.WordWrap = false;
+
         }
         #endregion
 
@@ -123,7 +128,8 @@ namespace SyntaxHighlightingTextbox
             AddLineNumbers();
             DocumentMap.Text = TypingArea.Text;
             DocumentMap.Rtf = TypingArea.Rtf;
-            DocumentMap.Font = new Font(FontFamily.GenericMonospace, 5);
+            DocumentMap.Font = new Font(FontFamily.GenericMonospace, 3);
+            typingArea.requiresSaving = 1;
         }
 
 
