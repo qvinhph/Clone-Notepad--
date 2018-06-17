@@ -64,6 +64,7 @@
             this.cToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.sQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.javascriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.vBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btNew = new System.Windows.Forms.ToolStripButton();
@@ -95,7 +96,6 @@
             this.slbTextLength = new System.Windows.Forms.ToolStripStatusLabel();
             this.slbSpaceAndSlash = new System.Windows.Forms.ToolStripStatusLabel();
             this.slbLine = new System.Windows.Forms.ToolStripStatusLabel();
-            this.vBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -351,7 +351,7 @@
             // normalTextToolStripMenuItem
             // 
             this.normalTextToolStripMenuItem.Name = "normalTextToolStripMenuItem";
-            this.normalTextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.normalTextToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.normalTextToolStripMenuItem.Text = "Normal Text";
             this.normalTextToolStripMenuItem.Click += new System.EventHandler(this.normalTextToolStripMenuItem_Click);
             // 
@@ -360,43 +360,51 @@
             this.cToolStripMenuItem.Checked = true;
             this.cToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cToolStripMenuItem.Name = "cToolStripMenuItem";
-            this.cToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.cToolStripMenuItem.Text = "C#";
             this.cToolStripMenuItem.Click += new System.EventHandler(this.cToolStripMenuItem_Click);
             // 
             // cToolStripMenuItem1
             // 
             this.cToolStripMenuItem1.Name = "cToolStripMenuItem1";
-            this.cToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.cToolStripMenuItem1.Size = new System.Drawing.Size(138, 22);
             this.cToolStripMenuItem1.Text = "C";
             this.cToolStripMenuItem1.Click += new System.EventHandler(this.cToolStripMenuItem1_Click);
             // 
             // cToolStripMenuItem2
             // 
             this.cToolStripMenuItem2.Name = "cToolStripMenuItem2";
-            this.cToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.cToolStripMenuItem2.Size = new System.Drawing.Size(138, 22);
             this.cToolStripMenuItem2.Text = "C++";
             this.cToolStripMenuItem2.Click += new System.EventHandler(this.cToolStripMenuItem2_Click);
             // 
             // sQLToolStripMenuItem
             // 
             this.sQLToolStripMenuItem.Name = "sQLToolStripMenuItem";
-            this.sQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sQLToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.sQLToolStripMenuItem.Text = "SQL";
             this.sQLToolStripMenuItem.Click += new System.EventHandler(this.sQLToolStripMenuItem_Click);
             // 
             // javascriptToolStripMenuItem
             // 
             this.javascriptToolStripMenuItem.Name = "javascriptToolStripMenuItem";
-            this.javascriptToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.javascriptToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.javascriptToolStripMenuItem.Text = "Javascript";
             this.javascriptToolStripMenuItem.Click += new System.EventHandler(this.javascriptToolStripMenuItem_Click);
+            // 
+            // vBToolStripMenuItem
+            // 
+            this.vBToolStripMenuItem.Name = "vBToolStripMenuItem";
+            this.vBToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+            this.vBToolStripMenuItem.Text = "VB";
+            this.vBToolStripMenuItem.Click += new System.EventHandler(this.vBToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // toolStrip1
             // 
@@ -467,38 +475,6 @@
             this.btSaveAs.Size = new System.Drawing.Size(23, 23);
             this.btSaveAs.Text = "Save As ";
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 26);
-            // 
-            // btCloseCurFile
-            // 
-            this.btCloseCurFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btCloseCurFile.Image = ((System.Drawing.Image)(resources.GetObject("btCloseCurFile.Image")));
-            this.btCloseCurFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btCloseCurFile.Name = "btCloseCurFile";
-            this.btCloseCurFile.Size = new System.Drawing.Size(23, 23);
-            this.btCloseCurFile.Text = "closeCurrentFile";
-            this.btCloseCurFile.Click += new System.EventHandler(this.btCloseCurFile_Click);
-            // 
-            // btSaveAll
-            // 
-            this.btSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btSaveAll.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAll.Image")));
-            this.btSaveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btSaveAll.Name = "btSaveAll";
-            this.btSaveAll.Size = new System.Drawing.Size(23, 23);
-            this.btSaveAll.Text = "Save All";
-            // 
-            // btSaveAs
-            // 
-            this.btSaveAs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btSaveAs.Image = ((System.Drawing.Image)(resources.GetObject("btSaveAs.Image")));
-            this.btSaveAs.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btSaveAs.Name = "btSaveAs";
-            this.btSaveAs.Size = new System.Drawing.Size(23, 23);
-            this.btSaveAs.Text = "Save As ";            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -713,13 +689,6 @@
             this.slbLine.Name = "slbLine";
             this.slbLine.Size = new System.Drawing.Size(35, 17);
             this.slbLine.Text = "Line: ";
-            // 
-            // vBToolStripMenuItem
-            // 
-            this.vBToolStripMenuItem.Name = "vBToolStripMenuItem";
-            this.vBToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.vBToolStripMenuItem.Text = "VB";
-            this.vBToolStripMenuItem.Click += new System.EventHandler(this.vBToolStripMenuItem_Click);
             // 
             // _MainFrm
             // 

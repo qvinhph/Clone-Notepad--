@@ -25,16 +25,16 @@ namespace GUI
 
         public void ShowAboutEasyType()
         {
-            this.Text = "About EasyType";
-            abtEasyType.Visible = true;
-            label1.Visible = true;
-            label2.Visible = true;
-            label3.Visible = true;
-            label4.Visible = true;
-            label5.Visible = true;
-            this.Width = 344;
-            this.Height = 164;
-            this.Show();
+            //this.Text = "About EasyType";
+            //abtEasyType.Visible = true;
+            //label1.Visible = true;
+            //label2.Visible = true;
+            //label3.Visible = true;
+            //label4.Visible = true;
+            //label5.Visible = true;
+            //this.Width = 344;
+            //this.Height = 164;
+            //this.Show();
         }
 
         private void AboutEasyType_Deactivate(object sender, EventArgs e)
@@ -63,8 +63,8 @@ namespace GUI
 
         private void AboutEasyType_FormClosing(object sender, FormClosingEventArgs e)
         {
-            this.Visible = false;
-            e.Cancel = true;
+            //this.Visible = false;
+            //e.Cancel = true;
         }
     }
 }

@@ -908,19 +908,29 @@ namespace GUI
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-        }
-
-
-        private void versionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TabControlMethods.IsEmpty()) return;
-
             if (aboutEasyType == null)
             {
                 aboutEasyType = new AboutEasyType();
             }
-            aboutEasyType.ShowAboutEasyType();
+            //aboutEasyType.ShowAboutEasyType();
+            aboutEasyType.ShowDialog();
         }
+
+
+        //private void versionToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+            //if (TabControlMethods.IsEmpty()) return;
+
+            //if (aboutEasyType == null)
+            //{
+            //    aboutEasyType = new AboutEasyType();
+            //}
+            //aboutEasyType.ShowAboutEasyType();
+            //this.IsMdiContainer = true;
+            //AboutEzType aet = new AboutEzType();
+            //aet.MdiParent = this;
+            //aet.Show();
+        //}
 
 
         private void _MainFrm_FormClosing(object sender, FormClosingEventArgs e)
@@ -930,6 +940,7 @@ namespace GUI
                 e.Cancel = true;
             }
         }
+
     }
 }
 
