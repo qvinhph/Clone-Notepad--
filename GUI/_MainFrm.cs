@@ -15,6 +15,7 @@ namespace GUI
     {
         private string language = "C#";
         private FindingForm findingForm = null;
+        private AboutEasyType aboutEasyType = null;
 
 
         public string Language
@@ -519,6 +520,35 @@ namespace GUI
         private void btCloseCurFile_Click(object sender, EventArgs e)
         {
             TabControlMethods.CloseCurrentTabPage();
+        }
+
+        private void btSaveAs_Click(object sender, EventArgs e)
+        {
+            saveAsToolStripMenuItem.PerformClick();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void versionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TabControlMethods.IsEmpty()) return;
+
+            if (aboutEasyType == null)
+            {
+                aboutEasyType = new AboutEasyType();
+            }
+            aboutEasyType.ShowAboutEasyType();
+        }
+
+        private void _MainFrm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (Dialog.ShowSafeCloseFormDialog(tabControl) == "Cancel")
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

@@ -49,6 +49,11 @@ namespace SyntaxHighlightingTextbox
         private bool isUndoRedo; //Use to avoid recording undo info.
         private UndoRedoInfo lastInfo;
 
+        //Prevent the record of undo, redo, hightlight, ...
+        private bool blockAllAction = false;
+
+        public bool BlockAllAction { get { return blockAllAction; } set { blockAllAction = value; } }
+
 
         public struct UndoRedoInfo
         {
@@ -1289,7 +1294,6 @@ namespace SyntaxHighlightingTextbox
             return listOfPositions;
         }
 
-
         /// <summary>       
         /// Clear background color of selected text
         /// </summary>
@@ -1313,6 +1317,8 @@ namespace SyntaxHighlightingTextbox
             {
                 controlToFocus.Focus();
             }
+
+            BlockAllAction = true;
 
             //List of position of the found texts
             List<int> listOfPositions = new List<int>();
@@ -1341,11 +1347,12 @@ namespace SyntaxHighlightingTextbox
                 }
             }
 
+            BlockAllAction = false;
+
             this.Focus();
 
             return listOfPositions;
         }
-
 
         #endregion
 

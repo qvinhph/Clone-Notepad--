@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutEasyType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutEasyType.designer.cs">
+      <DependentUpon>AboutEasyType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Classes\Dialog.cs" />
     <Compile Include="Classes\TabControlMethods.cs" />
     <Compile Include="Classes\TabPageInfo.cs" />
@@ -66,6 +72,9 @@
     <Compile Include="_MainFrm.Designer.cs">
       <DependentUpon>_MainFrm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AboutEasyType.resx">
+      <DependentUpon>AboutEasyType.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FindingForm.resx">
       <DependentUpon>FindingForm.cs</DependentUpon>
     </EmbeddedResource>

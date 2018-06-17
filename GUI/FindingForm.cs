@@ -18,7 +18,7 @@ namespace GUI
         List<int> textsFound = new List<int>();
         Color AllFoundTextBackColor = Color.Aquamarine;
        
-        Color SelectedFoundTextBackColor = Color.Orange;
+       // Color SelectedFoundTextBackColor = Color.Orange;
        
         string previousText = "";
 
@@ -54,7 +54,10 @@ namespace GUI
 
             textsFound.Clear();
             textsFound = currentTextArea.FindAndColorAll(searchTextbox.Text, AllFoundTextBackColor);
+
             indexOfSearchText = -1;
+
+            this.Focus();
         }
 
         private void FindForm_Deactivate(object sender, EventArgs e)
@@ -93,23 +96,6 @@ namespace GUI
             this.Show();
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData == (Keys.H | Keys.Control))
-            {
-                ShowFindAndReplaceForm();
-                return true;
-            }
-
-            if (keyData == (Keys.F | Keys.Control))
-            {
-                ShowFindingForm();
-                return true;
-            }
-
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
         private void findNextButton_Click(object sender, EventArgs e)
         {
             TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
@@ -127,7 +113,6 @@ namespace GUI
             {
                 if (searchTextbox.Text.Length == 0)
                     return;
-
 
                 indexOfSearchText++;
                 if (indexOfSearchText == textsFound.Count)
@@ -159,7 +144,6 @@ namespace GUI
                 if (searchTextbox.Text.Length == 0)
                     return;
                 
-
                 indexOfSearchText--;
                 if (indexOfSearchText <= -1)
                 {
@@ -176,9 +160,25 @@ namespace GUI
         private void replaceButton_Click(object sender, EventArgs e)
         {
             TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
+            currentTextArea.Focus();
 
-            //Replace the selected found text by replacement text
+            //Check if this string has been replaced or this string has nothing
+            if (indexOfSearchText == -1 || searchTextbox.Text.Equals(replacementTextbox.Text) || currentTextArea.SelectionLength == 0)
+            {
+                return;
+            }
+
+            //We might changed or do something with the text so we need to get this again
+            textsFound.Clear();
+            textsFound = currentTextArea.FindAll(searchTextbox.Text);
+
+            currentTextArea.Select(textsFound[indexOfSearchText], searchTextbox.Text.Length);
+
+            //Make it be replaced
             currentTextArea.SelectedText = replacementTextbox.Text;
+
+            //just select for nothing much
+            currentTextArea.Select(textsFound[indexOfSearchText], replacementTextbox.Text.Length);
         }
 
 
@@ -197,9 +197,17 @@ namespace GUI
 
         private void replaceAllButton_Click(object sender, EventArgs e)
         {
+            //Check if this string has been replaced or this string has nothing
+            if (searchTextbox.Text.Equals(replacementTextbox.Text))
+            {
+                return;
+            }
+
             TypingArea currentTextArea = TabControlMethods.CurrentTextArea;
 
             //Replace all the selected found text by replacement text
+            string textToReplace = currentTextArea.Text.Replace(searchTextbox.Text, replacementTextbox.Text);
+            currentTextArea.Select(0, currentTextArea.TextLength);
             currentTextArea.Text = currentTextArea.Text.Replace(searchTextbox.Text, replacementTextbox.Text);
         }
     }
