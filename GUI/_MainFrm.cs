@@ -516,9 +516,9 @@ namespace GUI
             findAndReplaceToolStripMenuItem.PerformClick();
         }
 
-        private void _MainFrm_Load(object sender, EventArgs e)
+        private void btCloseCurFile_Click(object sender, EventArgs e)
         {
-
+            TabControlMethods.CloseCurrentTabPage();
         }
     }
 }

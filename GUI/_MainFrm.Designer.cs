@@ -666,6 +666,7 @@
             this.btCloseCurFile.Name = "btCloseCurFile";
             this.btCloseCurFile.Size = new System.Drawing.Size(23, 23);
             this.btCloseCurFile.Text = "closeCurrentFile";
+            this.btCloseCurFile.Click += new System.EventHandler(this.btCloseCurFile_Click);
             // 
             // btSaveAs
             // 
@@ -688,7 +689,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "_MainFrm";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this._MainFrm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
