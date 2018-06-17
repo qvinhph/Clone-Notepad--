@@ -113,8 +113,10 @@
     <Content Include="Resources\icons8-copy.png" />
     <Content Include="Resources\icons8-cut.png" />
     <Content Include="Resources\icons8-delete-file.png" />
+    <None Include="Resources\icons8-documents-folder.png" />
     <Content Include="Resources\icons8-find-and-replace.png" />
     <Content Include="Resources\icons8-find.png" />
+    <None Include="Resources\icons8-open.png" />
     <Content Include="Resources\icons8-paste.png" />
     <Content Include="Resources\icons8-redo.png" />
     <Content Include="Resources\icons8-save-as.png" />

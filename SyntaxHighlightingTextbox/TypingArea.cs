@@ -314,6 +314,8 @@ namespace SyntaxHighlightingTextbox
         }
 
         #endregion
+
+
         protected override void OnTextChanged(EventArgs e)
         {
             if (parsing) return;
@@ -465,6 +467,14 @@ namespace SyntaxHighlightingTextbox
             if (parsing) return;
             autoCompleteListBox.Visible = false;
             base.OnVScroll(e);
+        }
+
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            //Hide ListBox 
+            autoCompleteListBox.Visible = false;
+            base.OnMouseDown(e);
         }
 
         #endregion

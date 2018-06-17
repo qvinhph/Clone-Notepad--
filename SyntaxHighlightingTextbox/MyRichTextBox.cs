@@ -67,7 +67,6 @@ namespace SyntaxHighlightingTextbox
         #region Constructor
         public MyRichTextBox()
         {
-
             InitializeComponent();
 
             //Default Font
@@ -79,7 +78,6 @@ namespace SyntaxHighlightingTextbox
 
             //Handle some comment event
             HandleEvent();
-
         }
         #endregion
 
