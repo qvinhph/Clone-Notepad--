@@ -31,6 +31,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>35472194_1577493462376025_7450681073488363520_n.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>GUI.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -105,6 +111,8 @@
   <ItemGroup>
     <None Include="Resources\icons8-close-window-48.png" />
     <None Include="Resources\CloseImage.bmp" />
+    <Content Include="35472194_1577493462376025_7450681073488363520_n.ico" />
+    <Content Include="favicon.ico" />
     <Content Include="Resources\icons8-add-file.png" />
     <Content Include="Resources\icons8-arrow-curved.png" />
     <Content Include="Resources\icons8-copy.png" />

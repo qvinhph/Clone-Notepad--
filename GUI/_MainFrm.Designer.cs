@@ -696,6 +696,7 @@
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "_MainFrm";
             this.Text = "Easy Type";
