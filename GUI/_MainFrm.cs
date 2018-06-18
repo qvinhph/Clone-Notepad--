@@ -932,7 +932,6 @@ namespace GUI
             }
             }
         }
-
     }
 }
 
