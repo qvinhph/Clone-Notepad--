@@ -14,10 +14,9 @@ namespace GUI
         //the "x" image 
         private static Image closeImage;
 
+
         //A variable refer on current handling TabControl.
         private static TabControl tabControl;
-
-        public static TabPage PreviousSelectedTabpage { get; private set; }
 
 
         #region Properties
@@ -51,6 +50,9 @@ namespace GUI
                 tabControl = value;
             }
         }
+
+
+        public static TabPage PreviousSelectedTabpage { get; private set; }
 
         #endregion
 
@@ -87,9 +89,6 @@ namespace GUI
 
             //Dragging event
             TabControl.DragOver += TabControl_DragTab;
-
-            //Raise event when a tab is selected.
-            //TabControl.Selected += TabControl_OnSelected;
             
         }
 
@@ -394,18 +393,6 @@ namespace GUI
 
             return listOfTabPageInfo.Remove(tabInfoToDelelte);            
         }
-
-        #endregion
-
-
-        #region Manipulate the Status Bar according to each TabPage
-
-
-        public static void UpdateStatusBar()
-        {
-
-        }
-
 
         #endregion
 
