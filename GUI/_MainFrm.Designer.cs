@@ -698,7 +698,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "_MainFrm";
-            this.Text = "Form1";
+            this.Text = "Easy Type";
             this.Load += new System.EventHandler(this._MainFrm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
