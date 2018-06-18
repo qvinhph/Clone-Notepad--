@@ -83,6 +83,8 @@ namespace SyntaxHighlightingTextbox
             TypingArea.WordWrap = false;
             DocumentMap.WordWrap = false;
 
+            TypingArea.requiresSaving = 0;
+
         }
         #endregion
 
@@ -111,6 +113,7 @@ namespace SyntaxHighlightingTextbox
             TypingArea.Select();
             AddLineNumbers();
             DocumentMap.Text = TypingArea.Text;
+            typingArea.requiresSaving = 0;
         }
 
         private void OnMyRichTextBox_Resize(object sender, EventArgs e)
@@ -129,7 +132,6 @@ namespace SyntaxHighlightingTextbox
             DocumentMap.Text = TypingArea.Text;
             DocumentMap.Rtf = TypingArea.Rtf;
             DocumentMap.Font = new Font(FontFamily.GenericMonospace, 3);
-            typingArea.requiresSaving = 1;
         }
 
 
