@@ -68,12 +68,6 @@
       <DependentUpon>MyRichTextBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RightMargin.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="RightMargin.Designer.cs">
-      <DependentUpon>RightMargin.cs</DependentUpon>
-    </Compile>
     <Compile Include="SeparatorCollection.cs" />
     <Compile Include="TypingArea.cs">
       <SubType>Component</SubType>
