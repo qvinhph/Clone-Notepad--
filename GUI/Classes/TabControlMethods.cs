@@ -140,7 +140,7 @@ namespace GUI
                 if (imageXRect.Contains(e.Location))
                 {
                     //Safe close
-                    if ((Dialog.ShowSafeCloseTabDialog(tabPage) == "Cancel"))
+                    if ((CurrentTextArea.requiresSaving == 1) && (Dialog.ShowSafeCloseTabDialog(tabPage) == "Cancel"))
                     {
                         break;
                     }
@@ -264,8 +264,9 @@ namespace GUI
                 return;
 
             TabPage currentTab = TabControl.SelectedTab;
-            if ((Dialog.ShowSafeCloseTabDialog(currentTab) == "Cancel"))
+            if ((CurrentTextArea.requiresSaving==1)&&(Dialog.ShowSafeCloseTabDialog(currentTab) == "Cancel"))
             {
+
             }
 
 

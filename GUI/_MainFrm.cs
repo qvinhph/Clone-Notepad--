@@ -50,7 +50,7 @@ namespace GUI
                 if (tabPage != tabControl.SelectedTab)
                 {
                     string result = Dialog.ShowSafeCloseTabDialog(tabPage);
-                    if (result == "Cancel") return;
+                    if (TabControlMethods.CurrentTextArea.requiresSaving==1 && result == "Cancel") return;
 
                     ////Delete tab status
                     //TabControlMethods.RemoveTabPageStatus(tabPage);
@@ -287,12 +287,14 @@ namespace GUI
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Dialog.ShowSaveDialog(tabControl.SelectedTab);
+            TabControlMethods.CurrentTextArea.requiresSaving = 0;
         }
 
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Dialog.ShowSaveAsDialog(tabControl.SelectedTab);
+            TabControlMethods.CurrentTextArea.requiresSaving = 0;
         }
 
 
@@ -924,15 +926,11 @@ namespace GUI
         {
             if (TabControlMethods.IsEmpty())
             { return; }
-            if (TabControlMethods.CurrentTextArea.requiresSaving==1)
-            {
-            if (Dialog.ShowSafeCloseFormDialog(tabControl) == "Cancel")
+            if ((TabControlMethods.CurrentTextArea.requiresSaving == 1) && Dialog.ShowSafeCloseFormDialog(tabControl) == "Cancel")
             {
                 e.Cancel = true;
             }
-            }
         }
-
     }
 }
 

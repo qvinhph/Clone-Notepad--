@@ -29,6 +29,8 @@ namespace SyntaxHighlightingTextbox
         private bool parsing; /*Help us prevent another action while parsing*/
         private char[] separatorArray;
 
+        //Require Saving after editing
+        public int requiresSaving;
 
         //Members used for Highlight() function.
         private StringBuilder rtfHeader;
@@ -40,8 +42,7 @@ namespace SyntaxHighlightingTextbox
         private bool enableAutoComplete;
         public DocumentMap documentMap;
 
-        //Require Saving after editing
-        public int requiresSaving = 0;
+
 
         //Undo/Redo members.
         private Stack<UndoRedoInfo> undoStack;
@@ -179,6 +180,7 @@ namespace SyntaxHighlightingTextbox
             parsing = false;
             isUndoRedo = false;
             EnableAutoComplete = true;
+            requiresSaving = 0;
             this.Font = new Font(FontFamily.GenericMonospace, 12);
 
             rtfHeader = new StringBuilder();
@@ -195,6 +197,7 @@ namespace SyntaxHighlightingTextbox
             //Inherited properties
             this.AcceptsTab = true;
 
+            
             //Load separators
             var separators = new List<char>()
                         {
@@ -202,7 +205,10 @@ namespace SyntaxHighlightingTextbox
                             '%', '^', '=', '~', '!', '|', ' ', '\r', '\n', '\t'
                         };
             AddListOfSeparators(separators);
-        }
+
+            
+            
+    }
 
         #endregion
 
