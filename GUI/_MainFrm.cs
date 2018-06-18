@@ -301,10 +301,10 @@ namespace GUI
             if (tabControl.TabPages.Count > 0)
             {
                 //Show SaveDialog
-                string result = Dialog.ShowSafeCloseTabDialog(tabControl.SelectedTab);
-
-
+                if (TabControlMethods.CurrentTextArea.requiresSaving==1)
+                { string result = Dialog.ShowSafeCloseTabDialog(tabControl.SelectedTab);
                 if (result == "Cancel") return;
+                }
 
 
                 //Choose the selected tab to remove
@@ -918,28 +918,18 @@ namespace GUI
         }
 
 
-        //private void versionToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-            //if (TabControlMethods.IsEmpty()) return;
-
-            //if (aboutEasyType == null)
-            //{
-            //    aboutEasyType = new AboutEasyType();
-            //}
-            //aboutEasyType.ShowAboutEasyType();
-            //this.IsMdiContainer = true;
-            //AboutEzType aet = new AboutEzType();
-            //aet.MdiParent = this;
-            //aet.Show();
-        //}
 
 
         private void _MainFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            if (TabControlMethods.IsEmpty())
+            { return; }
+            if (TabControlMethods.CurrentTextArea.requiresSaving==1)
+            {
             if (Dialog.ShowSafeCloseFormDialog(tabControl) == "Cancel")
             {
                 e.Cancel = true;
+            }
             }
         }
 

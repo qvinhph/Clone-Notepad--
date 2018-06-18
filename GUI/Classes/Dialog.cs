@@ -176,6 +176,7 @@ namespace GUI
         /// <param name="tabPage"></param>
         public static string ShowSafeCloseFormDialog(TabControl tabControl)
         {
+
             foreach (TabPage tabPage in tabControl.TabPages)
             {
                 string result = ShowSafeCloseTabDialog(tabPage);
