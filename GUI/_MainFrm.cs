@@ -931,7 +931,6 @@ namespace GUI
                 e.Cancel = true;
             }
         }
-
     }
 }
 

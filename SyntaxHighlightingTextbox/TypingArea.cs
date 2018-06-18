@@ -24,8 +24,6 @@ namespace SyntaxHighlightingTextbox
         private bool caseSensitive;
         private bool enableHighlight;
 
-        //The control to focus on the highligting
-        private Control controlToFocus = null;
 
         //Internal use members.
         private bool parsing; /*Help us prevent another action while parsing*/
@@ -51,11 +49,6 @@ namespace SyntaxHighlightingTextbox
         private Stack<UndoRedoInfo> redoStack;
         private bool isUndoRedo; //Use to avoid recording undo info.
         private UndoRedoInfo lastInfo;
-
-        //Prevent the record of undo, redo, hightlight, ...
-        private bool blockAllAction = false;
-
-        public bool BlockAllAction { get { return blockAllAction; } set { blockAllAction = value; } }
 
 
         public struct UndoRedoInfo
@@ -1295,10 +1288,6 @@ namespace SyntaxHighlightingTextbox
         /// <param name="textToSearch"></param>
         public List<int> FindAll(string textToSearch)
         {
-            if (controlToFocus != null)
-            {
-                controlToFocus.Focus();
-            }
             //List to hold all the position
             List<int> listOfPositions = new List<int>();
             int position = -1;
@@ -1346,13 +1335,6 @@ namespace SyntaxHighlightingTextbox
         /// <param name="backColor"></param>
         public List<int> FindAndColorAll(string textToSearch, Color backColor)
         {
-            if (controlToFocus != null)
-            {
-                controlToFocus.Focus();
-            }
-
-            BlockAllAction = true;
-
             //List of position of the found texts
             List<int> listOfPositions = new List<int>();
 
@@ -1379,10 +1361,10 @@ namespace SyntaxHighlightingTextbox
                     break;
                 }
             }
-
-            BlockAllAction = false;
+            
 
             this.Focus();
+
 
             return listOfPositions;
         }
