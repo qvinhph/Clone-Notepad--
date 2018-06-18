@@ -146,7 +146,7 @@ namespace GUI
                 string tabName = tabPage.Text;
                 tabName = tabName.Replace("*", "");
 
-                string text = "You haven't save " + tabName + "\n Do you want to save it before closing?";
+                string text = "You haven't save " + tabName + "\nDo you want to save it before closing?";
                 DialogResult result = MessageBox.Show(text, "Yes or No?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)

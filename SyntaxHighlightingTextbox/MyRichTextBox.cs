@@ -95,7 +95,6 @@ namespace SyntaxHighlightingTextbox
             typingArea.VScroll += OnTypingArea_VScroll;
             typingArea.TextChanged += OnTypingArea_TextChanged;
             this.Resize += OnMyRichTextBox_Resize;
-            typingArea.SelectionChanged += OnTypingArea_SelectionChanged;
             typingArea.FontChanged += OnTypingArea_FontChanged;
             typingArea.MouseDown += OnTypingArea_MouseDown;
             typingArea.SizeChanged += OnTypingArea_SizeChanged;
@@ -135,15 +134,6 @@ namespace SyntaxHighlightingTextbox
         }
 
 
-        //Update number margin when change selection in typing area
-        private void OnTypingArea_SelectionChanged(object sender, EventArgs e)
-        {
-            Point pt = typingArea.GetPositionFromCharIndex(typingArea.SelectionStart);
-            if (pt.X == 1)
-            {
-                AddLineNumbers();
-            }
-        }
         private void OnTypingArea_VScroll(object sender, EventArgs e)
         {
             LineNumberTextBox.Text = "";
